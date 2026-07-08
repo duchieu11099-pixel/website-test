@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>竹むら家 売上報告 – 5日</title>
+  <title>竹むら家 売上報告</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,210 +15,130 @@
       padding: 0 0 40px;
     }
 
-    /* Header */
     .header {
       background: linear-gradient(135deg, #1a1d2e 0%, #12141f 100%);
       border-bottom: 1px solid #2a2d3e;
       padding: 28px 20px 22px;
       text-align: center;
     }
-    .header-greeting {
-      font-size: 13px;
-      color: #8b8fa8;
-      margin-bottom: 10px;
-      letter-spacing: 0.05em;
-    }
-    .header-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.03em;
-    }
+    .header-greeting { font-size: 13px; color: #8b8fa8; margin-bottom: 10px; letter-spacing: 0.05em; }
+    .header-title { font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: 0.03em; }
     .header-date {
-      font-size: 13px;
-      color: #6c70a0;
-      margin-top: 6px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
     }
-
-    /* Content */
-    .content {
-      padding: 20px 16px 0;
-      max-width: 480px;
-      margin: 0 auto;
+    .header-date input {
+      background: #1a1c2a;
+      border: 1px solid #2e3358;
+      border-radius: 8px;
+      color: #c8ccee;
+      font-size: 14px;
+      padding: 6px 10px;
+      width: 70px;
+      text-align: center;
+      font-family: inherit;
     }
+    .header-date span { color: #6c70a0; font-size: 14px; }
 
-    /* Section label */
+    .content { padding: 20px 16px 0; max-width: 480px; margin: 0 auto; }
+
     .section-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #5a5f80;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin: 24px 0 10px;
+      font-size: 11px; font-weight: 600; color: #5a5f80;
+      letter-spacing: 0.12em; text-transform: uppercase; margin: 24px 0 10px;
     }
 
-    /* Summary hero card */
+    /* inputs */
+    input.money {
+      background: #1a1c2a;
+      border: 1px solid #2e3358;
+      border-radius: 8px;
+      color: #e8eaf8;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 8px 10px;
+      width: 130px;
+      text-align: right;
+      font-family: inherit;
+    }
+    input.money:focus { outline: none; border-color: #7b8fff; }
+    input.money.small {
+      font-size: 13px;
+      font-weight: 600;
+      color: #9098c0;
+      padding: 6px 10px;
+      width: 120px;
+    }
+
+    /* Summary */
     .summary-card {
       background: linear-gradient(135deg, #1e2240 0%, #161930 100%);
       border: 1px solid #2e3358;
       border-radius: 16px;
       padding: 22px 20px;
-      margin-bottom: 4px;
     }
     .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
     }
     .summary-row:last-child { margin-bottom: 0; }
-    .summary-label {
-      font-size: 13px;
-      color: #8b8fa8;
-    }
-    .summary-value {
-      font-size: 15px;
-      font-weight: 600;
-      color: #d0d4f0;
-    }
-    .summary-value.accent {
-      color: #7b8fff;
-      font-size: 18px;
-    }
-    .summary-divider {
-      height: 1px;
-      background: #2a2d45;
-      margin: 14px 0;
-    }
+    .summary-label { font-size: 13px; color: #8b8fa8; }
+    .summary-divider { height: 1px; background: #2a2d45; margin: 14px 0; }
 
     /* Payment cards */
-    .payment-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .payment-grid { display: flex; flex-direction: column; gap: 10px; }
     .payment-card {
       background: #161820;
       border: 1px solid #242638;
       border-radius: 12px;
       padding: 16px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: flex; flex-direction: column; gap: 10px;
     }
-    .payment-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .payment-header { display: flex; align-items: center; justify-content: space-between; }
     .payment-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #c8ccee;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: #c8ccee;
     }
-    .payment-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .payment-today {
-      font-size: 17px;
-      font-weight: 700;
-      color: #e8eaf8;
-    }
+    .payment-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .payment-cumulative {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1a1c2a;
-      border-radius: 8px;
-      padding: 8px 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #1a1c2a; border-radius: 8px; padding: 8px 12px;
     }
-    .cum-label {
-      font-size: 11px;
-      color: #5a5f80;
-      letter-spacing: 0.05em;
-    }
-    .cum-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: #6c70a0;
-    }
+    .cum-label { font-size: 11px; color: #5a5f80; letter-spacing: 0.05em; }
 
-    /* Colors per payment */
-    .dot-cash    { background: #4caf82; }
-    .dot-paypay  { background: #e8473f; }
-    .dot-rocket  { background: #4a9eff; }
-    .dot-uber    { background: #06c167; }
+    .dot-cash { background: #4caf82; }
+    .dot-paypay { background: #e8473f; }
+    .dot-rocket { background: #4a9eff; }
+    .dot-uber { background: #06c167; }
     .dot-demaekan { background: #ff6b35; }
+    .dot-takeout { background: #c77bff; }
 
-    /* Total band */
+    /* Total */
     .total-band {
       background: linear-gradient(135deg, #23274a 0%, #1a1d38 100%);
       border: 1px solid #3a3f6a;
       border-radius: 16px;
       padding: 22px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: flex; flex-direction: column; gap: 12px;
     }
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .total-label {
-      font-size: 14px;
-      color: #9098c0;
-    }
-    .total-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #a0aaff;
-    }
-    .total-value.grand {
-      font-size: 26px;
-      color: #7b8fff;
-    }
-    .total-divider {
-      height: 1px;
-      background: #2e3358;
-    }
+    .total-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .total-label { font-size: 14px; color: #9098c0; }
+    .total-value { font-size: 20px; font-weight: 700; color: #a0aaff; }
+    .total-value.grand { font-size: 26px; color: #7b8fff; }
+    .total-divider { height: 1px; background: #2e3358; }
 
-    /* Lunch note */
     .lunch-note {
-      background: #131520;
-      border: 1px solid #1e2030;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #5a5f80;
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      background: #131520; border: 1px solid #1e2030; border-radius: 10px;
+      padding: 10px 14px; font-size: 12px; color: #5a5f80; margin-top: 6px;
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
     }
     .lunch-note span.tag {
-      background: #1e2240;
-      color: #6c70a0;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      border: 1px solid #2e3358;
-      white-space: nowrap;
+      background: #1e2240; color: #6c70a0; font-size: 11px;
+      padding: 2px 8px; border-radius: 20px; border: 1px solid #2e3358; white-space: nowrap;
     }
 
-    /* Footer */
-    .footer {
-      text-align: center;
-      margin-top: 36px;
-      font-size: 11px;
-      color: #3a3e55;
-    }
+    .footer { text-align: center; margin-top: 36px; font-size: 11px; color: #3a3e55; }
   </style>
 </head>
 <body>
@@ -226,7 +146,10 @@
   <div class="header">
     <div class="header-greeting">お疲れ様です。</div>
     <div class="header-title">竹むら家 売上報告</div>
-    <div class="header-date">7月 5日</div>
+    <div class="header-date">
+      <input type="number" id="month" value="7" min="1" max="12" /><span>月</span>
+      <input type="number" id="day" min="1" max="31" placeholder="日" /><span>日</span>
+    </div>
   </div>
 
   <div class="content">
@@ -236,21 +159,16 @@
     <div class="summary-card">
       <div class="summary-row">
         <span class="summary-label">杯数</span>
-        <span class="summary-value accent">143 杯</span>
+        <input class="money" id="cups" type="text" inputmode="numeric" placeholder="0" />
       </div>
       <div class="summary-row">
         <span class="summary-label">客単価</span>
-        <span class="summary-value">¥1,238</span>
-      </div>
-      <div class="summary-divider"></div>
-      <div class="summary-row">
-        <span class="summary-label">5日 合計</span>
-        <span class="summary-value accent">¥305,680</span>
+        <input class="money" id="perCustomer" type="text" inputmode="numeric" placeholder="¥0" />
       </div>
     </div>
     <div class="lunch-note">
       <span class="tag">昼</span>
-      ¥164,180
+      <input class="money small" id="lunch" type="text" inputmode="numeric" placeholder="¥0" />
     </div>
 
     <!-- Payment breakdown -->
@@ -259,93 +177,152 @@
 
       <div class="payment-card">
         <div class="payment-header">
-          <div class="payment-name">
-            <span class="payment-dot dot-cash"></span>
-            現金
-          </div>
-          <div class="payment-today">¥135,520</div>
+          <div class="payment-name"><span class="payment-dot dot-cash"></span>現金</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
         <div class="payment-cumulative">
-          <span class="cum-label">7月累計</span>
-          <span class="cum-value">¥795,940</span>
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
       </div>
 
       <div class="payment-card">
         <div class="payment-header">
-          <div class="payment-name">
-            <span class="payment-dot dot-paypay"></span>
-            PayPay
-          </div>
-          <div class="payment-today">¥41,850</div>
+          <div class="payment-name"><span class="payment-dot dot-paypay"></span>PayPay</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
         <div class="payment-cumulative">
-          <span class="cum-label">7月累計</span>
-          <span class="cum-value">¥239,240</span>
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
       </div>
 
       <div class="payment-card">
         <div class="payment-header">
-          <div class="payment-name">
-            <span class="payment-dot dot-rocket"></span>
-            Rocket
-          </div>
-          <div class="payment-today">¥70,110</div>
+          <div class="payment-name"><span class="payment-dot dot-rocket"></span>Rocket</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
         <div class="payment-cumulative">
-          <span class="cum-label">7月累計</span>
-          <span class="cum-value">¥274,600</span>
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
       </div>
 
       <div class="payment-card">
         <div class="payment-header">
-          <div class="payment-name">
-            <span class="payment-dot dot-uber"></span>
-            Uber
-          </div>
-          <div class="payment-today">¥56,550</div>
+          <div class="payment-name"><span class="payment-dot dot-uber"></span>Uber</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
         <div class="payment-cumulative">
-          <span class="cum-label">7月累計</span>
-          <span class="cum-value">¥164,410</span>
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
       </div>
 
       <div class="payment-card">
         <div class="payment-header">
-          <div class="payment-name">
-            <span class="payment-dot dot-demaekan"></span>
-            出前館
-          </div>
-          <div class="payment-today">¥1,650</div>
+          <div class="payment-name"><span class="payment-dot dot-demaekan"></span>出前館</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
         <div class="payment-cumulative">
-          <span class="cum-label">7月累計</span>
-          <span class="cum-value">¥21,500</span>
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
+        </div>
+      </div>
+
+      <div class="payment-card">
+        <div class="payment-header">
+          <div class="payment-name"><span class="payment-dot dot-takeout"></span>Takeout</div>
+          <input class="money today" type="text" inputmode="numeric" placeholder="¥0" />
+        </div>
+        <div class="payment-cumulative">
+          <span class="cum-label">累計</span>
+          <input class="money small cum" type="text" inputmode="numeric" placeholder="¥0" />
         </div>
       </div>
 
     </div>
 
-    <!-- Total -->
-    <div class="section-label">合計</div>
+    <!-- Total (auto) -->
+    <div class="section-label">合計（自動計算）</div>
     <div class="total-band">
       <div class="total-row">
-        <span class="total-label">5日 合計</span>
-        <span class="total-value">¥305,680</span>
+        <span class="total-label"><span id="dayLabel">本日</span> 合計</span>
+        <span class="total-value" id="dayTotal">¥0</span>
       </div>
       <div class="total-divider"></div>
       <div class="total-row">
-        <span class="total-label">7月 累計</span>
-        <span class="total-value grand">¥1,495,690</span>
+        <span class="total-label"><span id="monthLabel">7月</span> 累計</span>
+        <span class="total-value grand" id="monthTotal">¥0</span>
       </div>
     </div>
 
   </div>
 
   <div class="footer">竹むら家 © 2025</div>
+
+  <script>
+    function parseNum(v) {
+      return parseInt(String(v).replace(/[^\d]/g, ''), 10) || 0;
+    }
+    function fmt(n) {
+      return '¥' + n.toLocaleString('ja-JP');
+    }
+
+    function recalc() {
+      let dayTotal = 0, monthTotal = 0;
+      document.querySelectorAll('input.today').forEach(el => dayTotal += parseNum(el.value));
+      document.querySelectorAll('input.cum').forEach(el => monthTotal += parseNum(el.value));
+      document.getElementById('dayTotal').textContent = fmt(dayTotal);
+      document.getElementById('monthTotal').textContent = fmt(monthTotal);
+
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      document.getElementById('dayLabel').textContent = day ? day + '日' : '本日';
+      document.getElementById('monthLabel').textContent = (month || '') + '月';
+    }
+
+    // format inputs with commas as user types
+    document.querySelectorAll('input.money').forEach(el => {
+      el.addEventListener('input', () => {
+        const n = parseNum(el.value);
+        el.value = n ? n.toLocaleString('ja-JP') : '';
+        recalc();
+        save();
+      });
+    });
+    document.getElementById('day').addEventListener('input', () => { recalc(); save(); });
+    document.getElementById('month').addEventListener('input', () => { recalc(); save(); });
+
+    // persist values in this browser so data isn't lost on reload
+    const KEY = 'takemura-report';
+    function save() {
+      const data = {
+        day: document.getElementById('day').value,
+        month: document.getElementById('month').value,
+        cups: document.getElementById('cups').value,
+        perCustomer: document.getElementById('perCustomer').value,
+        lunch: document.getElementById('lunch').value,
+        today: [...document.querySelectorAll('input.today')].map(e => e.value),
+        cum: [...document.querySelectorAll('input.cum')].map(e => e.value),
+      };
+      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+    }
+    function load() {
+      let data;
+      try { data = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+      if (!data) return;
+      document.getElementById('day').value = data.day || '';
+      document.getElementById('month').value = data.month || '7';
+      document.getElementById('cups').value = data.cups || '';
+      document.getElementById('perCustomer').value = data.perCustomer || '';
+      document.getElementById('lunch').value = data.lunch || '';
+      document.querySelectorAll('input.today').forEach((e, i) => e.value = (data.today || [])[i] || '');
+      document.querySelectorAll('input.cum').forEach((e, i) => e.value = (data.cum || [])[i] || '');
+    }
+    load();
+    recalc();
+  </script>
 
 </body>
 </html>
