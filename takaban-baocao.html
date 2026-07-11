@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>たかばん 売上報告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Hiragino Sans", "Yu Gothic", "Meiryo", "Segoe UI", sans-serif;
+    background: #0f1420;
+    color: #e5e9f0;
+    padding: 16px 16px 48px;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 22px; color: #fff; margin-bottom: 4px; }
+  h2 { font-size: 15px; color: #8b93a7; margin: 22px 0 10px; font-weight: 600; }
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    background: #1a2130;
+    border: 1px solid #2d3750;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 14px;
+    padding: 12px;
+    resize: vertical;
+  }
+  textarea:focus, input:focus { outline: 2px solid #3b82f6; }
+  .status { font-size: 13px; margin-top: 8px; display: none; }
+  .status.ok { color: #4ade80; }
+  .status.warn { color: #fbbf24; }
+  .note { font-size: 12px; color: #8b93a7; margin-top: 4px; display: none; }
+  .row3 { display: flex; gap: 8px; }
+  .row3 .cell { flex: 1; min-width: 0; }
+  .cell { margin-bottom: 8px; }
+  .box {
+    display: flex;
+    align-items: center;
+    background: #1a2130;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+  .box label { font-size: 14px; color: #cdd3e0; white-space: nowrap; }
+  .box input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #7dd3fc;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: right;
+    padding: 13px 0 13px 8px;
+  }
+  .box .computed { flex: 1; text-align: right; color: #4ade80; font-size: 17px; font-weight: 600; padding: 13px 0 13px 8px; }
+  .hint { font-size: 12px; color: #5c6678; margin: 3px 0 0 12px; }
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a2130;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .summary .lbl { color: #8b93a7; font-size: 15px; }
+  .summary .val { color: #7dd3fc; font-size: 18px; font-weight: 700; }
+  pre {
+    background: #151b28;
+    border: 1px solid #2d3750;
+    border-radius: 14px;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-top: 8px;
+  }
+  button {
+    width: 100%;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px;
+    margin-top: 14px;
+    cursor: pointer;
+  }
+  button:active { background: #2563eb; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>たかばん 売上報告</h1>
+
+  <h2>① 前日のメッセージを貼り付け</h2>
+  <textarea id="oldMsg" placeholder="前日の報告メッセージをここに貼り付けてください…&#10;（お疲れ様です たかばん …）"></textarea>
+  <div id="status" class="status"></div>
+  <div id="takeoutNote" class="note">前日のメッセージに takeout がないため、累計 ¥0 から開始します</div>
+
+  <h2>② 本日の数値を入力</h2>
+  <div class="row3">
+    <div class="cell"><div class="box"><label>日</label><input id="day" inputmode="numeric"></div></div>
+    <div class="cell"><div class="box"><label>杯</label><input id="cups" inputmode="numeric"></div></div>
+    <div class="cell"><div class="box"><label>単価</label><span class="computed" id="tanka">¥0</span></div></div>
+  </div>
+  <div class="hint" style="margin-bottom:10px">単価は自動計算 =（現金 + paypay）÷ 杯（小数点以下切り捨て）</div>
+
+  <div class="cell">
+    <div class="box"><label>昼（合計に含まれません）</label><input id="lunch" inputmode="numeric"></div>
+    <div class="hint" id="lunchHint" style="display:none"></div>
+  </div>
+  <div id="items"></div>
+
+  <h2>③ 結果</h2>
+  <div class="summary"><span class="lbl">本日累計</span><span class="val" id="totalVal">¥0</span></div>
+  <div class="summary"><span class="lbl" id="monthLbl">月累計</span><span class="val" id="monthVal">¥0</span></div>
+  <pre id="preview"></pre>
+  <button id="copyBtn">メッセージをコピー</button>
+</div>
+
+<script>
+// Các mục doanh thu: cộng vào 本日累計, mỗi mục có dòng 累計 riêng.
+// 昼 KHÔNG cộng vào 本日累計. takeout là mục mới, tin nhắn cũ chưa có thì 累計 cũ = 0.
+var ITEMS = [
+  { key: '現金', aliases: ['現金'] },
+  { key: 'Uber', aliases: ['uber'] },
+  { key: 'ロケット', aliases: ['ロケット', 'rocket'] },
+  { key: '出前館', aliases: ['出前館'] },
+  { key: 'menu', aliases: ['menu', 'メニュー'] },
+  { key: 'paypay', aliases: ['paypay'] },
+  { key: 'takeout', aliases: ['takeout', 'テイクアウト', '持ち帰り'] }
+];
+var REQUIRED = ITEMS.filter(function (i) { return i.key !== 'takeout'; });
+
+function parseNum(text) {
+  var digits = (String(text || '').match(/\d/g) || []).join('');
+  return digits ? parseInt(digits, 10) : 0;
+}
+function fmt(n) { return n.toLocaleString('en-US'); }
+
+function matchItem(line) {
+  var lower = line.toLowerCase();
+  for (var i = 0; i < ITEMS.length; i++) {
+    for (var j = 0; j < ITEMS[i].aliases.length; j++) {
+      if (lower.indexOf(ITEMS[i].aliases[j].toLowerCase()) === 0) return ITEMS[i];
+    }
+  }
+  return null;
+}
+
+// Đọc tin nhắn hôm trước: 累計 cũ từng mục, 月累計 cũ, 昼 cũ
+function parseOldMessage(text) {
+  var result = { cum: {}, month: null, monthCum: null, found: [], lunchOld: null };
+  if (!text || !text.trim()) return result;
+  var lines = text.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+  var current = null;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    var monthMatch = line.match(/(\d+)\s*月累計?\s*[¥￥]?\s*([\d,.]+)/);
+    if (monthMatch) {
+      result.month = parseInt(monthMatch[1], 10);
+      result.monthCum = parseNum(monthMatch[2]);
+      continue;
+    }
+    if (line.indexOf('本日') === 0 || line.indexOf('合計') !== -1) { current = null; continue; }
+    if (line.indexOf('昼') === 0) {
+      var m = line.match(/[¥￥]\s*([\d,.]+)/);
+      if (m) result.lunchOld = parseNum(m[1]);
+      continue;
+    }
+    var item = matchItem(line);
+    if (item) {
+      current = item.key;
+      var lunchInline = line.match(/昼\s*[:：]\s*[¥￥]?\s*([\d,.]+)/);
+      if (lunchInline) result.lunchOld = parseNum(lunchInline[1]);
+      continue;
+    }
+    if (line.indexOf('累計') === 0 && current) {
+      result.cum[current] = parseNum(line);
+      result.found.push(current);
+      current = null;
+    }
+  }
+  return result;
+}
+
+// Tạo các ô nhập cho từng mục
+var itemsDiv = document.getElementById('items');
+ITEMS.forEach(function (it) {
+  var cell = document.createElement('div');
+  cell.className = 'cell';
+  cell.innerHTML =
+    '<div class="box"><label>' + it.key + '</label>' +
+    '<input data-key="' + it.key + '" inputmode="numeric"></div>' +
+    '<div class="hint" data-hint="' + it.key + '"></div>';
+  itemsDiv.appendChild(cell);
+});
+
+function $(id) { return document.getElementById(id); }
+function val(sel) { return document.querySelector(sel).value; }
+
+function update() {
+  var parsed = parseOldMessage($('oldMsg').value);
+  var month = parsed.month !== null ? parsed.month : (new Date().getMonth() + 1);
+
+  var values = {};
+  var total = 0;
+  ITEMS.forEach(function (it) {
+    values[it.key] = parseNum(val('input[data-key="' + it.key + '"]'));
+    total += values[it.key];
+  });
+
+  var cupsNum = parseNum($('cups').value);
+  var tanka = cupsNum > 0 ? Math.floor((values['現金'] + values['paypay']) / cupsNum) : 0;
+  var newMonthCum = (parsed.monthCum || 0) + total;
+  var lunch = parseNum($('lunch').value);
+
+  // trạng thái đọc tin nhắn cũ
+  var status = $('status');
+  var foundRequired = REQUIRED.filter(function (i) { return parsed.found.indexOf(i.key) !== -1; });
+  var parsedOk = foundRequired.length === REQUIRED.length && parsed.monthCum !== null;
+  if ($('oldMsg').value.trim()) {
+    status.style.display = 'block';
+    status.className = 'status ' + (parsedOk ? 'ok' : 'warn');
+    status.textContent = parsedOk
+      ? '✓ ' + parsed.found.length + '項目の累計と' + month + '月累計 ¥' + fmt(parsed.monthCum) + ' を読み取りました'
+      : '⚠ 累計を ' + foundRequired.length + '/' + REQUIRED.length + ' 項目しか読み取れませんでした'
+        + (parsed.monthCum === null ? '（月累計が見つかりません）' : '') + ' — メッセージをご確認ください';
+    $('takeoutNote').style.display = (parsedOk && parsed.found.indexOf('takeout') === -1) ? 'block' : 'none';
+  } else {
+    status.style.display = 'none';
+    $('takeoutNote').style.display = 'none';
+  }
+
+  // hint 昼
+  var lunchHint = $('lunchHint');
+  if (parsed.lunchOld !== null) {
+    lunchHint.style.display = 'block';
+    lunchHint.textContent = '前日の昼 ¥' + fmt(parsed.lunchOld) + ' → ¥' + fmt(lunch) + ' に置き換え';
+  } else {
+    lunchHint.style.display = 'none';
+  }
+
+  // hint 累計 từng mục + dựng tin nhắn
+  var day = $('day').value.trim() || '?';
+  var cups = $('cups').value.trim() || '?';
+  var lines = [
+    'お疲れ様です',
+    'たかばん',
+    day + '日' + cups + ' 杯 単価¥' + fmt(tanka),
+    '昼 ¥' + fmt(lunch)
+  ];
+  ITEMS.forEach(function (it) {
+    var oldCum = parsed.cum[it.key] || 0;
+    var newCum = oldCum + values[it.key];
+    document.querySelector('[data-hint="' + it.key + '"]').textContent =
+      '累計: 前日 ¥' + fmt(oldCum) + ' + 本日 ¥' + fmt(values[it.key]) + ' → ¥' + fmt(newCum);
+    lines.push(it.key + ' ¥' + fmt(values[it.key]));
+    lines.push('累計 ¥' + fmt(newCum));
+  });
+  lines.push('');
+  lines.push('本日累計 ¥' + fmt(total));
+  lines.push(month + '月累計 ¥' + fmt(newMonthCum));
+
+  $('tanka').textContent = '¥' + fmt(tanka);
+  $('totalVal').textContent = '¥' + fmt(total);
+  $('monthLbl').textContent = month + '月累計';
+  $('monthVal').textContent = '¥' + fmt(newMonthCum);
+  $('preview').textContent = lines.join('\n');
+}
+
+document.addEventListener('input', update);
+
+// Copy có dự phòng cho trình duyệt cũ / mở bằng file
+function legacyCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+$('copyBtn').addEventListener('click', function () {
+  var text = $('preview').textContent;
+  var done = function () {
+    $('copyBtn').textContent = '✓ コピーしました！';
+    setTimeout(function () { $('copyBtn').textContent = 'メッセージをコピー'; }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text); done(); });
+  } else {
+    legacyCopy(text);
+    done();
+  }
+});
+
+update();
+</script>
+</body>
+</html>
