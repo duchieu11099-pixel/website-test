@@ -117,7 +117,8 @@
   <!-- THÊM TỪ -->
   <div class="page" id="page-add">
     <form id="addForm">
-      <label>Từ tiếng Anh *</label><input id="fWord" required placeholder="ví dụ: overfitting">
+      <label>Từ tiếng Anh *</label><input id="fWord" required placeholder="ví dụ: overfitting" autocomplete="off">
+      <div id="afStatus" style="font-size:.8rem;color:var(--accent);margin-top:6px;min-height:18px"></div>
       <label>Phiên âm IPA</label><input id="fIpa" placeholder="/ˌoʊvərˈfɪtɪŋ/">
       <label>Cách đọc (kiểu Việt)</label><input id="fRead" placeholder="âu-vơ-fít-ting">
       <label>Nghĩa tiếng Việt *</label><input id="fMeaning" required placeholder="quá khớp">
@@ -474,6 +475,107 @@ function renderList(filter=""){
   }).join("")||`<div class="empty">Không tìm thấy từ nào.</div>`;
 }
 $("search").addEventListener("input",e=>renderList(e.target.value));
+
+// ---- Tự động điền khi thêm từ ----
+// Tầng 1: thư viện từ AI/CNTT có sẵn (điền đầy đủ, kể cả "dùng khi nào")
+const AUTOFILL={
+"backpropagation":{ipa:"/ˌbækprɑːpəˈɡeɪʃn/",read:"bách-prop-pơ-gây-sần",m:"lan truyền ngược",u:"Dùng khi nói về thuật toán cốt lõi để huấn luyện mạng nơ-ron: lan truyền sai số từ đầu ra ngược về từng lớp để cập nhật trọng số.",ex:"Backpropagation computes gradients for every layer.",exVi:"Lan truyền ngược tính gradient cho mọi lớp."},
+"learning rate":{ipa:"/ˈlɜːrnɪŋ reɪt/",read:"lơn-ninh rây-t",m:"tốc độ học",u:"Siêu tham số quan trọng nhất khi train: bước nhảy mỗi lần cập nhật trọng số. Quá lớn thì không hội tụ, quá nhỏ thì train rất chậm.",ex:"We lowered the learning rate to stabilize training.",exVi:"Chúng tôi giảm tốc độ học để huấn luyện ổn định hơn."},
+"batch size":{ipa:"/bætʃ saɪz/",read:"bách sai-z",m:"kích thước lô",u:"Số mẫu dữ liệu xử lý trong một lần cập nhật trọng số. Batch lớn train nhanh nhưng tốn bộ nhớ GPU.",ex:"A batch size of 32 is a common default.",exVi:"Kích thước lô 32 là giá trị mặc định phổ biến."},
+"activation function":{ipa:"/ˌæktɪˈveɪʃn ˈfʌŋkʃn/",read:"ắc-ti-vây-sần phăng-sần",m:"hàm kích hoạt",u:"Hàm phi tuyến đặt sau mỗi nơ-ron (ReLU, sigmoid, tanh) giúp mạng học được quan hệ phức tạp. Không có nó, mạng chỉ là phép biến đổi tuyến tính.",ex:"ReLU is the most popular activation function.",exVi:"ReLU là hàm kích hoạt phổ biến nhất."},
+"dropout":{ipa:"/ˈdrɑːpaʊt/",read:"đróp-ao-t",m:"kỹ thuật bỏ ngẫu nhiên nơ-ron",u:"Kỹ thuật chống quá khớp: khi train, tắt ngẫu nhiên một phần nơ-ron để mạng không phụ thuộc vào nơ-ron nào quá nhiều.",ex:"We added dropout to reduce overfitting.",exVi:"Chúng tôi thêm dropout để giảm quá khớp."},
+"regularization":{ipa:"/ˌreɡjələrəˈzeɪʃn/",read:"re-giu-lơ-rai-zây-sần",m:"chính quy hóa",u:"Nhóm kỹ thuật chống quá khớp bằng cách phạt mô hình quá phức tạp (L1, L2, dropout...). Dùng khi mô hình tốt trên train nhưng kém trên test.",ex:"L2 regularization keeps the weights small.",exVi:"Chính quy hóa L2 giữ trọng số nhỏ."},
+"tokenization":{ipa:"/ˌtoʊkənaɪˈzeɪʃn/",read:"tâu-cần-nai-zây-sần",m:"tách token (tách văn bản thành đơn vị nhỏ)",u:"Bước đầu tiên khi xử lý văn bản: cắt câu thành các token (từ/mảnh từ) để mô hình xử lý. LLM tính phí và giới hạn theo số token.",ex:"Tokenization splits text into smaller units.",exVi:"Tách token chia văn bản thành các đơn vị nhỏ hơn."},
+"token":{ipa:"/ˈtoʊkən/",read:"tâu-cần",m:"token (đơn vị văn bản)",u:"Đơn vị nhỏ nhất mà LLM xử lý — thường là một từ hoặc mảnh từ (~4 ký tự tiếng Anh). Giá API và giới hạn ngữ cảnh đều tính theo token.",ex:"This prompt uses about 500 tokens.",exVi:"Prompt này dùng khoảng 500 token."},
+"large language model":{ipa:"/lɑːrdʒ ˈlæŋɡwɪdʒ ˈmɑːdl/",read:"lạc-ch leng-guých mo-đồ",m:"mô hình ngôn ngữ lớn (LLM)",u:"Chỉ các mô hình như GPT, Claude, Gemini — train trên lượng văn bản khổng lồ, có thể trò chuyện, viết, dịch, lập trình. Viết tắt: LLM.",ex:"Large language models can write code and answer questions.",exVi:"Mô hình ngôn ngữ lớn có thể viết code và trả lời câu hỏi."},
+"generative AI":{ipa:"/ˈdʒenərətɪv eɪ aɪ/",read:"che-nơ-rơ-tiv ây-ai",m:"AI tạo sinh",u:"Nhánh AI tạo ra nội dung mới (văn bản, ảnh, nhạc, video) thay vì chỉ phân loại/dự đoán. ChatGPT, Midjourney đều là generative AI.",ex:"Generative AI can create images from text descriptions.",exVi:"AI tạo sinh có thể tạo ảnh từ mô tả văn bản."},
+"hallucination":{ipa:"/həˌluːsɪˈneɪʃn/",read:"hơ-lu-xi-nây-sần",m:"ảo giác (AI bịa thông tin)",u:"Dùng khi LLM tự tin đưa ra thông tin sai/bịa đặt. Là hạn chế lớn nhất của LLM hiện nay — luôn cần kiểm chứng thông tin quan trọng.",ex:"The model's hallucination produced a fake citation.",exVi:"Ảo giác của mô hình tạo ra một trích dẫn giả."},
+"natural language processing":{ipa:"/ˈnætʃrəl ˈlæŋɡwɪdʒ ˈprɑːsesɪŋ/",read:"na-chơ-rồ leng-guých pro-xét-xinh",m:"xử lý ngôn ngữ tự nhiên (NLP)",u:"Lĩnh vực cho máy hiểu và tạo ngôn ngữ con người: dịch máy, chatbot, phân tích cảm xúc. Viết tắt: NLP.",ex:"NLP powers translation and chatbots.",exVi:"NLP là nền tảng của dịch máy và chatbot."},
+"computer vision":{ipa:"/kəmˈpjuːtər ˈvɪʒn/",read:"cơm-piu-tơ vi-giần",m:"thị giác máy tính",u:"Lĩnh vực cho máy 'nhìn' và hiểu ảnh/video: nhận diện khuôn mặt, xe tự lái, chẩn đoán ảnh y khoa.",ex:"Computer vision enables self-driving cars to detect pedestrians.",exVi:"Thị giác máy tính giúp xe tự lái phát hiện người đi bộ."},
+"transfer learning":{ipa:"/trænsˈfɜːr ˈlɜːrnɪŋ/",read:"tren-x-phơ lơn-ninh",m:"học chuyển giao",u:"Tận dụng mô hình đã train cho bài toán này để giải bài toán khác — tiết kiệm dữ liệu và chi phí. Fine-tuning là một dạng transfer learning.",ex:"Transfer learning lets us reuse pretrained models.",exVi:"Học chuyển giao cho phép tái sử dụng mô hình đã train sẵn."},
+"pretraining":{ipa:"/ˌpriːˈtreɪnɪŋ/",read:"pri-trây-ninh",m:"tiền huấn luyện",u:"Giai đoạn train mô hình trên dữ liệu khổng lồ không nhãn trước, để mô hình học kiến thức nền, rồi mới fine-tune cho nhiệm vụ cụ thể.",ex:"Pretraining on web text gives the model general knowledge.",exVi:"Tiền huấn luyện trên văn bản web cho mô hình kiến thức tổng quát."},
+"zero-shot":{ipa:"/ˈzɪroʊ ʃɑːt/",read:"zi-râu sót",m:"không cần ví dụ mẫu",u:"Dùng khi mô hình giải được nhiệm vụ chưa từng được dạy trực tiếp, không cần ví dụ nào trong prompt. Ngược lại: few-shot (kèm vài ví dụ).",ex:"The model solved the task zero-shot.",exVi:"Mô hình giải được nhiệm vụ mà không cần ví dụ mẫu."},
+"few-shot":{ipa:"/fjuː ʃɑːt/",read:"phiu sót",m:"kèm vài ví dụ mẫu",u:"Kỹ thuật prompt: đưa vài ví dụ mẫu (input → output) vào prompt để mô hình bắt chước làm theo. Hiệu quả hơn zero-shot với nhiệm vụ khó.",ex:"Few-shot prompting improved the accuracy significantly.",exVi:"Prompt kèm vài ví dụ mẫu cải thiện độ chính xác đáng kể."},
+"vector database":{ipa:"/ˈvektər ˈdeɪtəbeɪs/",read:"véc-tơ đây-tơ-bây-x",m:"cơ sở dữ liệu vector",u:"CSDL chuyên lưu và tìm kiếm embedding theo độ tương đồng ngữ nghĩa. Thành phần cốt lõi của hệ thống RAG (tìm tài liệu liên quan cho LLM).",ex:"We store document embeddings in a vector database.",exVi:"Chúng tôi lưu embedding tài liệu trong cơ sở dữ liệu vector."},
+"clustering":{ipa:"/ˈklʌstərɪŋ/",read:"clắc-x-tơ-rinh",m:"phân cụm",u:"Bài toán học không giám sát: tự gom dữ liệu thành các nhóm giống nhau (phân khúc khách hàng, gom chủ đề tin tức). Thuật toán tiêu biểu: K-means.",ex:"Clustering grouped users by purchasing behavior.",exVi:"Phân cụm gom người dùng theo hành vi mua hàng."},
+"decision tree":{ipa:"/dɪˈsɪʒn triː/",read:"đi-xi-giần tri",m:"cây quyết định",u:"Mô hình dạng cây câu hỏi if-else, dễ hiểu và giải thích được. Nền tảng của random forest và gradient boosting.",ex:"A decision tree is easy to interpret.",exVi:"Cây quyết định dễ diễn giải."},
+"random forest":{ipa:"/ˈrændəm ˈfɔːrɪst/",read:"ren-đầm pho-rít-xt",m:"rừng ngẫu nhiên",u:"Mô hình kết hợp nhiều cây quyết định để dự đoán chính xác và ổn định hơn. Rất mạnh với dữ liệu dạng bảng, dùng nhiều trong thực tế.",ex:"Random forest often beats a single decision tree.",exVi:"Rừng ngẫu nhiên thường tốt hơn một cây quyết định đơn lẻ."},
+"cross-validation":{ipa:"/krɔːs ˌvælɪˈdeɪʃn/",read:"cro-x ve-li-đây-sần",m:"kiểm định chéo",u:"Kỹ thuật đánh giá mô hình đáng tin cậy: chia dữ liệu thành k phần, lần lượt dùng từng phần làm test. Dùng khi dữ liệu ít.",ex:"We used 5-fold cross-validation to evaluate the model.",exVi:"Chúng tôi dùng kiểm định chéo 5 phần để đánh giá mô hình."},
+"precision":{ipa:"/prɪˈsɪʒn/",read:"pri-xi-giần",m:"độ chuẩn xác",u:"Trong số các dự đoán 'dương tính', bao nhiêu % đúng thật. Quan trọng khi báo động nhầm gây tốn kém (lọc spam). Đi cặp với recall.",ex:"High precision means few false alarms.",exVi:"Độ chuẩn xác cao nghĩa là ít báo động nhầm."},
+"recall":{ipa:"/rɪˈkɔːl/",read:"ri-co-l",m:"độ bao phủ (độ nhạy)",u:"Trong số các ca dương tính thật, mô hình bắt được bao nhiêu %. Quan trọng khi bỏ sót gây nguy hiểm (chẩn đoán ung thư). Đi cặp với precision.",ex:"High recall means the model misses very few cases.",exVi:"Độ bao phủ cao nghĩa là mô hình bỏ sót rất ít ca."},
+"optimizer":{ipa:"/ˈɑːptɪmaɪzər/",read:"óp-ti-mai-zơ",m:"bộ tối ưu",u:"Thuật toán cập nhật trọng số khi train: SGD, Adam, AdamW... Adam là lựa chọn mặc định phổ biến nhất hiện nay.",ex:"We used the Adam optimizer with default settings.",exVi:"Chúng tôi dùng bộ tối ưu Adam với cài đặt mặc định."},
+"weight":{ipa:"/weɪt/",read:"guây-t",m:"trọng số",u:"Các con số mô hình học được, quyết định đầu ra. 'Model weights' = toàn bộ tham số đã train. 'Open weights' = công khai trọng số cho tải về.",ex:"The weights are updated after every batch.",exVi:"Trọng số được cập nhật sau mỗi lô dữ liệu."},
+"checkpoint":{ipa:"/ˈtʃekpɔɪnt/",read:"chéc-poin-t",m:"điểm lưu mô hình",u:"Bản lưu trọng số mô hình tại một thời điểm train. Dùng để tiếp tục train sau khi gián đoạn hoặc chọn bản tốt nhất.",ex:"We saved a checkpoint every epoch.",exVi:"Chúng tôi lưu checkpoint sau mỗi epoch."},
+"deployment":{ipa:"/dɪˈplɔɪmənt/",read:"đi-ploi-mần",m:"triển khai (đưa vào sử dụng)",u:"Đưa mô hình đã train vào môi trường thực tế để phục vụ người dùng (API, app, thiết bị). 'Deploy a model' = triển khai mô hình.",ex:"Model deployment requires monitoring and scaling.",exVi:"Triển khai mô hình cần giám sát và mở rộng quy mô."},
+"pipeline":{ipa:"/ˈpaɪplaɪn/",read:"pai-p-lai-n",m:"quy trình xử lý (chuỗi bước)",u:"Chuỗi các bước xử lý nối tiếp: thu thập dữ liệu → làm sạch → train → đánh giá → triển khai. 'Data pipeline', 'ML pipeline'.",ex:"Our ML pipeline runs automatically every night.",exVi:"Quy trình ML của chúng tôi tự chạy mỗi đêm."},
+"data augmentation":{ipa:"/ˈdeɪtə ˌɔːɡmenˈteɪʃn/",read:"đây-tơ oóc-men-tây-sần",m:"tăng cường dữ liệu",u:"Tạo thêm dữ liệu train bằng cách biến đổi dữ liệu có sẵn (xoay/lật ảnh, đổi từ đồng nghĩa). Dùng khi dữ liệu ít, giúp giảm quá khớp.",ex:"Data augmentation doubled our training set.",exVi:"Tăng cường dữ liệu giúp tập train tăng gấp đôi."},
+"convolutional neural network":{ipa:"/ˌkɑːnvəˈluːʃənl ˈnʊrəl ˈnetwɜːrk/",read:"con-vơ-lu-sần-nồ niu-rồ nét-guơk",m:"mạng nơ-ron tích chập (CNN)",u:"Kiến trúc mạng chuyên xử lý ảnh: dùng phép tích chập để nhận diện cạnh, hình khối, vật thể. Viết tắt: CNN.",ex:"CNNs dominate image recognition tasks.",exVi:"CNN thống trị các bài toán nhận dạng ảnh."},
+"recurrent neural network":{ipa:"/rɪˈkɜːrənt ˈnʊrəl ˈnetwɜːrk/",read:"ri-cơ-rần niu-rồ nét-guơk",m:"mạng nơ-ron hồi quy (RNN)",u:"Kiến trúc xử lý dữ liệu tuần tự (văn bản, chuỗi thời gian) bằng cách 'nhớ' trạng thái trước. Nay phần lớn đã bị transformer thay thế.",ex:"RNNs were widely used for text before transformers.",exVi:"RNN từng được dùng rộng rãi cho văn bản trước khi có transformer."},
+"context window":{ipa:"/ˈkɑːntekst ˈwɪndoʊ/",read:"con-téc-xt guyn-đâu",m:"cửa sổ ngữ cảnh",u:"Lượng token tối đa LLM 'nhìn thấy' cùng lúc (prompt + câu trả lời). Vượt quá thì mô hình quên phần đầu hội thoại.",ex:"This model has a 200K token context window.",exVi:"Mô hình này có cửa sổ ngữ cảnh 200 nghìn token."},
+"prompt engineering":{ipa:"/prɑːmpt ˌendʒɪˈnɪrɪŋ/",read:"prom-pt en-chi-ni-rinh",m:"kỹ thuật viết prompt",u:"Nghệ thuật viết prompt để LLM cho kết quả tốt nhất: nêu rõ vai trò, yêu cầu, định dạng, kèm ví dụ mẫu.",ex:"Good prompt engineering can greatly improve outputs.",exVi:"Kỹ thuật viết prompt tốt cải thiện đáng kể kết quả."},
+"artificial intelligence":{ipa:"/ˌɑːrtɪˈfɪʃl ɪnˈtelɪdʒəns/",read:"a-ti-phi-sồ in-te-li-chần-x",m:"trí tuệ nhân tạo (AI)",u:"Thuật ngữ bao trùm nhất: mọi hệ thống máy tính mô phỏng trí thông minh con người. Machine learning là một nhánh của AI.",ex:"Artificial intelligence is transforming every industry.",exVi:"Trí tuệ nhân tạo đang thay đổi mọi ngành nghề."},
+};
+
+// Tầng 2: tra từ điển + dịch tự động trên mạng cho từ lạ
+function ipaToViet(ipa){
+  if(!ipa) return "";
+  let s=ipa.replace(/[\/ˈˌ]/g,"");
+  const map=[["tʃ","ch"],["dʒ","ch"],["ʃ","s"],["ʒ","gi"],["θ","th"],["ð","th"],["ŋ","ng"],["j","d"],
+    ["eɪ","ây"],["aɪ","ai"],["ɔɪ","oi"],["oʊ","âu"],["aʊ","ao"],["ɪr","ia"],["ʊr","ua"],["ɜːr","ơ"],["ər","ơ"],
+    ["iː","i"],["ɪ","i"],["uː","u"],["ʊ","u"],["ɑː","a"],["æ","e"],["e","e"],["ʌ","ă"],["ə","ơ"],["ɔː","o"],["ɒ","o"],
+    ["w","g"],["r","r"],["z","d"]];
+  map.forEach(([a,b])=>{ s=s.split(a).join(b); });
+  return s.trim();
+}
+async function fetchDict(word){
+  const r=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word));
+  if(!r.ok) throw 0;
+  const j=await r.json(), e=j[0];
+  const ipa=(e.phonetics||[]).map(p=>p.text).find(t=>t)||"";
+  let def="",ex="";
+  (e.meanings||[]).some(m=>(m.definitions||[]).some(d=>{ if(!def)def=d.definition; if(!ex&&d.example)ex=d.example; return def&&ex; }));
+  return {ipa,def,ex};
+}
+async function translateVi(text){
+  if(!text) return "";
+  const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q="+encodeURIComponent(text));
+  if(!r.ok) return "";
+  const j=await r.json();
+  return (j[0]||[]).map(x=>x[0]).join("");
+}
+let afTimer=null;
+async function autoFill(){
+  const w=$("fWord").value.trim().toLowerCase();
+  const st=$("afStatus");
+  if(w.length<2){ st.textContent=""; return; }
+  const fill=(id,val)=>{ if(val&&!$(id).value.trim()) $(id).value=val; };
+  // tầng 1: thư viện có sẵn (kể cả từ gốc trong app)
+  const local=AUTOFILL[w]||(SEED.find(s=>s.w.toLowerCase()===w));
+  if(local){
+    fill("fIpa",local.ipa); fill("fRead",local.read); fill("fMeaning",local.m);
+    fill("fUsage",local.u); fill("fExample",local.ex); fill("fExampleVi",local.exVi);
+    st.textContent="✨ Đã tự điền từ thư viện có sẵn — bạn có thể chỉnh lại tùy ý.";
+    return;
+  }
+  // tầng 2: tra mạng
+  st.textContent="⏳ Đang tra từ điển và dịch tự động...";
+  try{
+    const d=await fetchDict(w);
+    if($("fWord").value.trim().toLowerCase()!==w) return; // user đã gõ từ khác
+    fill("fIpa",d.ipa);
+    fill("fRead",ipaToViet(d.ipa));
+    const [mVi,defVi,exVi]=await Promise.all([translateVi(w),translateVi(d.def),translateVi(d.ex)]);
+    if($("fWord").value.trim().toLowerCase()!==w) return;
+    fill("fMeaning",mVi&&mVi.toLowerCase()!==w?mVi:"");
+    if(d.def) fill("fUsage","Định nghĩa: "+d.def+(defVi?"\n(Dịch: "+defVi+")":""));
+    fill("fExample",d.ex); fill("fExampleVi",exVi);
+    st.textContent="✨ Đã tự điền từ từ điển trực tuyến — hãy kiểm tra và chỉnh lại nếu cần.";
+  }catch(e){
+    st.textContent="ℹ️ Không tìm thấy từ này trong từ điển — bạn hãy điền thủ công nhé.";
+  }
+}
+$("fWord").addEventListener("input",()=>{ $("afStatus").textContent=""; clearTimeout(afTimer); afTimer=setTimeout(autoFill,800); });
+$("fWord").addEventListener("blur",()=>{ clearTimeout(afTimer); autoFill(); });
 
 // ---- Thêm từ ----
 $("addForm").addEventListener("submit",e=>{
