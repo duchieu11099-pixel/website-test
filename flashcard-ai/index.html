@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Vocab — Flashcard tiếng Anh chuyên ngành AI/ML</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1f35; --card2:#232a4a; --text:#eef1ff; --muted:#9aa3c7;
+    --accent:#6c8cff; --accent2:#8b5cf6; --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0; font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh;}
+  .app{max-width:520px; margin:0 auto; padding:16px 16px 96px;}
+  header{text-align:center; padding:12px 0 4px;}
+  header h1{font-size:1.35rem; margin:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  header p{color:var(--muted); font-size:.85rem; margin:6px 0 0;}
+  .stats{display:flex; gap:10px; margin:14px 0;}
+  .stat{flex:1; background:var(--card); border-radius:14px; padding:10px; text-align:center;}
+  .stat b{display:block; font-size:1.25rem;}
+  .stat span{font-size:.72rem; color:var(--muted);}
+  /* Tabs */
+  nav{position:fixed; bottom:0; left:0; right:0; display:flex; background:#12162a; border-top:1px solid #2a3155; z-index:50;}
+  nav button{flex:1; background:none; border:none; color:var(--muted); padding:10px 4px 12px; font-size:.78rem; cursor:pointer;}
+  nav button.active{color:var(--accent);}
+  nav button .ico{display:block; font-size:1.25rem; margin-bottom:2px;}
+  .page{display:none; animation:fadeIn .25s ease;}
+  .page.show{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  /* Flashcard */
+  .cardwrap{perspective:1200px; margin:10px 0;}
+  .flashcard{position:relative; width:100%; min-height:300px; transform-style:preserve-3d; transition:transform .5s; cursor:pointer;}
+  .flashcard.flipped{transform:rotateY(180deg);}
+  .face{position:absolute; inset:0; backface-visibility:hidden; background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid #2e3560; border-radius:var(--radius); padding:24px 18px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;}
+  .face.back{transform:rotateY(180deg);}
+  .word{font-size:1.9rem; font-weight:700;}
+  .ipa{color:var(--accent); font-size:1.05rem; margin-top:6px;}
+  .readvi{color:var(--muted); font-size:.9rem; margin-top:4px;}
+  .meaning{font-size:1.25rem; font-weight:600; color:var(--good);}
+  .hint{color:var(--muted); font-size:.78rem; margin-top:14px;}
+  .btnrow{display:flex; gap:10px; margin-top:12px;}
+  button.btn{border:none; border-radius:14px; padding:13px 10px; font-size:.95rem; font-weight:600; cursor:pointer; flex:1; color:#fff; transition:transform .1s;}
+  button.btn:active{transform:scale(.96);}
+  .b-again{background:var(--bad);} .b-hard{background:var(--warn); color:#222;} .b-good{background:var(--good); color:#0b3323;} .b-easy{background:var(--accent);}
+  .b-neutral{background:#2e3560;}
+  .b-speak{background:none; border:1px solid var(--accent); color:var(--accent); border-radius:12px; padding:8px 14px; margin-top:10px; cursor:pointer; font-size:.9rem;}
+  .b-detail{background:none; border:1px solid var(--accent2); color:#c4b5fd; border-radius:12px; padding:8px 14px; margin-top:10px; cursor:pointer; font-size:.9rem;}
+  .empty{background:var(--card); border-radius:var(--radius); padding:40px 20px; text-align:center; color:var(--muted);}
+  .empty b{color:var(--good); display:block; font-size:1.1rem; margin-bottom:8px;}
+  /* Modal */
+  .modal{position:fixed; inset:0; background:rgba(0,0,0,.65); display:none; align-items:flex-end; justify-content:center; z-index:100;}
+  .modal.show{display:flex;}
+  .sheet{background:var(--card); border-radius:22px 22px 0 0; width:100%; max-width:520px; max-height:82vh; overflow-y:auto; padding:22px 20px 30px; animation:slideUp .3s ease;}
+  @keyframes slideUp{from{transform:translateY(40px); opacity:0;} to{transform:none; opacity:1;}}
+  .sheet h3{margin:0 0 2px; font-size:1.4rem;}
+  .sheet .sec{margin-top:14px;}
+  .sheet .sec h4{margin:0 0 4px; font-size:.8rem; color:var(--accent); text-transform:uppercase; letter-spacing:.05em;}
+  .sheet .sec p{margin:0; font-size:.92rem; line-height:1.55; color:#d7dcf5;}
+  .example{background:#141830; border-left:3px solid var(--accent2); border-radius:8px; padding:10px 12px; margin-top:6px; font-size:.88rem; font-style:italic;}
+  .example .vi{font-style:normal; color:var(--muted); display:block; margin-top:4px;}
+  .closex{float:right; background:#2e3560; border:none; color:#fff; border-radius:50%; width:32px; height:32px; font-size:1rem; cursor:pointer;}
+  /* Quiz */
+  .quizbox{background:var(--card); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+  .quizbox .q{font-size:1.15rem; margin-bottom:6px;}
+  .quizbox input[type=text]{width:100%; padding:14px; border-radius:12px; border:2px solid #2e3560; background:#12162a; color:#fff; font-size:1.1rem; text-align:center; outline:none; margin-top:12px;}
+  .quizbox input[type=text]:focus{border-color:var(--accent);}
+  .feedback{margin-top:12px; font-weight:600; min-height:24px;}
+  .feedback.ok{color:var(--good);} .feedback.no{color:var(--bad);}
+  .progressbar{height:8px; background:#2e3560; border-radius:6px; overflow:hidden; margin:12px 0;}
+  .progressbar i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .3s;}
+  /* List + form */
+  .wordlist{margin-top:10px;}
+  .witem{background:var(--card); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+  .witem .info{flex:1; min-width:0;}
+  .witem b{font-size:1rem;}
+  .witem small{color:var(--muted); display:block; font-size:.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .lvl{font-size:.68rem; padding:3px 8px; border-radius:999px; white-space:nowrap;}
+  .lvl0{background:#3b1f2e; color:var(--bad);} .lvl1{background:#3b331f; color:var(--warn);} .lvl2{background:#1f3b2e; color:var(--good);}
+  form label{display:block; font-size:.82rem; color:var(--muted); margin:12px 0 4px;}
+  form input, form textarea{width:100%; padding:12px; border-radius:12px; border:2px solid #2e3560; background:#12162a; color:#fff; font-size:.95rem; outline:none;}
+  form input:focus, form textarea:focus{border-color:var(--accent);}
+  .toast{position:fixed; top:14px; left:50%; transform:translateX(-50%); background:var(--good); color:#0b3323; font-weight:600; padding:10px 20px; border-radius:999px; z-index:200; display:none; font-size:.9rem;}
+  .searchbox{width:100%; padding:12px; border-radius:12px; border:2px solid #2e3560; background:#12162a; color:#fff; font-size:.95rem; outline:none; margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>🧠 AI Vocab Flashcards</h1>
+    <p>Từ vựng tiếng Anh chuyên ngành AI / Machine Learning</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b id="stDue">0</b><span>Cần ôn hôm nay</span></div>
+    <div class="stat"><b id="stLearned">0</b><span>Đã thuộc</span></div>
+    <div class="stat"><b id="stTotal">0</b><span>Tổng số từ</span></div>
+    <div class="stat"><b id="stStreak">0🔥</b><span>Chuỗi ngày học</span></div>
+  </div>
+
+  <!-- HỌC -->
+  <div class="page show" id="page-study">
+    <div id="studyArea"></div>
+  </div>
+
+  <!-- KIỂM TRA VIẾT -->
+  <div class="page" id="page-quiz">
+    <div id="quizArea"></div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div class="page" id="page-list">
+    <input class="searchbox" id="search" placeholder="🔍 Tìm từ...">
+    <div class="wordlist" id="wordList"></div>
+  </div>
+
+  <!-- THÊM TỪ -->
+  <div class="page" id="page-add">
+    <form id="addForm">
+      <label>Từ tiếng Anh *</label><input id="fWord" required placeholder="ví dụ: overfitting">
+      <label>Phiên âm IPA</label><input id="fIpa" placeholder="/ˌoʊvərˈfɪtɪŋ/">
+      <label>Cách đọc (kiểu Việt)</label><input id="fRead" placeholder="âu-vơ-fít-ting">
+      <label>Nghĩa tiếng Việt *</label><input id="fMeaning" required placeholder="quá khớp">
+      <label>Khi nào dùng / giải thích chi tiết</label><textarea id="fUsage" rows="3" placeholder="Dùng khi mô hình học quá kỹ dữ liệu huấn luyện..."></textarea>
+      <label>Câu ví dụ tiếng Anh</label><input id="fExample" placeholder="The model suffers from overfitting.">
+      <label>Nghĩa câu ví dụ</label><input id="fExampleVi" placeholder="Mô hình bị quá khớp.">
+      <button class="btn b-easy" style="margin-top:18px" type="submit">➕ Lưu từ mới</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal chi tiết -->
+<div class="modal" id="detailModal" onclick="if(event.target===this)closeDetail()">
+  <div class="sheet" id="detailSheet"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav>
+  <button class="active" data-page="study"><span class="ico">📇</span>Học</button>
+  <button data-page="quiz"><span class="ico">✍️</span>Kiểm tra viết</button>
+  <button data-page="list"><span class="ico">📚</span>Từ vựng</button>
+  <button data-page="add"><span class="ico">➕</span>Thêm từ</button>
+</nav>
+
+<script>
+// ================= DỮ LIỆU TỪ VỰNG GỐC =================
+const SEED = [
+{w:"machine learning",ipa:"/məˈʃiːn ˈlɜːrnɪŋ/",read:"mơ-sin lơn-ninh",m:"học máy",
+ u:"Dùng khi nói về lĩnh vực cho máy tính tự học từ dữ liệu thay vì được lập trình cứng. Là thuật ngữ bao trùm, dùng trong hầu hết ngữ cảnh AI tổng quát.",
+ ex:"Machine learning allows computers to improve from experience.",exVi:"Học máy cho phép máy tính tự cải thiện từ kinh nghiệm."},
+{w:"neural network",ipa:"/ˈnʊrəl ˈnetwɜːrk/",read:"niu-rồ nét-guơk",m:"mạng nơ-ron",
+ u:"Dùng khi nói về mô hình mô phỏng não bộ gồm nhiều lớp nơ-ron. Xuất hiện khi bàn về deep learning, nhận dạng ảnh, xử lý ngôn ngữ.",
+ ex:"We trained a neural network to classify images.",exVi:"Chúng tôi huấn luyện một mạng nơ-ron để phân loại ảnh."},
+{w:"deep learning",ipa:"/diːp ˈlɜːrnɪŋ/",read:"đíp lơn-ninh",m:"học sâu",
+ u:"Dùng khi nói về mạng nơ-ron nhiều lớp (deep). Khác machine learning ở chỗ tự động trích xuất đặc trưng, cần nhiều dữ liệu và GPU.",
+ ex:"Deep learning has revolutionized computer vision.",exVi:"Học sâu đã cách mạng hóa thị giác máy tính."},
+{w:"training",ipa:"/ˈtreɪnɪŋ/",read:"trây-ninh",m:"huấn luyện",
+ u:"Dùng khi nói về quá trình cho mô hình học từ dữ liệu. 'Training data' = dữ liệu huấn luyện, 'training time' = thời gian huấn luyện.",
+ ex:"Training this model took three days on a GPU.",exVi:"Huấn luyện mô hình này mất ba ngày trên GPU."},
+{w:"dataset",ipa:"/ˈdeɪtəset/",read:"đây-tơ-sét",m:"tập dữ liệu",
+ u:"Dùng khi nói về bộ dữ liệu dùng để huấn luyện hoặc kiểm tra mô hình. Thường chia thành training set, validation set và test set.",
+ ex:"We collected a dataset of 10,000 labeled images.",exVi:"Chúng tôi thu thập tập dữ liệu gồm 10.000 ảnh có nhãn."},
+{w:"model",ipa:"/ˈmɑːdl/",read:"mo-đồ",m:"mô hình",
+ u:"Từ cực kỳ phổ biến — chỉ hệ thống toán học đã học được từ dữ liệu. Dùng trong mọi ngữ cảnh: train a model, deploy a model, model accuracy.",
+ ex:"The model predicts house prices from features.",exVi:"Mô hình dự đoán giá nhà từ các đặc trưng."},
+{w:"algorithm",ipa:"/ˈælɡərɪðəm/",read:"eo-gơ-ri-thầm",m:"thuật toán",
+ u:"Dùng khi nói về quy trình/các bước tính toán để giải bài toán. Trong ML: thuật toán học (learning algorithm) như gradient descent, decision tree.",
+ ex:"This algorithm sorts the data in linear time.",exVi:"Thuật toán này sắp xếp dữ liệu trong thời gian tuyến tính."},
+{w:"overfitting",ipa:"/ˌoʊvərˈfɪtɪŋ/",read:"âu-vơ-fít-ting",m:"quá khớp",
+ u:"Dùng khi mô hình học 'thuộc lòng' dữ liệu huấn luyện, kết quả tốt trên train nhưng kém trên dữ liệu mới. Ngược lại là underfitting.",
+ ex:"The model shows overfitting: 99% train accuracy but 60% test accuracy.",exVi:"Mô hình bị quá khớp: chính xác 99% trên train nhưng chỉ 60% trên test."},
+{w:"underfitting",ipa:"/ˌʌndərˈfɪtɪŋ/",read:"ăn-đơ-fít-ting",m:"chưa khớp / học chưa tới",
+ u:"Dùng khi mô hình quá đơn giản, không học được quy luật của dữ liệu — kém cả trên train lẫn test. Giải pháp: mô hình phức tạp hơn, thêm đặc trưng.",
+ ex:"A linear model may underfit complex data.",exVi:"Mô hình tuyến tính có thể chưa khớp với dữ liệu phức tạp."},
+{w:"accuracy",ipa:"/ˈækjərəsi/",read:"e-kiu-rơ-xi",m:"độ chính xác",
+ u:"Dùng khi đánh giá mô hình: tỉ lệ dự đoán đúng trên tổng số. Lưu ý: với dữ liệu mất cân bằng nên dùng thêm precision, recall, F1.",
+ ex:"Our classifier achieved 95% accuracy on the test set.",exVi:"Bộ phân loại của chúng tôi đạt độ chính xác 95% trên tập test."},
+{w:"feature",ipa:"/ˈfiːtʃər/",read:"fi-chơ",m:"đặc trưng",
+ u:"Dùng khi nói về thuộc tính đầu vào của dữ liệu (tuổi, giá, số pixel...). 'Feature engineering' = kỹ thuật tạo đặc trưng.",
+ ex:"Age and income are important features for this prediction.",exVi:"Tuổi và thu nhập là các đặc trưng quan trọng cho dự đoán này."},
+{w:"label",ipa:"/ˈleɪbl/",read:"lây-bồ",m:"nhãn",
+ u:"Dùng khi nói về đáp án đúng gắn với dữ liệu (ảnh mèo → nhãn 'cat'). 'Labeled data' = dữ liệu có nhãn, cần cho học có giám sát.",
+ ex:"Each image in the dataset has a label.",exVi:"Mỗi ảnh trong tập dữ liệu đều có nhãn."},
+{w:"supervised learning",ipa:"/ˈsuːpərvaɪzd ˈlɜːrnɪŋ/",read:"su-pơ-vai-zd lơn-ninh",m:"học có giám sát",
+ u:"Dùng khi mô hình học từ dữ liệu có nhãn (input + đáp án đúng). Ví dụ: phân loại email spam, dự đoán giá nhà.",
+ ex:"Spam detection is a classic supervised learning task.",exVi:"Phát hiện thư rác là bài toán học có giám sát kinh điển."},
+{w:"unsupervised learning",ipa:"/ˌʌnˈsuːpərvaɪzd ˈlɜːrnɪŋ/",read:"ăn-su-pơ-vai-zd lơn-ninh",m:"học không giám sát",
+ u:"Dùng khi dữ liệu không có nhãn, mô hình tự tìm cấu trúc/nhóm. Ví dụ điển hình: clustering (phân cụm khách hàng).",
+ ex:"Clustering customers is an unsupervised learning problem.",exVi:"Phân cụm khách hàng là bài toán học không giám sát."},
+{w:"reinforcement learning",ipa:"/ˌriːɪnˈfɔːrsmənt ˈlɜːrnɪŋ/",read:"ri-in-fo-x-mần lơn-ninh",m:"học tăng cường",
+ u:"Dùng khi agent học qua thử-sai và nhận phần thưởng (reward). Ứng dụng: chơi game (AlphaGo), robot, xe tự lái.",
+ ex:"AlphaGo was trained with reinforcement learning.",exVi:"AlphaGo được huấn luyện bằng học tăng cường."},
+{w:"gradient descent",ipa:"/ˈɡreɪdiənt dɪˈsent/",read:"grây-đi-ần đi-xen-t",m:"hạ gradient (giảm dần độ dốc)",
+ u:"Dùng khi nói về thuật toán tối ưu phổ biến nhất trong ML: đi ngược hướng đạo hàm để giảm hàm mất mát dần dần.",
+ ex:"We optimize the loss function using gradient descent.",exVi:"Chúng tôi tối ưu hàm mất mát bằng hạ gradient."},
+{w:"loss function",ipa:"/lɔːs ˈfʌŋkʃn/",read:"lo-x phăng-sần",m:"hàm mất mát",
+ u:"Dùng khi nói về hàm đo mức độ sai của mô hình — mục tiêu huấn luyện là giảm loss. Ví dụ: MSE, cross-entropy.",
+ ex:"The loss function measures prediction error.",exVi:"Hàm mất mát đo sai số dự đoán."},
+{w:"parameter",ipa:"/pəˈræmɪtər/",read:"pơ-ra-mi-tơ",m:"tham số",
+ u:"Dùng khi nói về các giá trị mô hình học được (weights, biases). 'GPT có hàng tỷ parameters'. Khác hyperparameter — do người chỉnh.",
+ ex:"This model has 7 billion parameters.",exVi:"Mô hình này có 7 tỷ tham số."},
+{w:"hyperparameter",ipa:"/ˌhaɪpərpəˈræmɪtər/",read:"hai-pơ-pơ-ra-mi-tơ",m:"siêu tham số",
+ u:"Dùng khi nói về các cài đặt do con người chọn trước khi train: learning rate, batch size, số lớp. 'Hyperparameter tuning' = tinh chỉnh siêu tham số.",
+ ex:"We tuned hyperparameters like learning rate and batch size.",exVi:"Chúng tôi tinh chỉnh siêu tham số như tốc độ học và kích thước lô."},
+{w:"epoch",ipa:"/ˈiːpɑːk/",read:"i-pốc",m:"vòng lặp huấn luyện (1 lượt qua toàn bộ dữ liệu)",
+ u:"Dùng khi nói về số lần mô hình duyệt qua toàn bộ tập huấn luyện. 'Train for 10 epochs' = duyệt dữ liệu 10 lần.",
+ ex:"We trained the network for 50 epochs.",exVi:"Chúng tôi huấn luyện mạng trong 50 epoch."},
+{w:"inference",ipa:"/ˈɪnfərəns/",read:"in-fơ-rần-x",m:"suy luận (chạy dự đoán)",
+ u:"Dùng khi mô hình đã train xong và đưa vào sử dụng để dự đoán. 'Inference time' = thời gian dự đoán, 'inference cost' = chi phí chạy mô hình.",
+ ex:"Inference on mobile devices must be fast.",exVi:"Suy luận trên thiết bị di động phải nhanh."},
+{w:"classification",ipa:"/ˌklæsɪfɪˈkeɪʃn/",read:"kle-xi-fi-kây-sần",m:"phân loại",
+ u:"Dùng khi bài toán dự đoán nhãn rời rạc: spam/không spam, mèo/chó. Khác regression — dự đoán số liên tục.",
+ ex:"Image classification assigns a category to each picture.",exVi:"Phân loại ảnh gán một danh mục cho mỗi bức ảnh."},
+{w:"regression",ipa:"/rɪˈɡreʃn/",read:"ri-grét-sần",m:"hồi quy",
+ u:"Dùng khi bài toán dự đoán giá trị số liên tục: giá nhà, nhiệt độ, doanh thu. 'Linear regression' = hồi quy tuyến tính.",
+ ex:"We used regression to predict house prices.",exVi:"Chúng tôi dùng hồi quy để dự đoán giá nhà."},
+{w:"transformer",ipa:"/trænsˈfɔːrmər/",read:"tren-x-fo-mơ",m:"kiến trúc Transformer",
+ u:"Dùng khi nói về kiến trúc nền tảng của GPT, BERT, Claude — dựa trên cơ chế attention. Là từ khóa quan trọng nhất của NLP hiện đại.",
+ ex:"GPT is based on the transformer architecture.",exVi:"GPT dựa trên kiến trúc transformer."},
+{w:"attention",ipa:"/əˈtenʃn/",read:"ơ-ten-sần",m:"cơ chế chú ý",
+ u:"Dùng khi nói về cơ chế cho phép mô hình 'tập trung' vào phần quan trọng của đầu vào. Câu nổi tiếng: 'Attention is all you need'.",
+ ex:"The attention mechanism lets the model focus on relevant words.",exVi:"Cơ chế chú ý giúp mô hình tập trung vào các từ liên quan."},
+{w:"fine-tuning",ipa:"/ˌfaɪn ˈtuːnɪŋ/",read:"fai-n tiu-ninh",m:"tinh chỉnh mô hình",
+ u:"Dùng khi lấy mô hình đã train sẵn (pre-trained) và train thêm trên dữ liệu riêng cho nhiệm vụ cụ thể. Rẻ hơn nhiều so với train từ đầu.",
+ ex:"We fine-tuned the model on medical texts.",exVi:"Chúng tôi tinh chỉnh mô hình trên văn bản y khoa."},
+{w:"prompt",ipa:"/prɑːmpt/",read:"prom-pt",m:"câu lệnh / lời nhắc cho AI",
+ u:"Dùng khi nói về đầu vào văn bản gửi cho LLM (ChatGPT, Claude). 'Prompt engineering' = kỹ thuật viết prompt hiệu quả.",
+ ex:"A clear prompt produces better answers from the model.",exVi:"Prompt rõ ràng giúp mô hình trả lời tốt hơn."},
+{w:"embedding",ipa:"/ɪmˈbedɪŋ/",read:"im-bét-đinh",m:"vector nhúng (biểu diễn số của dữ liệu)",
+ u:"Dùng khi nói về việc chuyển từ/câu/ảnh thành vector số để máy hiểu. Từ có nghĩa giống nhau sẽ có embedding gần nhau.",
+ ex:"Word embeddings capture semantic similarity.",exVi:"Vector nhúng từ nắm bắt sự tương đồng ngữ nghĩa."},
+{w:"overparameterized",ipa:"/ˌoʊvərpəˈræmɪtəraɪzd/",read:"âu-vơ-pơ-ra-mi-tơ-rai-zd",m:"dư tham số",
+ u:"Dùng khi mô hình có nhiều tham số hơn cần thiết so với lượng dữ liệu. Thường gặp trong thảo luận về deep learning hiện đại.",
+ ex:"Modern neural networks are often overparameterized.",exVi:"Mạng nơ-ron hiện đại thường dư tham số."},
+{w:"benchmark",ipa:"/ˈbentʃmɑːrk/",read:"ben-ch-mác",m:"bài kiểm tra chuẩn / thước đo chuẩn",
+ u:"Dùng khi so sánh các mô hình trên cùng một bộ đề chuẩn (ImageNet, MMLU...). 'Beat the benchmark' = vượt chuẩn hiện có.",
+ ex:"The new model set a record on several benchmarks.",exVi:"Mô hình mới lập kỷ lục trên nhiều bài kiểm tra chuẩn."},
+];
+
+// ================= LƯU TRỮ & SRS =================
+const KEY="aiVocabApp_v1";
+let state=load();
+function load(){
+  let s=null;
+  try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+  if(!s){s={words:[],streak:0,lastStudy:null};}
+  // gộp từ gốc (không ghi đè tiến độ đã có)
+  const have=new Set(s.words.map(x=>x.w.toLowerCase()));
+  SEED.forEach(sd=>{ if(!have.has(sd.w.toLowerCase())) s.words.push(newWord(sd)); });
+  return s;
+}
+function newWord(d){
+  return {...d, ef:2.5, interval:0, reps:0, due:Date.now(), custom:d.custom||false};
+}
+function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
+
+// SM-2 đơn giản hóa: q = 0(quên) 3(khó) 4(nhớ) 5(dễ)
+function review(word,q){
+  if(q<3){ word.reps=0; word.interval=0; word.due=Date.now()+10*60*1000; } // ôn lại sau 10 phút
+  else{
+    word.reps++;
+    if(word.reps===1) word.interval=1;
+    else if(word.reps===2) word.interval=3;
+    else word.interval=Math.round(word.interval*word.ef);
+    word.ef=Math.max(1.3, word.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
+    word.due=Date.now()+word.interval*24*60*60*1000;
+  }
+  bumpStreak(); save(); renderStats();
+}
+function bumpStreak(){
+  const today=new Date().toDateString();
+  if(state.lastStudy!==today){
+    const yest=new Date(Date.now()-86400000).toDateString();
+    state.streak=(state.lastStudy===yest)?state.streak+1:1;
+    state.lastStudy=today;
+  }
+}
+function dueWords(){ return state.words.filter(w=>w.due<=Date.now()); }
+function learnedCount(){ return state.words.filter(w=>w.reps>=3).length; }
+
+// ================= GIAO DIỆN =================
+const $=id=>document.getElementById(id);
+function renderStats(){
+  $("stDue").textContent=dueWords().length;
+  $("stLearned").textContent=learnedCount();
+  $("stTotal").textContent=state.words.length;
+  $("stStreak").textContent=state.streak+"🔥";
+}
+
+// ---- Tab ----
+document.querySelectorAll("nav button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+    $("page-"+b.dataset.page).classList.add("show");
+    if(b.dataset.page==="study") renderStudy();
+    if(b.dataset.page==="quiz") startQuiz();
+    if(b.dataset.page==="list") renderList();
+  };
+});
+
+// ---- Phát âm ----
+function speak(text){
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; u.rate=0.9;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+
+// ---- Học flashcard ----
+let queue=[], cur=null;
+function renderStudy(){
+  queue=dueWords().sort(()=>Math.random()-.5);
+  nextCard();
+}
+function nextCard(){
+  const area=$("studyArea");
+  cur=queue.shift();
+  if(!cur){
+    area.innerHTML=`<div class="empty"><b>🎉 Tuyệt vời! Bạn đã ôn hết từ cần học hôm nay.</b>
+      Hãy quay lại sau, hoặc vào tab <b style="color:var(--accent)">✍️ Kiểm tra viết</b> để luyện thêm.<br><br>
+      <button class="btn b-neutral" onclick="cramMode()" style="max-width:260px">📖 Ôn tự do (tất cả từ)</button></div>`;
+    renderStats(); return;
+  }
+  area.innerHTML=`
+    <div class="cardwrap">
+      <div class="flashcard" id="fc" onclick="this.classList.toggle('flipped')">
+        <div class="face front">
+          <div class="word">${esc(cur.w)}</div>
+          <div class="ipa">${esc(cur.ipa||"")}</div>
+          <div class="readvi">đọc: ${esc(cur.read||"—")}</div>
+          <button class="b-speak" onclick="event.stopPropagation();speak('${esc(cur.w)}')">🔊 Nghe phát âm</button>
+          <div class="hint">👆 Chạm vào thẻ để xem nghĩa</div>
+        </div>
+        <div class="face back">
+          <div class="meaning">${esc(cur.m)}</div>
+          <div class="readvi" style="margin-top:8px">${esc(cur.w)} ${esc(cur.ipa||"")}</div>
+          <button class="b-detail" onclick="event.stopPropagation();showDetail('${esc(cur.w)}')">📖 Chi tiết — dùng khi nào?</button>
+          <div class="hint">Bạn nhớ từ này thế nào? Chọn bên dưới 👇</div>
+        </div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button class="btn b-again" onclick="grade(0)">😵 Quên<br><small>10 phút</small></button>
+      <button class="btn b-hard" onclick="grade(3)">😅 Khó<br><small>sớm</small></button>
+      <button class="btn b-good" onclick="grade(4)">🙂 Nhớ<br><small>vài ngày</small></button>
+      <button class="btn b-easy" onclick="grade(5)">😎 Dễ<br><small>lâu hơn</small></button>
+    </div>
+    <p class="hint" style="text-align:center">Còn lại hôm nay: ${queue.length+1} từ</p>`;
+}
+function grade(q){ review(cur,q); nextCard(); }
+function cramMode(){ queue=[...state.words].sort(()=>Math.random()-.5); nextCard(); }
+
+// ---- Chi tiết ----
+function showDetail(w){
+  const d=state.words.find(x=>x.w===w); if(!d)return;
+  $("detailSheet").innerHTML=`
+    <button class="closex" onclick="closeDetail()">✕</button>
+    <h3>${esc(d.w)}</h3>
+    <div class="ipa">${esc(d.ipa||"")} · <span class="readvi">${esc(d.read||"")}</span></div>
+    <button class="b-speak" onclick="speak('${esc(d.w)}')">🔊 Nghe phát âm</button>
+    <div class="sec"><h4>Nghĩa tiếng Việt</h4><p>${esc(d.m)}</p></div>
+    <div class="sec"><h4>Dùng khi nào?</h4><p>${esc(d.u||"Chưa có mô tả.")}</p></div>
+    ${d.ex?`<div class="sec"><h4>Ví dụ</h4>
+      <div class="example">"${esc(d.ex)}" <button class="b-speak" style="padding:2px 8px;margin:0;font-size:.75rem" onclick="speak('${esc(d.ex)}')">🔊</button>
+      <span class="vi">→ ${esc(d.exVi||"")}</span></div></div>`:""}
+    <div class="sec"><h4>Tiến độ</h4><p>Đã trả lời đúng liên tiếp: ${d.reps} lần · Lần ôn tiếp theo: ${d.due<=Date.now()?"bây giờ":new Date(d.due).toLocaleDateString("vi-VN")}</p></div>`;
+  $("detailModal").classList.add("show");
+}
+function closeDetail(){ $("detailModal").classList.remove("show"); }
+
+// ---- Kiểm tra viết ----
+let quiz=[], qi=0, qScore=0;
+function startQuiz(){
+  // ưu tiên từ đến hạn, nếu ít thì bổ sung ngẫu nhiên
+  let pool=dueWords();
+  if(pool.length<8){
+    const extra=state.words.filter(w=>!pool.includes(w)).sort(()=>Math.random()-.5);
+    pool=pool.concat(extra.slice(0,8-pool.length));
+  }
+  quiz=pool.sort(()=>Math.random()-.5).slice(0,8);
+  qi=0; qScore=0; renderQuiz();
+}
+function renderQuiz(){
+  const area=$("quizArea");
+  if(qi>=quiz.length){
+    area.innerHTML=`<div class="quizbox"><div style="font-size:3rem">${qScore===quiz.length?"🏆":qScore>=quiz.length*0.7?"🎉":"💪"}</div>
+      <h3>Kết quả: ${qScore}/${quiz.length}</h3>
+      <p style="color:var(--muted)">${qScore===quiz.length?"Xuất sắc! Bạn thuộc hết rồi!":qScore>=quiz.length*0.7?"Rất tốt! Cố thêm chút nữa nhé.":"Đừng nản — ôn lại flashcard rồi thử lại nhé!"}</p>
+      <button class="btn b-easy" onclick="startQuiz()" style="margin-top:10px">🔄 Làm lại bài khác</button></div>`;
+    return;
+  }
+  const q=quiz[qi];
+  area.innerHTML=`
+    <div class="progressbar"><i style="width:${qi/quiz.length*100}%"></i></div>
+    <div class="quizbox">
+      <p style="color:var(--muted);font-size:.8rem;margin:0">Câu ${qi+1}/${quiz.length} — Viết từ tiếng Anh có nghĩa là:</p>
+      <div class="q"><b style="color:var(--good);font-size:1.35rem">"${esc(q.m)}"</b></div>
+      <p style="color:var(--muted);font-size:.85rem">Gợi ý: ${q.w.length} ký tự, bắt đầu bằng "<b>${esc(q.w[0])}</b>"
+        · <a href="#" style="color:var(--accent)" onclick="speak('${esc(q.w)}');return false">🔊 nghe</a></p>
+      <input type="text" id="qInput" autocomplete="off" autocapitalize="off" placeholder="Gõ từ tiếng Anh...">
+      <div class="feedback" id="qFb"></div>
+      <div class="btnrow">
+        <button class="btn b-neutral" onclick="skipQ()">Bỏ qua</button>
+        <button class="btn b-easy" onclick="checkQ()">Kiểm tra ✓</button>
+      </div>
+    </div>`;
+  const inp=$("qInput");
+  inp.focus();
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") checkQ(); });
+}
+function norm(s){ return s.toLowerCase().replace(/[^a-z]/g,""); }
+function checkQ(){
+  const q=quiz[qi], val=$("qInput").value.trim();
+  if(!val)return;
+  const fb=$("qFb");
+  if(norm(val)===norm(q.w)){
+    fb.textContent="✅ Chính xác! "+q.w+" "+(q.ipa||"");
+    fb.className="feedback ok";
+    qScore++; review(q,5);
+    setTimeout(()=>{qi++;renderQuiz();},900);
+  }else{
+    fb.textContent="❌ Chưa đúng. Đáp án: "+q.w;
+    fb.className="feedback no";
+    review(q,0);
+    setTimeout(()=>{qi++;renderQuiz();},1800);
+  }
+}
+function skipQ(){ review(quiz[qi],0); $("qFb").textContent="Đáp án: "+quiz[qi].w; $("qFb").className="feedback no"; setTimeout(()=>{qi++;renderQuiz();},1400); }
+
+// ---- Danh sách từ ----
+function renderList(filter=""){
+  const list=$("wordList");
+  const f=filter.toLowerCase();
+  const items=state.words
+    .filter(w=>w.w.toLowerCase().includes(f)||w.m.toLowerCase().includes(f))
+    .sort((a,b)=>a.w.localeCompare(b.w));
+  list.innerHTML=items.map(w=>{
+    const lvl=w.reps>=3?2:w.reps>=1?1:0;
+    const lvlTxt=["Mới","Đang học","Đã thuộc"][lvl];
+    return `<div class="witem" onclick="showDetail('${esc(w.w)}')">
+      <div class="info"><b>${esc(w.w)}</b><small>${esc(w.ipa||"")} · ${esc(w.m)}</small></div>
+      <span class="lvl lvl${lvl}">${lvlTxt}</span>
+    </div>`;
+  }).join("")||`<div class="empty">Không tìm thấy từ nào.</div>`;
+}
+$("search").addEventListener("input",e=>renderList(e.target.value));
+
+// ---- Thêm từ ----
+$("addForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const w=$("fWord").value.trim();
+  if(!w)return;
+  if(state.words.some(x=>x.w.toLowerCase()===w.toLowerCase())){
+    toast("⚠️ Từ này đã có trong app rồi!"); return;
+  }
+  state.words.push(newWord({
+    w, ipa:$("fIpa").value.trim(), read:$("fRead").value.trim(),
+    m:$("fMeaning").value.trim(), u:$("fUsage").value.trim(),
+    ex:$("fExample").value.trim(), exVi:$("fExampleVi").value.trim(), custom:true
+  }));
+  save(); renderStats();
+  e.target.reset();
+  toast("✅ Đã lưu từ \""+w+"\"! Từ sẽ xuất hiện trong phần Học.");
+});
+
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.style.display="block";
+  setTimeout(()=>t.style.display="none",2500);
+}
+function esc(s){ return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;").replace(/'/g,"\\'"); }
+
+// khởi động
+save(); renderStats(); renderStudy();
+</script>
+</body>
+</html>
