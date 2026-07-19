@@ -532,9 +532,10 @@ async function fetchDict(word){
   const r=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word));
   if(!r.ok) throw 0;
   const j=await r.json(), e=j[0];
-  const ipa=(e.phonetics||[]).map(p=>p.text).find(t=>t)||"";
+  let ipa=(e.phonetics||[]).map(p=>p.text).find(t=>t)||e.phonetic||"";
+  ipa=ipa.replace(/ɹ/g,"r").replace(/\(r\)/g,"r");
   let def="",ex="";
-  (e.meanings||[]).some(m=>(m.definitions||[]).some(d=>{ if(!def)def=d.definition; if(!ex&&d.example)ex=d.example; return def&&ex; }));
+  j.forEach(ent=>(ent.meanings||[]).forEach(m=>(m.definitions||[]).forEach(d=>{ if(!def)def=d.definition; if(!ex&&d.example)ex=d.example; })));
   return {ipa,def,ex};
 }
 async function translateVi(text){
@@ -544,12 +545,17 @@ async function translateVi(text){
   const j=await r.json();
   return (j[0]||[]).map(x=>x[0]).join("");
 }
-let afTimer=null;
+let afTimer=null, afOwned={}, afWord="";
 async function autoFill(){
   const w=$("fWord").value.trim().toLowerCase();
   const st=$("afStatus");
   if(w.length<2){ st.textContent=""; return; }
-  const fill=(id,val)=>{ if(val&&!$(id).value.trim()) $(id).value=val; };
+  // Từ đã đổi so với lần tự điền trước → xóa các ô do máy điền (ô user tự gõ giữ nguyên)
+  if(w!==afWord){
+    for(const id in afOwned){ if($(id).value===afOwned[id]) $(id).value=""; }
+    afOwned={}; afWord=w;
+  }
+  const fill=(id,val)=>{ if(val&&!$(id).value.trim()){ $(id).value=val; afOwned[id]=val; } };
   // tầng 1: thư viện có sẵn (kể cả từ gốc trong app)
   const local=AUTOFILL[w]||(SEED.find(s=>s.w.toLowerCase()===w));
   if(local){
@@ -570,7 +576,8 @@ async function autoFill(){
     fill("fMeaning",mVi&&mVi.toLowerCase()!==w?mVi:"");
     if(d.def) fill("fUsage","Định nghĩa: "+d.def+(defVi?"\n(Dịch: "+defVi+")":""));
     fill("fExample",d.ex); fill("fExampleVi",exVi);
-    st.textContent="✨ Đã tự điền từ từ điển trực tuyến — hãy kiểm tra và chỉnh lại nếu cần.";
+    st.textContent=d.ex?"✨ Đã tự điền từ từ điển trực tuyến — hãy kiểm tra và chỉnh lại nếu cần."
+      :"✨ Đã tự điền (từ điển không có câu ví dụ cho từ này — bạn có thể tự thêm).";
   }catch(e){
     st.textContent="ℹ️ Không tìm thấy từ này trong từ điển — bạn hãy điền thủ công nhé.";
   }
@@ -593,6 +600,7 @@ $("addForm").addEventListener("submit",e=>{
   }));
   save(); renderStats();
   e.target.reset();
+  afOwned={}; afWord=""; $("afStatus").textContent="";
   toast("✅ Đã lưu từ \""+w+"\"! Từ sẽ xuất hiện trong phần Học.");
 });
 
