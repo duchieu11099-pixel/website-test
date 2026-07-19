@@ -296,6 +296,7 @@ document.querySelectorAll("nav button").forEach(b=>{
     b.classList.add("active");
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
     $("page-"+b.dataset.page).classList.add("show");
+    if(auto.on&&b.dataset.page!=="study"){ auto.on=false; speechSynthesis.cancel(); }
     if(b.dataset.page==="study") renderStudy();
     if(b.dataset.page==="quiz") startQuiz();
     if(b.dataset.page==="list") renderList();
@@ -337,9 +338,68 @@ function speak(text){
   },60);
 }
 
+// ---- Chế độ tự chạy (nghe + nhìn, không cần chạm) ----
+let auto={on:false,idx:0,list:[]};
+function sleepMs(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function speakP(text,lang){
+  return new Promise(res=>{
+    if(!text||!("speechSynthesis" in window)) return res();
+    let done=false; const fin=()=>{ if(!done){done=true; res();} };
+    const u=new SpeechSynthesisUtterance(text);
+    curUtter=u; u.lang=lang; u.rate=0.88;
+    const vs=speechSynthesis.getVoices();
+    if(lang==="en-US"&&voiceEN) u.voice=voiceEN;
+    if(lang==="vi-VN"){ const vi=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("vi")); if(vi) u.voice=vi; else return res(); }
+    u.onend=fin; u.onerror=fin;
+    speechSynthesis.resume(); speechSynthesis.speak(u);
+    setTimeout(fin, 2000+text.length*180); // phòng khi onend không được gọi
+  });
+}
+function startAuto(){
+  auto.list=[...state.words].sort(()=>Math.random()-.5);
+  auto.idx=0; auto.on=true;
+  autoLoop();
+}
+function stopAuto(){ auto.on=false; speechSynthesis.cancel(); renderStudy(); }
+function renderAutoCard(w,showBack){
+  $("studyArea").innerHTML=`
+    <div class="cardwrap">
+      <div class="flashcard ${showBack?"flipped":""}">
+        <div class="face front">
+          <div class="word">${esc(w.w)}</div>
+          <div class="ipa">${esc(w.ipa||"")}</div>
+          <div class="readvi">đọc: ${esc(w.read||"—")}</div>
+          <div class="hint">🔊 Đang đọc từ...</div>
+        </div>
+        <div class="face back">
+          <div class="meaning">${esc(w.m)}</div>
+          <div class="readvi" style="margin-top:8px">${esc(w.w)} ${esc(w.ipa||"")}</div>
+          ${w.ex?`<div class="example" style="margin-top:12px">"${esc(w.ex)}"<span class="vi">→ ${esc(w.exVi||"")}</span></div>`:""}
+        </div>
+      </div>
+    </div>
+    <button class="btn b-again" onclick="stopAuto()" style="width:100%">⏹ Dừng tự chạy</button>
+    <p class="hint" style="text-align:center">▶️ Chế độ tự chạy — từ ${auto.idx+1}/${auto.list.length} · không cần chạm màn hình</p>`;
+}
+async function autoLoop(){
+  while(auto.on){
+    if(auto.idx>=auto.list.length){ auto.idx=0; auto.list.sort(()=>Math.random()-.5); }
+    const w=auto.list[auto.idx];
+    renderAutoCard(w,false);
+    await speakP(w.w,"en-US"); if(!auto.on)break; await sleepMs(700);
+    await speakP(w.w,"en-US"); if(!auto.on)break; await sleepMs(900);
+    renderAutoCard(w,true);
+    await speakP(w.m,"vi-VN"); if(!auto.on)break; await sleepMs(500);
+    if(w.ex){ await speakP(w.ex,"en-US"); if(!auto.on)break; await sleepMs(400); if(w.exVi) await speakP(w.exVi,"vi-VN"); }
+    if(!auto.on)break; await sleepMs(1500);
+    auto.idx++;
+  }
+}
+
 // ---- Học flashcard ----
 let queue=[], cur=null;
 function renderStudy(){
+  auto.on=false;
   queue=dueWords().sort(()=>Math.random()-.5);
   nextCard();
 }
@@ -349,10 +409,12 @@ function nextCard(){
   if(!cur){
     area.innerHTML=`<div class="empty"><b>🎉 Tuyệt vời! Bạn đã ôn hết từ cần học hôm nay.</b>
       Hãy quay lại sau, hoặc vào tab <b style="color:var(--accent)">✍️ Kiểm tra viết</b> để luyện thêm.<br><br>
-      <button class="btn b-neutral" onclick="cramMode()" style="max-width:260px">📖 Ôn tự do (tất cả từ)</button></div>`;
+      <button class="btn b-neutral" onclick="cramMode()" style="max-width:260px">📖 Ôn tự do (tất cả từ)</button><br><br>
+      <button class="btn b-easy" onclick="startAuto()" style="max-width:260px">▶️ Tự chạy — chỉ nghe &amp; nhìn</button></div>`;
     renderStats(); return;
   }
   area.innerHTML=`
+    <button class="btn b-neutral" onclick="startAuto()" style="width:100%;margin-bottom:10px;padding:9px">▶️ Tự chạy — chỉ nghe &amp; nhìn, không cần chạm</button>
     <div class="cardwrap">
       <div class="flashcard" id="fc" onclick="this.classList.toggle('flipped')">
         <div class="face front">
