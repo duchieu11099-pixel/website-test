@@ -302,10 +302,38 @@ document.querySelectorAll("nav button").forEach(b=>{
 });
 
 // ---- Phát âm ----
+// Trên di động: voices tải bất đồng bộ, cancel()+speak() liền nhau bị nuốt tiếng,
+// và utterance phải giữ tham chiếu toàn cục kẻo bị dọn rác giữa chừng.
+let voiceEN=null, curUtter=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  voiceEN=vs.find(v=>v.lang==="en-US")||vs.find(v=>v.lang&&v.lang.startsWith("en"))||null;
+}
+if("speechSynthesis" in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged=pickVoice;
+  // iOS: phải phát 1 lần ngay trong thao tác chạm đầu tiên để "mở khóa" âm thanh
+  const unlock=()=>{
+    const u=new SpeechSynthesisUtterance(" ");
+    u.volume=0; speechSynthesis.speak(u);
+    document.removeEventListener("touchend",unlock);
+    document.removeEventListener("click",unlock);
+  };
+  document.addEventListener("touchend",unlock,{once:false});
+  document.addEventListener("click",unlock,{once:false});
+}
 function speak(text){
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="en-US"; u.rate=0.9;
-  speechSynthesis.cancel(); speechSynthesis.speak(u);
+  if(!("speechSynthesis" in window)){ toast("⚠️ Thiết bị này không hỗ trợ đọc văn bản"); return; }
+  speechSynthesis.cancel();
+  setTimeout(()=>{
+    if(!voiceEN) pickVoice();
+    const u=new SpeechSynthesisUtterance(text);
+    curUtter=u;
+    u.lang="en-US"; u.rate=0.9;
+    if(voiceEN) u.voice=voiceEN;
+    speechSynthesis.resume();
+    speechSynthesis.speak(u);
+  },60);
 }
 
 // ---- Học flashcard ----
