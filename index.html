@@ -438,6 +438,9 @@ function round2(n){ return Math.round(n * 100) / 100; }
 function fmtMoney(n){
   return '¥' + n.toLocaleString('ja-JP', { maximumFractionDigits: 2 });
 }
+function fmtMoney3(n){
+  return '¥' + n.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
+}
 function esc(s){
   return String(s == null ? '' : s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -555,17 +558,25 @@ function xlsxColName(n){
    4 = quantity: thousands + up to 3 decimals, so 1.5 is not rounded to 2
    5 = amount: thousands + up to 2 decimals (金額 is 単価 x 数量 exactly)
    6 = grand total: bold on a yellow fill with a box border */
-var XLSX_S = { plain: 0, bold: 1, num: 2, boldNum: 3, qty: 4, amount: 5, total: 6 };
+var XLSX_S = { plain: 0, bold: 1, num: 2, boldNum: 3, qty: 4, amount: 5, total: 6,
+               // recipe costs carry up to 3 decimals (上白糖 is 26.136); this is
+               // the same #,##0.### number format the quantity column uses
+               money3: 4 };
 
 var XLSX_XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
 
-function xlsxContentTypesXml(){
+function xlsxContentTypesXml(sheetCount){
+  var sheets = '';
+  for (var i = 1; i <= sheetCount; i++){
+    sheets += '<Override PartName="/xl/worksheets/sheet' + i + '.xml" ' +
+      'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+  }
   return XLSX_XML_HEAD +
     '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
     '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
     '<Default Extension="xml" ContentType="application/xml"/>' +
     '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
-    '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+    sheets +
     '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
     '</Types>';
 }
@@ -577,19 +588,30 @@ function xlsxRootRelsXml(){
     '</Relationships>';
 }
 
-function xlsxWorkbookXml(sheetName){
+function xlsxWorkbookXml(sheetNames){
+  var sheets = '';
+  for (var i = 0; i < sheetNames.length; i++){
+    sheets += '<sheet name="' + xlsxEsc(sheetNames[i]) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>';
+  }
   return XLSX_XML_HEAD +
     '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
     'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
-    '<sheets><sheet name="' + xlsxEsc(sheetName) + '" sheetId="1" r:id="rId1"/></sheets>' +
+    '<sheets>' + sheets + '</sheets>' +
     '</workbook>';
 }
 
-function xlsxWorkbookRelsXml(){
+function xlsxWorkbookRelsXml(sheetCount){
+  var rels = '';
+  for (var i = 1; i <= sheetCount; i++){
+    rels += '<Relationship Id="rId' + i + '" ' +
+      'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" ' +
+      'Target="worksheets/sheet' + i + '.xml"/>';
+  }
+  // the styles part is found by scanning these relationships, not by an r:id
   return XLSX_XML_HEAD +
     '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
-    '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+    rels +
+    '<Relationship Id="rId' + (sheetCount + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
     '</Relationships>';
 }
 
@@ -698,16 +720,23 @@ function xlsxSheetXml(sheet){
 
 /* sheet = { name, cols: [widths], rows: [[cell, ...], ...] }
    cell = null | string | number | { v: string|number, s: styleIndex } */
-function buildXlsx(sheet){
+/* sheets = [ { name, cols: [widths], rows: [[cell, ...], ...] }, ... ]
+   cell = null | string | number | { v: string|number, s: styleIndex } */
+function buildXlsx(sheets){
   var enc = new TextEncoder();
-  return xlsxZip([
-    { name: '[Content_Types].xml',        data: enc.encode(xlsxContentTypesXml()) },
+  var names = sheets.map(function(s, i){ return s.name || ('Sheet' + (i + 1)); });
+
+  var files = [
+    { name: '[Content_Types].xml',        data: enc.encode(xlsxContentTypesXml(sheets.length)) },
     { name: '_rels/.rels',                data: enc.encode(xlsxRootRelsXml()) },
-    { name: 'xl/workbook.xml',            data: enc.encode(xlsxWorkbookXml(sheet.name || 'Sheet1')) },
-    { name: 'xl/_rels/workbook.xml.rels', data: enc.encode(xlsxWorkbookRelsXml()) },
-    { name: 'xl/styles.xml',              data: enc.encode(xlsxStylesXml()) },
-    { name: 'xl/worksheets/sheet1.xml',   data: enc.encode(xlsxSheetXml(sheet)) }
-  ]);
+    { name: 'xl/workbook.xml',            data: enc.encode(xlsxWorkbookXml(names)) },
+    { name: 'xl/_rels/workbook.xml.rels', data: enc.encode(xlsxWorkbookRelsXml(sheets.length)) },
+    { name: 'xl/styles.xml',              data: enc.encode(xlsxStylesXml()) }
+  ];
+  for (var i = 0; i < sheets.length; i++){
+    files.push({ name: 'xl/worksheets/sheet' + (i + 1) + '.xml', data: enc.encode(xlsxSheetXml(sheets[i])) });
+  }
+  return xlsxZip(files);
 }
 
 /* ============================================================
@@ -798,10 +827,18 @@ var DEFAULT_ITEMS = [
    親鳥 493.56 x 3 = 1,480.68 and 大山鳥ガラ 201.96 x 10 = 2,019.6.
    使用量 was not in the pasted range, so the lines start empty. */
 var DEFAULT_RECIPES = [
-  ['鶏スープ(70L)',     ['モミジ', '親鳥', '大山丸鳥', '大山鳥ガラ']],
-  ['煮干しスープ(20L)', ['アゴ【箱】', 'いりこＷＰ【箱】', '促成赤葉真昆布', '椎茸足Ｓ']],
-  ['味玉（２シート）',   ['卵90個', 'キッコーマン　こってりん　1.8L',
-                         'キッコーマン 芳醇こいくち醤油 1.8L　【バラ】', '上白糖 1㎏　【バラ】']]
+  ['鶏スープ(70L)', [
+    ['モミジ', 2], ['親鳥', 3], ['大山丸鳥', 10], ['大山鳥ガラ', 10]
+  ]],
+  ['煮干しスープ(20L)', [
+    ['アゴ【箱】', 0.0862069], ['いりこＷＰ【箱】', 0.0574074],
+    ['促成赤葉真昆布', 0.05], ['椎茸足Ｓ', 0.02]
+  ]],
+  ['味玉（２シート）', [
+    ['卵90個', 1], ['キッコーマン　こってりん　1.8L', 0.0055556],
+    ['キッコーマン 芳醇こいくち醤油 1.8L　【バラ】', 0.0333333],
+    ['上白糖 1㎏　【バラ】', 0.1]
+  ]]
 ];
 var DEFAULT_MONTH = '2025-08';
 
@@ -837,13 +874,13 @@ function seedFirstRun(){
     // recipes reference items by name in the shop's sheet; resolve to ids here
     for (var r = 0; r < DEFAULT_RECIPES.length; r++){
       var recipe = { id: uid(), name: DEFAULT_RECIPES[r][0], lines: [] };
-      var names = DEFAULT_RECIPES[r][1];
-      for (var n = 0; n < names.length; n++){
+      var lines = DEFAULT_RECIPES[r][1];
+      for (var n = 0; n < lines.length; n++){
         var found = null;
         for (var k = 0; k < state.items.length; k++){
-          if (state.items[k].name === names[n]){ found = state.items[k]; break; }
+          if (state.items[k].name === lines[n][0]){ found = state.items[k]; break; }
         }
-        if (found) recipe.lines.push({ itemId: found.id, qty: 0 });
+        if (found) recipe.lines.push({ itemId: found.id, qty: lines[n][1] });
       }
       state.recipes.push(recipe);
     }
@@ -1022,15 +1059,19 @@ function renderSuppliers(){
 
 /* ---------- recipes ---------- */
 
+// Recipe costs keep three decimals: 味玉 works out to 2,651.336 and one of its
+// lines to 26.136, and the shop's sheet carries that precision.
+function round3(n){ return Math.round(n * 1000) / 1000; }
+
 function lineCost(line){
   var it = findItem(line.itemId);
-  return it ? round2(parseNum(it.price) * (line.qty || 0)) : 0;
+  return it ? round3(parseNum(it.price) * (line.qty || 0)) : 0;
 }
 
 function recipeTotal(recipe){
   var sum = 0;
   for (var i = 0; i < recipe.lines.length; i++) sum += lineCost(recipe.lines[i]);
-  return round2(sum);
+  return round3(sum);
 }
 
 function renderRecipes(){
@@ -1048,7 +1089,7 @@ function renderRecipes(){
     html += '<div class="recipe">' +
       '<div class="rtop">' +
         '<div class="rname">' + esc(rec.name) + '</div>' +
-        '<div class="rtotal" data-rtotal="' + esc(rec.id) + '">' + fmtMoney(total) + '</div>' +
+        '<div class="rtotal" data-rtotal="' + esc(rec.id) + '">' + fmtMoney3(total) + '</div>' +
       '</div>';
 
     if (!rec.lines.length){
@@ -1074,7 +1115,7 @@ function renderRecipes(){
             '<span class="u">' + esc(it.unit) + '</span>' +
           '</div>' +
           '<div class="rlc' + (cost ? '' : ' zero') + '" data-rcost="' + esc(rec.id) + '|' + esc(line.itemId) + '">' +
-            fmtMoney(cost) + '</div>' +
+            fmtMoney3(cost) + '</div>' +
           '<button class="rmv" data-rmline="' + esc(rec.id) + '|' + esc(line.itemId) + '" aria-label="削除">✕</button>' +
         '</div>';
     }
@@ -1181,7 +1222,7 @@ function exportExcel(){
     var head = rows[at] || [];
     while (head.length < 6) head.push(null);
     head[6] = { v: rec.name, s: S.bold };
-    head[7] = { v: recipeTotal(rec), s: S.amount };
+    head[7] = { v: recipeTotal(rec), s: S.money3 };
     rows[at] = head;
     at++;
 
@@ -1192,17 +1233,70 @@ function exportExcel(){
       var lrow = rows[at] || [];
       while (lrow.length < 6) lrow.push(null);
       lrow[6] = li.name;
-      lrow[7] = { v: lineCost(ln), s: S.amount };
+      lrow[7] = { v: lineCost(ln), s: S.money3 };
       rows[at] = lrow;
       at++;
     }
     at++;                                      // blank row between recipes
   }
 
-  var bytes = buildXlsx({ name: sheetName(mk), cols: [44, 9, 9, 12, 10, 3, 32, 12], rows: rows });
+  // Two sheets, matching the shop's workbook: the count on the first, the
+  // supplier pivot on the second.
+  var bytes = buildXlsx([
+    { name: sheetName(mk), cols: [44, 9, 9, 12, 10, 3, 32, 12], rows: rows },
+    { name: '仕入先',       cols: [46, 12, 12, 12], rows: supplierSheet(S) }
+  ]);
   downloadFile(bytes, '棚卸_' + sheetName(mk) + '.xlsx',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   toast('Excelを書き出しました');
+}
+
+/* The supplier sheet reproduces the shop's pivot: one block per 仕入先, its
+   最大 / 8% and 最大 / 10%, then each item with its price in the column for
+   its tax rate. The 総計 row aggregates with MAX too, as the pivot does. */
+function supplierSheet(S){
+  var rows = [[], [],
+    [{ v: '行ラベル', s: S.bold }, { v: '最大 / 8%', s: S.bold },
+     { v: '最大 / 10%', s: S.bold }, { v: '合計', s: S.bold }]];
+
+  var order = [], groups = {};
+  for (var i = 0; i < state.items.length; i++){
+    var it = state.items[i];
+    var key = (it.supplier || '').trim() || '（空白）';
+    if (!groups[key]){ groups[key] = []; order.push(key); }
+    groups[key].push(it);
+  }
+
+  var top8 = 0, top10 = 0;
+  for (var g = 0; g < order.length; g++){
+    var items = groups[order[g]];
+    var max8 = 0, max10 = 0;
+    for (var j = 0; j < items.length; j++){
+      var p = parseNum(items[j].price);
+      if (items[j].tax === 10){ if (p > max10) max10 = p; }
+      else if (items[j].tax === 8){ if (p > max8) max8 = p; }
+    }
+    if (max8 > top8) top8 = max8;
+    if (max10 > top10) top10 = max10;
+
+    rows.push([{ v: order[g], s: S.bold },
+               { v: max8, s: S.amount }, { v: max10, s: S.amount },
+               { v: round2(max8 + max10), s: S.num }]);
+
+    for (var k = 0; k < items.length; k++){
+      var e = items[k];
+      var pv = parseNum(e.price);
+      rows.push([e.name,
+                 e.tax === 10 ? null : { v: pv, s: S.amount },
+                 e.tax === 10 ? { v: pv, s: S.amount } : null,
+                 { v: pv, s: S.num }]);
+    }
+  }
+
+  rows.push([{ v: '総計', s: S.bold },
+             { v: top8, s: S.amount }, { v: top10, s: S.amount },
+             { v: round2(top8 + top10), s: S.num }]);
+  return rows;
 }
 
 // The shop names each month's sheet 2025.8, so mirror that (no leading zero).
@@ -1524,11 +1618,11 @@ function init(){
     var cost = lineCost({ itemId: inp.getAttribute('data-line'), qty: qty });
     var cell = document.querySelector('[data-rcost="' + inp.getAttribute('data-rq') + '|' + inp.getAttribute('data-line') + '"]');
     if (cell){
-      cell.textContent = fmtMoney(cost);
+      cell.textContent = fmtMoney3(cost);
       cell.className = 'rlc' + (cost ? '' : ' zero');
     }
     var rt = document.querySelector('[data-rtotal="' + rec.id + '"]');
-    if (rt) rt.textContent = fmtMoney(recipeTotal(rec));
+    if (rt) rt.textContent = fmtMoney3(recipeTotal(rec));
     saveSoon();
   });
 
