@@ -1213,6 +1213,11 @@ function exportExcel(){
   ]);
   for (var j = 0; j < data.length; j++) rows.push(data[j]);
 
+  // A labelled total at the foot of the table. The same figure already sits
+  // alone in C1, but that cell carries no label, so a printed sheet gives no
+  // clue what the number is.
+  rows.push([{ v: '合計', s: S.bold }, null, null, { v: round2(total), s: S.total }]);
+
   // The recipe block sits to the right of the table, in columns G/H, exactly
   // where the shop keeps it: a recipe header row followed by its ingredients.
   var at = 1;                                  // 0-based; row 2
