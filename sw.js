@@ -1,8 +1,9 @@
-/* Service worker: cache the app shell so the counting screen works with no
-   network (a stockroom is a bad place to depend on wifi).
-   Bump CACHE when the app changes; the old cache is dropped on activate. */
+/* Service worker: keeps the app usable with no network, without ever pinning
+   an old build. Network first, cache only as a fallback, so a phone that has
+   been offline for a week still picks up the new version on its next launch.
+   Bump CACHE when the shell changes; the old cache is dropped on activate. */
 
-var CACHE = 'zaiko-v1';
+var CACHE = 'zaiko-v2';
 var ASSETS = [
   './',
   './index.html',
@@ -33,20 +34,19 @@ self.addEventListener('activate', function(e){
 
 self.addEventListener('fetch', function(e){
   if (e.request.method !== 'GET') return;
+  if (e.request.url.indexOf('http') !== 0) return;   // leave blob:/data: alone
 
   e.respondWith(
-    caches.match(e.request).then(function(hit){
-      if (hit) return hit;
-      return fetch(e.request).then(function(res){
-        // keep same-origin assets around for the next offline launch
-        if (res && res.status === 200 && res.type === 'basic'){
-          var copy = res.clone();
-          caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
-        }
-        return res;
-      }).catch(function(){
-        // offline and not cached: fall back to the app shell for navigations
-        return caches.match('./index.html');
+    fetch(e.request).then(function(res){
+      if (res && res.status === 200 && res.type === 'basic'){
+        var copy = res.clone();
+        caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
+      }
+      return res;
+    }).catch(function(){
+      // offline: serve what we cached, and for a navigation fall back to the shell
+      return caches.match(e.request).then(function(hit){
+        return hit || caches.match('./index.html');
       });
     })
   );
