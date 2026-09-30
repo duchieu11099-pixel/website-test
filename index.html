@@ -769,23 +769,23 @@ var DEFAULT_ITEMS = [
   ['大山鳥ガラ', 201.96, 'kg', 10, '株式会社小田島商店', 8, true],
   ['豚ロースブロック', 1004.4, 'kg', 14, '株式会社小田島商店', 8, true],
   ['背ガラ', 180.36, 'kg', 4, '株式会社小田島商店', 8, true],
-  ['ﾏｷｼﾏﾑこいたまご赤Ｍ10㎏', 4860, '箱', 1, '株式会社アマダ東京', 8, true],
+  ['ﾏｷｼﾏﾑこいたまご赤Ｍ10㎏', 5076, '箱', 1, '株式会社アマダ東京', 8, true],
   ['味玉（２シート）', 2651.336, 'CS', 4, '', 0, true],
-  ['大豆白絞油 16.5kg 1缶', 6318, '缶', 0.7, '株式会社アマダ東京', 8, true],
-  ['半熟温泉たまご10ヶ入', 388.8, 'PC', 1.5, '株式会社アマダ東京', 8, true],
-  ['【ＣＢ】大葉　１００枚入　ＰＣ', 518.4, 'PC', 1.3, '株式会社フードサプライ', 8, true],
-  ['【FS】アーリーレッド　個', 129.6, '個', 24, '株式会社フードサプライ', 8, true],
+  ['大豆白絞油 16.5kg 1缶', 6480, '缶', 0.7, '株式会社アマダ東京', 8, true],
+  ['半熟温泉たまご10ヶ入', 442.8, 'PC', 1.5, '株式会社アマダ東京', 8, true],
+  ['【ＣＢ】大葉　１００枚入　ＰＣ', 972, 'PC', 1.3, '株式会社フードサプライ', 8, true],
+  ['【FS】アーリーレッド　個', 140.4, '個', 24, '株式会社フードサプライ', 8, true],
   ['【FS】ベニーナ　PC', 118.8, 'PC', 4, '株式会社フードサプライ', 8, true],
-  ['【FS】みょうが', 167.4, '個', 6, '株式会社フードサプライ', 8, true],
+  ['【FS】みょうが', 205.2, 'PC', 6, '株式会社フードサプライ', 8, true],
   ['【FS】ムキ玉ねぎ　真空PC', 199.8, 'PC', 0, '株式会社フードサプライ', 8, true],
-  ['【FS】糸三つ葉　束', 237.6, '束', 7, '株式会社フードサプライ', 8, true],
-  ['【FS】中国産　人参　本', 48.6, '本', 0, '株式会社フードサプライ', 8, true],
-  ['【FS】長芋　Ｌ　本', 583.2, '本', 2, '株式会社フードサプライ', 8, true],
+  ['【FS】糸三つ葉　束', 129.6, '束', 7, '株式会社フードサプライ', 8, true],
+  ['【FS】中国産　人参　本', 54, '本', 0, '株式会社フードサプライ', 8, true],
+  ['【FS】長芋　Ｌ　本', 648, '本', 2, '株式会社フードサプライ', 8, true],
   ['京都産九条ネギ（カットネギ）', 788.4, '袋', 2, '株式会社京都知七', 8, true],
-  ['アゴ【箱】', 3132, 'kg', 7, '丸勝かつおぶし株式会社', 8, true],
+  ['アゴ【箱】', 2700, 'kg', 7, '丸勝かつおぶし株式会社', 8, true],
   ['いりこＷＰ【箱】', 1080, 'kg', 6, '丸勝かつおぶし株式会社', 8, true],
-  ['のり（6枚切）', 3024, 'kg', 1, '丸勝かつおぶし株式会社', 8, true],
-  ['促成赤葉真昆布', 3348, 'kg', 0.5, '丸勝かつおぶし株式会社', 8, true],
+  ['のり（6枚切）', 3024, 'PC', 1, '丸勝かつおぶし株式会社', 8, true],
+  ['促成赤葉真昆布', 3888, 'kg', 0.5, '丸勝かつおぶし株式会社', 8, true],
   ['椎茸足Ｓ', 1296, 'kg', 0.4, '丸勝かつおぶし株式会社', 8, true],
   ['NTGスープ', 1318.5, 'pc', 7, '有限会社天辺ダッシュカンパニー', 8, true],
   ['【INGS様PB】極太ﾒﾝﾏ 1㎏', 972, '袋', 50, '日栄商事株式会社', 8, true],
@@ -842,7 +842,12 @@ var DEFAULT_RECIPES = [
 ];
 var DEFAULT_MONTH = '2025-08';
 
-var state = { v: 1, items: [], months: {}, recipes: [], seeded: false };
+/* Bump this whenever DEFAULT_ITEMS prices are revised. Devices that already
+   hold data keep their counts but pick up the new prices and units, because
+   the master lives in localStorage, not in this file. */
+var PRICE_REV = 2;
+
+var state = { v: 1, items: [], months: {}, recipes: [], seeded: false, priceRev: 0 };
 
 function load(){
   try{
@@ -854,6 +859,7 @@ function load(){
       state.months = (s.months && typeof s.months === 'object') ? s.months : {};
       state.recipes = Array.isArray(s.recipes) ? s.recipes : [];
       state.seeded = s.seeded === true;
+      state.priceRev = s.priceRev || 0;
     }
   }catch(e){ /* corrupt storage: start clean rather than break the app */ }
 }
@@ -886,6 +892,28 @@ function seedFirstRun(){
     }
   }
   state.seeded = true;
+  save();
+}
+
+/* Prices come from the supplier and change; the master is stored per device,
+   so an app already in use needs the new figures pushed to it. Matched by
+   item name, and the counted quantities are left untouched. */
+function applyPriceRevision(){
+  if (state.priceRev === PRICE_REV) return;
+
+  if (state.items.length){
+    var byName = {};
+    for (var i = 0; i < DEFAULT_ITEMS.length; i++) byName[DEFAULT_ITEMS[i][0]] = DEFAULT_ITEMS[i];
+
+    for (var j = 0; j < state.items.length; j++){
+      var it = state.items[j];
+      var d = byName[it.name];
+      if (!d) continue;
+      it.price = d[1];
+      it.unit  = d[2];
+    }
+  }
+  state.priceRev = PRICE_REV;
   save();
 }
 
@@ -1503,6 +1531,7 @@ function init(){
   load();
   setupMonths();
   seedFirstRun();
+  applyPriceRevision();
 
   // --- tabs
   var btns = document.querySelectorAll('nav button');
