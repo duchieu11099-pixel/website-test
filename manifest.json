@@ -1,0 +1,27 @@
+{
+  "name": "棚卸 – 在庫金額計算",
+  "short_name": "棚卸",
+  "description": "月末の在庫数量を入力すると金額を自動計算し、Excelに書き出せます。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f1220",
+  "theme_color": "#0f1220",
+  "icons": [
+    {
+      "src": "./icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
