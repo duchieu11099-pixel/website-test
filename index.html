@@ -125,6 +125,18 @@
     border-top:1px solid #2e3560; font-size:.8rem; color:var(--muted);}
   .sup .ssum b{color:var(--text); font-variant-numeric:tabular-nums;}
 
+  /* ---------- history ---------- */
+  .hist{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid #2e3560;
+    border-radius:14px; padding:13px 14px; margin-bottom:9px; cursor:pointer; display:flex;
+    justify-content:space-between; align-items:center; gap:12px;}
+  .hist:active{transform:scale(.99);}
+  .hist .hl{min-width:0;}
+  .hist .hm{font-weight:700; font-size:1rem;}
+  .hist .hs{color:var(--muted); font-size:.74rem; margin-top:3px;}
+  .hist .hr{text-align:right; flex:0 0 auto;}
+  .hist .hv{font-weight:700; font-size:1.02rem; color:var(--accent); font-variant-numeric:tabular-nums;}
+  .hist .hc{color:var(--muted); font-size:.7rem; margin-top:2px;}
+
   /* ---------- recipes ---------- */
   .recipe{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid #2e3560;
     border-radius:14px; padding:14px; margin-bottom:12px;}
@@ -345,6 +357,15 @@
     <div id="supplierList"></div>
   </section>
 
+  <!-- ================= 履歴 ================= -->
+  <section id="page-history" class="page">
+    <header>
+      <h1>履歴</h1>
+      <p>今までに棚卸した月の一覧です</p>
+    </header>
+    <div id="historyList"></div>
+  </section>
+
 </div>
 
 <!-- total bar -->
@@ -366,6 +387,7 @@
   <button data-tab="master"><span class="ico">🏷️</span>品目マスタ</button>
   <button data-tab="recipe"><span class="ico">🍜</span>レシピ</button>
   <button data-tab="supplier"><span class="ico">🚚</span>仕入先</button>
+  <button data-tab="history"><span class="ico">🗓️</span>履歴</button>
 </nav>
 
 <div class="modal" id="lineModal">
@@ -1076,6 +1098,48 @@ function renderTotal(){
   $('totalCount').textContent = filled + ' / ' + list.length;
 }
 
+/* ---------- history ---------- */
+
+function renderHistory(){
+  var host = $('historyList');
+  if (!host) return;
+
+  var keys = [];
+  for (var k in state.months){
+    var m = state.months[k];
+    if (!m) continue;
+    for (var id in m){ if (m[id]){ keys.push(k); break; } }
+  }
+  if (!keys.length){
+    host.innerHTML = '<div class="empty">まだ棚卸の記録がありません。<br>「棚卸」で数量を入力すると、ここに残ります。</div>';
+    return;
+  }
+  keys.sort().reverse();
+
+  var list = countedItems();
+  var html = '';
+  for (var i = 0; i < keys.length; i++){
+    var mk = keys[i], m = state.months[mk], total = 0, filled = 0;
+    for (var j = 0; j < list.length; j++){
+      var q = m[list[j].id] || 0;
+      if (q > 0) filled++;
+      total += valueOf(list[j], q);
+    }
+    var a = state.audit && state.audit[mk];
+    html += '<div class="hist" data-open="' + esc(mk) + '">' +
+      '<div class="hl">' +
+        '<div class="hm">' + esc(monthLabel(mk)) + '</div>' +
+        '<div class="hs">' + filled + ' / ' + list.length + ' 品目' +
+          (a ? ' ・ ' + esc(String(a.by).split('@')[0]) + ' が棚卸' : '') + '</div>' +
+      '</div>' +
+      '<div class="hr">' +
+        '<div class="hv">' + fmtMoney(round2(total)) + '</div>' +
+        '<div class="hc">合計金額</div>' +
+      '</div></div>';
+  }
+  host.innerHTML = html;
+}
+
 /* ---------- suppliers ---------- */
 
 function renderSuppliers(){
@@ -1553,6 +1617,7 @@ function renderAll(){
   renderMaster();
   renderRecipes();
   renderSuppliers();
+  renderHistory();
   fillSupplierList();
 }
 
@@ -1726,6 +1791,18 @@ function init(){
       save(); renderRecipes();
       toast('材料を削除しました');
     }
+  });
+
+  $('historyList').addEventListener('click', function(e){
+    var card = e.target.closest('[data-open]');
+    if (!card) return;
+    var mk = card.getAttribute('data-open');
+    var parts = mk.split('-');
+    $('selYear').value = parts[0];
+    $('selMonth').value = String(parseInt(parts[1], 10));
+    switchTab('count');
+    renderCount();
+    window.scrollTo(0, 0);
   });
 
   $('btnAddRecipe').addEventListener('click', function(){
