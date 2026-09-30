@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>棚卸 – 在庫金額計算</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="棚卸">
+<meta name="theme-color" content="#0f1220">
+<link rel="icon" href="./icon-180.png">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="manifest" href="./manifest.json">
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1f35; --card2:#232a4a; --text:#eef1ff; --muted:#9aa3c7;
+    --accent:#6c8cff; --accent2:#8b5cf6; --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+    --radius:18px;
+    --navh:58px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{touch-action:manipulation;}
+  body{
+    margin:0; background:var(--bg); color:var(--text); min-height:100vh;
+    font-family:-apple-system,'Hiragino Sans','Noto Sans JP','Yu Gothic',Meiryo,sans-serif;
+    font-size:16px; -webkit-text-size-adjust:100%;
+  }
+  .app{max-width:720px; margin:0 auto; padding:16px 16px calc(var(--navh) + 96px + env(safe-area-inset-bottom));}
+  header{text-align:center; padding:10px 0 2px;}
+  header h1{font-size:1.4rem; margin:0; letter-spacing:.02em;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;}
+  header p{color:var(--muted); font-size:.84rem; margin:6px 0 0;}
+  .page{display:none; animation:fadeIn .25s ease;}
+  .page.show{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  /* ---------- month selector ---------- */
+  .monthbar{display:flex; align-items:center; justify-content:center; gap:8px; margin:16px 0 14px;}
+  .monthbar select{
+    background:#12162a; color:var(--text); border:2px solid #2e3560; border-radius:12px;
+    padding:10px 12px; font-size:16px; font-family:inherit; outline:none; appearance:none;
+    -webkit-appearance:none; text-align:center; text-align-last:center;
+  }
+  .monthbar select:focus{border-color:var(--accent);}
+  .monthbar .sfx{color:var(--muted); font-size:.9rem;}
+
+  /* ---------- count rows ---------- */
+  .item{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid #2e3560; border-radius:14px; padding:12px 14px; margin-bottom:10px;
+    animation:fadeIn .2s ease;
+  }
+  .item .top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .item .nm{font-weight:600; font-size:1rem; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .item .val{font-weight:700; font-size:1.05rem; color:var(--accent); white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .item .val.zero{color:var(--muted); font-weight:600;}
+  .item .bottom{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:9px;}
+  .item .meta{color:var(--muted); font-size:.82rem; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .qtywrap{display:flex; align-items:center; gap:4px; background:#12162a; border:2px solid #2e3560; border-radius:12px; padding:0 10px; flex:0 0 auto;}
+  .qtywrap:focus-within{border-color:var(--accent);}
+  .qtywrap input{
+    width:92px; background:none; border:none; outline:none; color:#fff;
+    font-size:16px; font-family:inherit; text-align:right; padding:11px 0;
+    font-variant-numeric:tabular-nums;
+  }
+  .qtywrap input::placeholder{color:#4d5480;}
+  .qtywrap .u{color:var(--muted); font-size:.8rem; min-width:1.2em;}
+
+  /* ---------- buttons ---------- */
+  .btnrow{display:flex; gap:10px; margin-top:16px;}
+  button.btn{
+    border:none; border-radius:14px; padding:15px 12px; font-size:.98rem; font-weight:600;
+    font-family:inherit; cursor:pointer; flex:1; color:#fff; transition:transform .1s;
+  }
+  button.btn:active{transform:scale(.97);}
+  .b-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));}
+  .b-good{background:var(--good); color:#0b3323;}
+  .b-neutral{background:#2e3560;}
+  button.btn:disabled{opacity:.45; cursor:default;}
+  button.btn:disabled:active{transform:none;}
+
+  /* ---------- master list ---------- */
+  .mitem{background:var(--card); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+  .mitem .info{flex:1; min-width:0;}
+  .mitem b{font-size:1rem; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .mitem small{color:var(--muted); display:block; font-size:.8rem; margin-top:2px;}
+  .icobtn{
+    background:#2e3560; border:none; color:#fff; border-radius:10px; padding:10px 13px;
+    font-size:.85rem; font-family:inherit; cursor:pointer; flex:0 0 auto; transition:transform .1s;
+  }
+  .icobtn:active{transform:scale(.94);}
+  .icobtn.danger{background:#3b1f2e; color:var(--bad);}
+
+  /* ---------- forms ---------- */
+  form label{display:block; font-size:.82rem; color:var(--muted); margin:14px 0 5px;}
+  form input{
+    width:100%; padding:13px 12px; border-radius:12px; border:2px solid #2e3560;
+    background:#12162a; color:#fff; font-size:16px; font-family:inherit; outline:none;
+  }
+  form input:focus{border-color:var(--accent);}
+  form select{
+    width:100%; padding:13px 12px; border-radius:12px; border:2px solid #2e3560;
+    background:#12162a; color:#fff; font-size:16px; font-family:inherit; outline:none;
+    appearance:none; -webkit-appearance:none;
+  }
+  form select:focus{border-color:var(--accent);}
+  .two{display:flex; gap:10px;}
+  .two > div{flex:1;}
+
+  label.chk{display:flex; align-items:center; gap:9px; margin:16px 0 0; font-size:.9rem; color:var(--text);}
+  label.chk input{width:auto; margin:0; accent-color:var(--accent);}
+
+  /* ---------- suppliers ---------- */
+  .sup{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid #2e3560;
+    border-radius:14px; padding:14px; margin-bottom:12px;}
+  .sup .stop{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .sup .sname{font-weight:700; font-size:1rem; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .sup .scount{color:var(--muted); font-size:.76rem; white-space:nowrap;}
+  .sup .srow{display:flex; align-items:baseline; gap:9px; padding:8px 0; border-top:1px solid #2e3560; margin-top:8px;}
+  .sup .srow .sn{flex:1; min-width:0; font-size:.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .sup .srow .sp{font-size:.9rem; color:var(--accent); white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .sup .ssum{display:flex; justify-content:space-between; gap:12px; margin-top:10px; padding-top:10px;
+    border-top:1px solid #2e3560; font-size:.8rem; color:var(--muted);}
+  .sup .ssum b{color:var(--text); font-variant-numeric:tabular-nums;}
+
+  /* ---------- recipes ---------- */
+  .recipe{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid #2e3560;
+    border-radius:14px; padding:14px; margin-bottom:12px;}
+  .recipe .rtop{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .recipe .rname{font-weight:700; font-size:1.05rem; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .recipe .rtotal{font-weight:700; font-size:1.1rem; color:var(--good); white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .recipe .rnote{color:var(--muted); font-size:.78rem; margin:2px 0 0;}
+  .rline{display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid #2e3560; margin-top:9px;}
+  .rline .rli{flex:1; min-width:0;}
+  .rline .rli b{display:block; font-size:.92rem; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .rline .rli small{color:var(--muted); font-size:.74rem;}
+  .rline .rlc{width:5.5em; text-align:right; font-size:.88rem; color:var(--accent);
+    font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .rline .rlc.zero{color:var(--muted);}
+  .rline .qtywrap input{width:62px;}
+  .rline .rmv{background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; padding:6px 2px; flex:0 0 auto;}
+  .recipe .ractions{display:flex; gap:8px; margin-top:12px;}
+  .recipe .ractions .icobtn{flex:1; text-align:center;}
+
+  .box{background:var(--card); border:1px solid #2e3560; border-radius:var(--radius); padding:16px; margin-top:16px;}
+  .box h3{margin:0 0 4px; font-size:.95rem;}
+  .box .hint{color:var(--muted); font-size:.8rem; margin:0 0 4px; line-height:1.5;}
+  .sec{margin-top:20px;}
+  .sec > h2{font-size:.78rem; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin:0 0 8px;}
+
+  .empty{background:var(--card); border:1px dashed #2e3560; border-radius:var(--radius); padding:34px 20px; text-align:center; color:var(--muted); font-size:.9rem; line-height:1.6;}
+  .empty button{margin-top:14px;}
+
+  /* ---------- fixed total bar + nav ---------- */
+  .totalbar{
+    position:fixed; left:0; right:0; bottom:calc(var(--navh) + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,#23274a,#1a1d38); border-top:1px solid #2e3560;
+    z-index:40;
+  }
+  .totalbar .inner{
+    max-width:720px; margin:0 auto; padding:12px 16px;
+    display:flex; justify-content:space-between; align-items:center; gap:14px;
+  }
+  .totalbar .lbl{font-size:.72rem; color:var(--muted); letter-spacing:.08em; display:block; margin-bottom:2px;}
+  .totalbar .amt{font-size:1.5rem; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; letter-spacing:.01em;}
+  .totalbar .side{text-align:right; flex:0 0 auto;}
+  .totalbar .side b{font-size:1.05rem; font-variant-numeric:tabular-nums;}
+
+  nav{position:fixed; bottom:0; left:0; right:0; display:flex; background:#12162a;
+      border-top:1px solid #2a3155; z-index:50; padding-bottom:env(safe-area-inset-bottom);}
+  nav button{
+    flex:1; height:var(--navh); background:none; border:none; color:var(--muted);
+    font-size:.75rem; font-family:inherit; cursor:pointer; padding:0;
+  }
+  nav button .ico{display:block; font-size:1.3rem; margin-bottom:3px; line-height:1;}
+  nav button.active{color:var(--accent);}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed; inset:0; background:rgba(0,0,0,.65); display:none; align-items:flex-end; justify-content:center; z-index:100;}
+  .modal.show{display:flex;}
+  .sheet{
+    background:var(--card); border-radius:22px 22px 0 0; width:100%; max-width:720px;
+    max-height:86vh; overflow-y:auto; padding:22px 20px calc(26px + env(safe-area-inset-bottom));
+    animation:slideUp .28s ease; border:1px solid #2e3560; border-bottom:none;
+  }
+  @keyframes slideUp{from{transform:translateY(40px); opacity:0;} to{transform:none; opacity:1;}}
+  .sheet h3{margin:0 0 4px; font-size:1.2rem;}
+  .sheet .sub{color:var(--muted); font-size:.82rem; margin:0;}
+  .closex{float:right; background:#2e3560; border:none; color:#fff; border-radius:50%; width:34px; height:34px; font-size:1rem; cursor:pointer;}
+
+  /* Anchored above the bottom bars rather than at the top, so it never covers
+     the page title, and it lands where the eye already is after a tap. */
+  .toast{
+    position:fixed; left:50%; transform:translateX(-50%);
+    bottom:calc(var(--navh) + 92px + env(safe-area-inset-bottom));
+    background:var(--good); color:#0b3323; font-weight:600; padding:11px 20px; border-radius:999px;
+    z-index:200; display:none; font-size:.9rem; max-width:90vw; text-align:center;
+    /* the dark ring keeps the pill legible whatever it happens to float over */
+    box-shadow:0 0 0 3px rgba(15,18,32,.92), 0 10px 28px rgba(0,0,0,.5);
+    animation:toastIn .22s ease;
+  }
+  @keyframes toastIn{
+    from{opacity:0; transform:translate(-50%,12px);}
+    to{opacity:1; transform:translate(-50%,0);}
+  }
+  .toast.err{background:var(--bad); color:#3b0f14;}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= 棚卸 ================= -->
+  <section id="page-count" class="page show">
+    <header>
+      <h1>棚卸</h1>
+      <p>月末の在庫数量を入力すると、金額を自動で計算します</p>
+    </header>
+
+    <div class="monthbar">
+      <select id="selYear" aria-label="年"></select><span class="sfx">年</span>
+      <select id="selMonth" aria-label="月"></select><span class="sfx">月</span>
+    </div>
+
+    <div id="countList"></div>
+
+    <div class="btnrow" id="countActions">
+      <button class="btn b-good" id="btnSave">保存</button>
+      <button class="btn b-primary" id="btnExport">Excel出力</button>
+    </div>
+  </section>
+
+  <!-- ================= 品目マスタ ================= -->
+  <section id="page-master" class="page">
+    <header>
+      <h1>品目マスタ</h1>
+      <p>品目・単価・単位を登録します（全月共通）</p>
+    </header>
+
+    <form id="itemForm" autocomplete="off">
+      <label for="fName">品目名</label>
+      <input id="fName" type="text" placeholder="例：ボルト M6" required>
+
+      <div class="two">
+        <div>
+          <label for="fPrice">単価（円）</label>
+          <input id="fPrice" type="text" inputmode="decimal" placeholder="500" required>
+        </div>
+        <div>
+          <label for="fUnit">単位</label>
+          <input id="fUnit" type="text" list="unitList" placeholder="個" required>
+        </div>
+      </div>
+
+      <div class="two">
+        <div>
+          <label for="fSupplier">仕入先</label>
+          <input id="fSupplier" type="text" list="supplierOptions" placeholder="例：株式会社小田島商店">
+        </div>
+        <div>
+          <label for="fTax">税率</label>
+          <select id="fTax">
+            <option value="8">8%</option>
+            <option value="10">10%</option>
+            <option value="0">なし</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="chk"><input id="fCounted" type="checkbox" checked> 棚卸の対象にする</label>
+
+      <datalist id="supplierOptions"></datalist>
+
+      <datalist id="unitList">
+        <option value="個"></option><option value="箱"></option><option value="ケース"></option>
+        <option value="袋"></option><option value="セット"></option><option value="パック"></option>
+        <option value="枚"></option><option value="本"></option><option value="台"></option>
+        <option value="ロール"></option><option value="kg"></option><option value="g"></option>
+        <option value="L"></option><option value="m"></option><option value="cm"></option>
+      </datalist>
+
+      <div class="btnrow">
+        <button type="submit" class="btn b-primary" id="btnAddItem">品目を追加</button>
+      </div>
+    </form>
+
+    <div class="sec">
+      <h2>登録済みの品目</h2>
+      <div id="itemList"></div>
+    </div>
+
+    <div class="box">
+      <h3>バックアップ</h3>
+      <p class="hint">データはこの端末の中だけに保存されます。機種変更やデータ消去に備えて、ときどき書き出しておいてください。</p>
+      <div class="btnrow">
+        <button class="btn b-neutral" id="btnBackup">書き出す</button>
+        <button class="btn b-neutral" id="btnRestore">読み込む</button>
+      </div>
+      <input type="file" id="fileRestore" accept=".json,application/json" hidden>
+    </div>
+  </section>
+
+  <!-- ================= レシピ ================= -->
+  <section id="page-recipe" class="page">
+    <header>
+      <h1>レシピ</h1>
+      <p>スープ・仕込みの材料費を計算します</p>
+    </header>
+
+    <div id="recipeList"></div>
+
+    <div class="btnrow">
+      <button class="btn b-primary" id="btnAddRecipe">レシピを追加</button>
+    </div>
+  </section>
+
+  <!-- ================= 仕入先 ================= -->
+  <section id="page-supplier" class="page">
+    <header>
+      <h1>仕入先</h1>
+      <p>取引先ごとの品目と単価・税率の一覧です</p>
+    </header>
+
+    <div id="supplierList"></div>
+  </section>
+
+</div>
+
+<!-- total bar -->
+<div class="totalbar">
+  <div class="inner">
+    <div>
+      <span class="lbl">合計金額</span>
+      <span class="amt" id="totalAmt">¥0</span>
+    </div>
+    <div class="side">
+      <span class="lbl">入力済み</span>
+      <b id="totalCount">0 / 0</b>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <button class="active" data-tab="count"><span class="ico">📋</span>棚卸</button>
+  <button data-tab="master"><span class="ico">🏷️</span>品目マスタ</button>
+  <button data-tab="recipe"><span class="ico">🍜</span>レシピ</button>
+  <button data-tab="supplier"><span class="ico">🚚</span>仕入先</button>
+</nav>
+
+<div class="modal" id="lineModal">
+  <div class="sheet">
+    <button class="closex" id="btnCloseLine">✕</button>
+    <h3>材料を追加</h3>
+    <p class="sub" id="lineSub"></p>
+    <form id="lineForm" autocomplete="off">
+      <label for="lItem">品目</label>
+      <select id="lItem"></select>
+      <label for="lQty">使用量</label>
+      <input id="lQty" type="text" inputmode="decimal" placeholder="0" required>
+      <div class="btnrow">
+        <button type="button" class="btn b-neutral" id="btnCancelLine">キャンセル</button>
+        <button type="submit" class="btn b-primary">追加する</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="editModal">
+  <div class="sheet">
+    <button class="closex" id="btnCloseEdit">✕</button>
+    <h3>品目を編集</h3>
+    <p class="sub" id="editSub"></p>
+    <form id="editForm" autocomplete="off">
+      <label for="eName">品目名</label>
+      <input id="eName" type="text" required>
+      <div class="two">
+        <div>
+          <label for="ePrice">単価（円）</label>
+          <input id="ePrice" type="text" inputmode="decimal" required>
+        </div>
+        <div>
+          <label for="eUnit">単位</label>
+          <input id="eUnit" type="text" list="unitList" required>
+        </div>
+      </div>
+      <div class="two">
+        <div>
+          <label for="eSupplier">仕入先</label>
+          <input id="eSupplier" type="text" list="supplierOptions">
+        </div>
+        <div>
+          <label for="eTax">税率</label>
+          <select id="eTax">
+            <option value="8">8%</option>
+            <option value="10">10%</option>
+            <option value="0">なし</option>
+          </select>
+        </div>
+      </div>
+      <label class="chk"><input id="eCounted" type="checkbox"> 棚卸の対象にする</label>
+      <div class="btnrow">
+        <button type="button" class="btn b-neutral" id="btnCancelEdit">キャンセル</button>
+        <button type="submit" class="btn b-primary">保存する</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   棚卸 – 在庫金額計算
+   Single-file app. No dependencies, no build step.
+   ============================================================ */
+
+var KEY = 'zaikoApp_v1';
+
+/* ---------- number handling ----------------------------------------------
+   A Japanese IME emits full-width digits (１２３) and full-width dots (．。،),
+   which parseFloat would silently turn into NaN. Normalise before parsing.   */
+function normalizeNum(s){
+  return String(s == null ? '' : s)
+    .replace(/[０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+    .replace(/[．。，]/g, function(c){ return c === '，' ? ',' : '.'; })
+    .replace(/,/g, '')
+    .replace(/[^0-9.]/g, '');
+}
+function parseNum(s){
+  var n = parseFloat(normalizeNum(s));
+  return (isFinite(n) && n > 0) ? n : 0;
+}
+// 金額 = 単価 x 数量 exactly (the shop's sheet carries decimals here, e.g. 5,724.5).
+// Round to 2 decimals only to shake off binary float noise, never to whole yen.
+function round2(n){ return Math.round(n * 100) / 100; }
+function fmtMoney(n){
+  return '¥' + n.toLocaleString('ja-JP', { maximumFractionDigits: 2 });
+}
+function fmtMoney3(n){
+  return '¥' + n.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
+}
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ============================================================
+   Minimal .xlsx writer
+   An .xlsx is a ZIP of XML parts. Everything here is store-only (no
+   compression) and dependency-free, so it inlines into a plain page.
+   ============================================================ */
+
+function xlsxCrc32(bytes){
+  var crc = 0xFFFFFFFF;
+  for (var i = 0; i < bytes.length; i++){
+    crc ^= bytes[i];
+    for (var k = 0; k < 8; k++) crc = (crc >>> 1) ^ (0xEDB88320 & -(crc & 1));
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+function xlsxZip(files){
+  var enc = new TextEncoder();
+  var chunks = [], central = [], offset = 0;
+  var now = new Date();
+  var dosTime = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xFFFF;
+  var dosDate = (((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate()) & 0xFFFF;
+
+  for (var i = 0; i < files.length; i++){
+    var f = files[i];
+    var nameBytes = enc.encode(f.name);
+    var data = f.data;
+    var crc = xlsxCrc32(data);
+
+    var lh = new Uint8Array(30 + nameBytes.length);
+    var lv = new DataView(lh.buffer);
+    lv.setUint32(0, 0x04034b50, true);   // local file header signature
+    lv.setUint16(4, 20, true);           // version needed
+    lv.setUint16(6, 0x0800, true);       // flags: UTF-8 filenames
+    lv.setUint16(8, 0, true);            // method 0 = store
+    lv.setUint16(10, dosTime, true);
+    lv.setUint16(12, dosDate, true);
+    lv.setUint32(14, crc, true);
+    lv.setUint32(18, data.length, true); // compressed size
+    lv.setUint32(22, data.length, true); // uncompressed size
+    lv.setUint16(26, nameBytes.length, true);
+    lv.setUint16(28, 0, true);           // extra field length
+    lh.set(nameBytes, 30);
+    chunks.push(lh, data);
+
+    var cd = new Uint8Array(46 + nameBytes.length);
+    var cv = new DataView(cd.buffer);
+    cv.setUint32(0, 0x02014b50, true);   // central directory signature
+    cv.setUint16(4, 20, true);           // version made by
+    cv.setUint16(6, 20, true);           // version needed
+    cv.setUint16(8, 0x0800, true);
+    cv.setUint16(10, 0, true);
+    cv.setUint16(12, dosTime, true);
+    cv.setUint16(14, dosDate, true);
+    cv.setUint32(16, crc, true);
+    cv.setUint32(20, data.length, true);
+    cv.setUint32(24, data.length, true);
+    cv.setUint16(28, nameBytes.length, true);
+    cv.setUint16(30, 0, true);           // extra
+    cv.setUint16(32, 0, true);           // comment
+    cv.setUint16(34, 0, true);           // disk number start
+    cv.setUint16(36, 0, true);           // internal attributes
+    cv.setUint32(38, 0, true);           // external attributes
+    cv.setUint32(42, offset, true);      // offset of local header
+    cd.set(nameBytes, 46);
+    central.push(cd);
+
+    offset += lh.length + data.length;
+  }
+
+  var cdSize = 0;
+  for (var j = 0; j < central.length; j++) cdSize += central[j].length;
+
+  var eocd = new Uint8Array(22);
+  var ev = new DataView(eocd.buffer);
+  ev.setUint32(0, 0x06054b50, true);     // end of central directory
+  ev.setUint16(4, 0, true);
+  ev.setUint16(6, 0, true);
+  ev.setUint16(8, files.length, true);
+  ev.setUint16(10, files.length, true);
+  ev.setUint32(12, cdSize, true);
+  ev.setUint32(16, offset, true);
+  ev.setUint16(20, 0, true);
+
+  var all = chunks.concat(central, [eocd]);
+  var total = 0;
+  for (var k = 0; k < all.length; k++) total += all[k].length;
+  var out = new Uint8Array(total);
+  var pos = 0;
+  for (var m = 0; m < all.length; m++){ out.set(all[m], pos); pos += all[m].length; }
+  return out;
+}
+
+function xlsxEsc(s){
+  return String(s)
+    // control chars are illegal in XML 1.0 and make Excel reject the file
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function xlsxColName(n){
+  var s = '';
+  while (n > 0){ var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = (n - 1 - m) / 26; }
+  return s;
+}
+
+/* Style indexes into cellXfs below:
+   0 = plain   1 = bold   2 = thousands (money, integer display)   3 = bold + thousands
+   4 = quantity: thousands + up to 3 decimals, so 1.5 is not rounded to 2
+   5 = amount: thousands + up to 2 decimals (金額 is 単価 x 数量 exactly)
+   6 = grand total: bold on a yellow fill with a box border */
+var XLSX_S = { plain: 0, bold: 1, num: 2, boldNum: 3, qty: 4, amount: 5, total: 6,
+               // recipe costs carry up to 3 decimals (上白糖 is 26.136); this is
+               // the same #,##0.### number format the quantity column uses
+               money3: 4 };
+
+var XLSX_XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+
+function xlsxContentTypesXml(sheetCount){
+  var sheets = '';
+  for (var i = 1; i <= sheetCount; i++){
+    sheets += '<Override PartName="/xl/worksheets/sheet' + i + '.xml" ' +
+      'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+  }
+  return XLSX_XML_HEAD +
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+    '<Default Extension="xml" ContentType="application/xml"/>' +
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+    sheets +
+    '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+    '</Types>';
+}
+
+function xlsxRootRelsXml(){
+  return XLSX_XML_HEAD +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+    '</Relationships>';
+}
+
+function xlsxWorkbookXml(sheetNames){
+  var sheets = '';
+  for (var i = 0; i < sheetNames.length; i++){
+    sheets += '<sheet name="' + xlsxEsc(sheetNames[i]) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>';
+  }
+  return XLSX_XML_HEAD +
+    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+    '<sheets>' + sheets + '</sheets>' +
+    '</workbook>';
+}
+
+function xlsxWorkbookRelsXml(sheetCount){
+  var rels = '';
+  for (var i = 1; i <= sheetCount; i++){
+    rels += '<Relationship Id="rId' + i + '" ' +
+      'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" ' +
+      'Target="worksheets/sheet' + i + '.xml"/>';
+  }
+  // the styles part is found by scanning these relationships, not by an r:id
+  return XLSX_XML_HEAD +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    rels +
+    '<Relationship Id="rId' + (sheetCount + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+    '</Relationships>';
+}
+
+function xlsxStylesXml(){
+  // theme colours are avoided on purpose: referencing a theme part that is not
+  // shipped is what makes minimal writers produce files Excel wants to "repair".
+  var fontPlain = '<font><sz val="11"/><color rgb="FF000000"/><name val="Calibri"/><family val="2"/></font>';
+  var fontBold  = '<font><b/><sz val="11"/><color rgb="FF000000"/><name val="Calibri"/><family val="2"/></font>';
+  return XLSX_XML_HEAD +
+    '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<numFmts count="3">' +
+      '<numFmt numFmtId="164" formatCode="#,##0"/>' +
+      '<numFmt numFmtId="165" formatCode="#,##0.###"/>' +
+      '<numFmt numFmtId="166" formatCode="#,##0.##"/>' +
+    '</numFmts>' +
+    '<fonts count="2">' + fontPlain + fontBold + '</fonts>' +
+    // fills 0 and 1 must be none and gray125; Excel treats them as reserved,
+    // so the yellow highlight starts at index 2.
+    '<fills count="3">' +
+      '<fill><patternFill patternType="none"/></fill>' +
+      '<fill><patternFill patternType="gray125"/></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFFFE699"/><bgColor indexed="64"/></patternFill></fill>' +
+    '</fills>' +
+    '<borders count="2">' +
+      '<border><left/><right/><top/><bottom/><diagonal/></border>' +
+      '<border><left style="thin"><color rgb="FF000000"/></left>' +
+        '<right style="thin"><color rgb="FF000000"/></right>' +
+        '<top style="thin"><color rgb="FF000000"/></top>' +
+        '<bottom style="thin"><color rgb="FF000000"/></bottom><diagonal/></border>' +
+    '</borders>' +
+    '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+    '<cellXfs count="7">' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>' +
+      '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/>' +
+      '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="166" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+    '</cellXfs>' +
+    '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+    '</styleSheet>';
+}
+
+function xlsxSheetXml(sheet){
+  // Excel always records the used range; readers that do not find it have to
+  // guess, and guessing goes wrong when a sheet starts at C1 as this one does.
+  var maxCol = 0;
+  for (var dr = 0; dr < sheet.rows.length; dr++){
+    var rowCells = sheet.rows[dr] || [];
+    for (var dc = 0; dc < rowCells.length; dc++){
+      var cv = rowCells[dc];
+      if (cv === null || cv === undefined || cv === '') continue;
+      if (dc + 1 > maxCol) maxCol = dc + 1;
+    }
+  }
+  var dim = (maxCol > 0 && sheet.rows.length > 0)
+    ? '<dimension ref="A1:' + xlsxColName(maxCol) + sheet.rows.length + '"/>'
+    : '<dimension ref="A1"/>';
+
+  var cols = '';
+  if (sheet.cols && sheet.cols.length){
+    var parts = [];
+    for (var i = 0; i < sheet.cols.length; i++){
+      parts.push('<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + sheet.cols[i] + '" customWidth="1"/>');
+    }
+    cols = '<cols>' + parts.join('') + '</cols>';
+  }
+
+  var body = '';
+  for (var r = 0; r < sheet.rows.length; r++){
+    var cells = sheet.rows[r] || [];
+    var ref = r + 1;
+    var out = '';
+    var filled = 0;
+    for (var c = 0; c < cells.length; c++){
+      var cell = cells[c];
+      var at = xlsxColName(c + 1) + ref;
+      if (cell === null || cell === undefined || cell === ''){
+        // Write leading blanks out as real (empty) cells so each row's first
+        // cell sits in column A. The total row starts at C1, and without this
+        // some viewers mis-detect the sheet origin and render it blank.
+        if (!filled) out += '<c r="' + at + '"/>';
+        continue;
+      }
+      var style = '';
+      var value = cell;
+      if (typeof cell === 'object'){ value = cell.v; style = cell.s ? ' s="' + cell.s + '"' : ''; }
+      if (typeof value === 'number'){
+        if (!isFinite(value)) continue;
+        out += '<c r="' + at + '"' + style + '><v>' + value + '</v></c>';
+      } else {
+        out += '<c r="' + at + '"' + style + ' t="inlineStr"><is><t xml:space="preserve">' + xlsxEsc(value) + '</t></is></c>';
+      }
+      filled++;
+    }
+    // a row holding nothing but blanks is written as a bare row
+    body += filled ? '<row r="' + ref + '">' + out + '</row>' : '<row r="' + ref + '"/>';
+  }
+
+  return XLSX_XML_HEAD +
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    dim + cols + '<sheetData>' + body + '</sheetData>' +
+    '</worksheet>';
+}
+
+/* sheet = { name, cols: [widths], rows: [[cell, ...], ...] }
+   cell = null | string | number | { v: string|number, s: styleIndex } */
+/* sheets = [ { name, cols: [widths], rows: [[cell, ...], ...] }, ... ]
+   cell = null | string | number | { v: string|number, s: styleIndex } */
+function buildXlsx(sheets){
+  var enc = new TextEncoder();
+  var names = sheets.map(function(s, i){ return s.name || ('Sheet' + (i + 1)); });
+
+  var files = [
+    { name: '[Content_Types].xml',        data: enc.encode(xlsxContentTypesXml(sheets.length)) },
+    { name: '_rels/.rels',                data: enc.encode(xlsxRootRelsXml()) },
+    { name: 'xl/workbook.xml',            data: enc.encode(xlsxWorkbookXml(names)) },
+    { name: 'xl/_rels/workbook.xml.rels', data: enc.encode(xlsxWorkbookRelsXml(sheets.length)) },
+    { name: 'xl/styles.xml',              data: enc.encode(xlsxStylesXml()) }
+  ];
+  for (var i = 0; i < sheets.length; i++){
+    files.push({ name: 'xl/worksheets/sheet' + (i + 1) + '.xml', data: enc.encode(xlsxSheetXml(sheets[i])) });
+  }
+  return xlsxZip(files);
+}
+
+/* ============================================================
+   State
+   ============================================================ */
+
+/* ----------------------------------------------------------------
+   The shop's own product list, transcribed from 竹むら 棚卸.xlsx
+   (sheet 2025.8). The sheet *displays* 単価 rounded via a #,##0
+   format while the stored price carries decimals -- that is why
+   493.56 shows as 494. These are the exact stored prices, so
+   金額 = 単価 x 数量 comes out right.
+   Fields: [ 品目, 単価, 単位, 2025年8月の数量 ]
+   The prices were cross-checked against the Sheet1 price list:
+   48 of 54 matched exactly, and the 54 rows sum to 244,302.86
+   against the sheet's own total of 244,303.                */
+var DEFAULT_ITEMS = [
+  ['ＡＢ２０ストレート　１４０ｇ', 63.72, '食', 90, '株式会社菅野製麺所　埼玉支社', 8, true],
+  ['Ｍ２２厚ストレート　150ｇ', 65.88, '食', 30, '株式会社菅野製麺所　埼玉支社', 8, true],
+  ['Ｓ中華１２手もみ　250ｇ', 82.08, '食', 45, '株式会社菅野製麺所　埼玉支社', 8, true],
+  ['MO16ストレート', 74, '食', 54, '', 0, true],
+  ['YD10ストレート（2.1）　250ｇ', 87.48, '食', 9, '株式会社菅野製麺所　埼玉支社', 8, true],
+  ['鳥スープ', 3648.8, '缶', 2.3, '', 0, true],
+  ['煮干しスープ', 525, '缶', 3, '', 0, true],
+  ['鶏油', 336.96, 'ℓ', 12, '株式会社小田島商店', 8, true],
+  ['博多地鶏油', 817.56, 'ℓ', 10, '株式会社小田島商店', 8, true],
+  ['モミジ', 169.56, 'kg', 3, '株式会社小田島商店', 8, true],
+  ['親鳥', 493.56, 'kg', 5, '株式会社小田島商店', 8, true],
+  ['大山丸鳥', 893.16, 'kg', 10, '株式会社小田島商店', 8, true],
+  ['大山鳥ガラ', 201.96, 'kg', 10, '株式会社小田島商店', 8, true],
+  ['豚ロースブロック', 1004.4, 'kg', 14, '株式会社小田島商店', 8, true],
+  ['背ガラ', 180.36, 'kg', 4, '株式会社小田島商店', 8, true],
+  ['ﾏｷｼﾏﾑこいたまご赤Ｍ10㎏', 4860, '箱', 1, '株式会社アマダ東京', 8, true],
+  ['味玉（２シート）', 2651.336, 'CS', 4, '', 0, true],
+  ['大豆白絞油 16.5kg 1缶', 6318, '缶', 0.7, '株式会社アマダ東京', 8, true],
+  ['半熟温泉たまご10ヶ入', 388.8, 'PC', 1.5, '株式会社アマダ東京', 8, true],
+  ['【ＣＢ】大葉　１００枚入　ＰＣ', 518.4, 'PC', 1.3, '株式会社フードサプライ', 8, true],
+  ['【FS】アーリーレッド　個', 129.6, '個', 24, '株式会社フードサプライ', 8, true],
+  ['【FS】ベニーナ　PC', 118.8, 'PC', 4, '株式会社フードサプライ', 8, true],
+  ['【FS】みょうが', 167.4, '個', 6, '株式会社フードサプライ', 8, true],
+  ['【FS】ムキ玉ねぎ　真空PC', 199.8, 'PC', 0, '株式会社フードサプライ', 8, true],
+  ['【FS】糸三つ葉　束', 237.6, '束', 7, '株式会社フードサプライ', 8, true],
+  ['【FS】中国産　人参　本', 48.6, '本', 0, '株式会社フードサプライ', 8, true],
+  ['【FS】長芋　Ｌ　本', 583.2, '本', 2, '株式会社フードサプライ', 8, true],
+  ['京都産九条ネギ（カットネギ）', 788.4, '袋', 2, '株式会社京都知七', 8, true],
+  ['アゴ【箱】', 3132, 'kg', 7, '丸勝かつおぶし株式会社', 8, true],
+  ['いりこＷＰ【箱】', 1080, 'kg', 6, '丸勝かつおぶし株式会社', 8, true],
+  ['のり（6枚切）', 3024, 'kg', 1, '丸勝かつおぶし株式会社', 8, true],
+  ['促成赤葉真昆布', 3348, 'kg', 0.5, '丸勝かつおぶし株式会社', 8, true],
+  ['椎茸足Ｓ', 1296, 'kg', 0.4, '丸勝かつおぶし株式会社', 8, true],
+  ['NTGスープ', 1318.5, 'pc', 7, '有限会社天辺ダッシュカンパニー', 8, true],
+  ['【INGS様PB】極太ﾒﾝﾏ 1㎏', 972, '袋', 50, '日栄商事株式会社', 8, true],
+  ['【取置】冷蔵真富士屋 ほぐし水小袋 20g×150', 1026, '袋', 2.5, '日栄商事株式会社', 8, true],
+  ['INGS様PB 特選醤油 20㎏箱入', 14428.8, '箱', 2, '日栄商事株式会社', 8, true],
+  ['カネク　キザミゆず　100g', 594, '袋', 5, '日栄商事株式会社', 8, true],
+  ['キッコーマン　こってりん　1.8L', 626.4, '本', 3, '日栄商事株式会社', 8, true],
+  ['キッコーマン 芳醇こいくち醤油 1.8L　【バラ】', 561.6, '本', 3, '日栄商事株式会社', 8, true],
+  ['キッコーマン　料理酒　1.8L', 594, '本', 1.6, '日栄商事株式会社', 8, true],
+  ['ギャバン　ブラックペッパー（グラインド）　1㎏', 3002.4, '本', 0.4, '日栄商事株式会社', 8, true],
+  ['キング醸造（ロイヤルキング） 料理酒 1.8L　【バラ】', 356.4, '本', 0, '日栄商事株式会社', 8, true],
+  ['トロロ昆布  1㎏', 3920.4, '袋', 0.8, '日栄商事株式会社', 8, true],
+  ['ミツエイ 業務用 キッチンブリーチ 5㎏', 880, '本', 0, '日栄商事株式会社', 10, true],
+  ['ミツカン 酢 1．8L　【バラ】', 410.4, '本', 0.7, '日栄商事株式会社', 8, true],
+  ['ﾐﾂｶﾝ 追いがつおつゆの素【1L･小】', 496.8, '本', 0.4, '日栄商事株式会社', 8, true],
+  ['ﾗｲｵﾝ ﾌﾟﾛ用ﾘｰﾄﾞﾍﾟｰﾊﾟｰ 中100枚 2ﾛｰﾙ入', 913, '個', 1, '日栄商事株式会社', 10, true],
+  ['リケン（元 三井） ハイラップ 30㎝×100m　【バラ】', 363, '個', 5, '日栄商事株式会社', 8, true],
+  ['元禄箸 アスヘﾟﾝ（オレンシﾞ） 100本　【バラ】', 170.5, '袋', 15, '日栄商事株式会社', 8, true],
+  ['紙ｴﾌﾟﾛﾝ8折 395×600㎜ 50枚入', 440, '袋', 7, '日栄商事株式会社', 8, true],
+  ['上白糖 1㎏　【バラ】', 261.36, 'kg', 2, '日栄商事株式会社', 8, true],
+  ['食塩 1㎏', 102.6, 'kg', 3, '日栄商事株式会社', 8, true],
+  ['日栄 焼きざみのり中国産【2㎜】100g', 1350, '袋', 2, '日栄商事株式会社', 8, true],
+  ['コカ コーラ瓶 Ｐ箱入 190ml', 149.04, '本', 0, '株式会社ＮＩＧＩＴＡ', 8, false],
+  ['サッポロ 生樽　１０Ｌ', 5896, '樽', 0, '株式会社ＮＩＧＩＴＡ', 10, false],
+  ['サッポロ 生樽　２０Ｌ', 11792, '樽', 0, '株式会社ＮＩＧＩＴＡ', 10, false],
+  ['檸檬堂 定番ﾚﾓﾝ 5°缶 350ml', 154, '缶', 0, '株式会社ＮＩＧＩＴＡ', 10, false],
+  ['地養鳥ガラ', 385.56, 'kg', 0, '株式会社小田島商店', 8, false],
+  ['豚肩ロースブロック', 1015.2, 'kg', 0, '株式会社小田島商店', 8, false],
+  ['ヤマト関東・信越　80ｻｲｽﾞ送料クール', 1002.1, '個', 0, '株式会社京都知七', 10, false],
+  ['【IG】大葉　10枚束　束', 54, '束', 0, '株式会社フードサプライ', 8, false],
+  ['配送補助費', 220, '個', 0, '日栄商事株式会社', 10, false],
+  ['楊枝 袋入 1000', 605, '袋', 0, '日栄商事株式会社', 8, false],
+  ['卵90個', 2603, 'パック', 0, '', 0, false],
+];
+
+/* The recipe block that sits in columns G-I of the same sheet: each prepared
+   batch lists the items it consumes. 材料費 = 単価 x 使用量, and the recipe
+   total is the sum of its lines -- verified against the sheet, e.g.
+   親鳥 493.56 x 3 = 1,480.68 and 大山鳥ガラ 201.96 x 10 = 2,019.6.
+   使用量 was not in the pasted range, so the lines start empty. */
+var DEFAULT_RECIPES = [
+  ['鶏スープ(70L)', [
+    ['モミジ', 2], ['親鳥', 3], ['大山丸鳥', 10], ['大山鳥ガラ', 10]
+  ]],
+  ['煮干しスープ(20L)', [
+    ['アゴ【箱】', 0.0862069], ['いりこＷＰ【箱】', 0.0574074],
+    ['促成赤葉真昆布', 0.05], ['椎茸足Ｓ', 0.02]
+  ]],
+  ['味玉（２シート）', [
+    ['卵90個', 1], ['キッコーマン　こってりん　1.8L', 0.0055556],
+    ['キッコーマン 芳醇こいくち醤油 1.8L　【バラ】', 0.0333333],
+    ['上白糖 1㎏　【バラ】', 0.1]
+  ]]
+];
+var DEFAULT_MONTH = '2025-08';
+
+var state = { v: 1, items: [], months: {}, recipes: [], seeded: false };
+
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    if (s && typeof s === 'object'){
+      state.items  = Array.isArray(s.items) ? s.items : [];
+      state.months = (s.months && typeof s.months === 'object') ? s.months : {};
+      state.recipes = Array.isArray(s.recipes) ? s.recipes : [];
+      state.seeded = s.seeded === true;
+    }
+  }catch(e){ /* corrupt storage: start clean rather than break the app */ }
+}
+
+/* Load the shop's product list the first time the app runs on a device, and
+   carry last month's counts across with it. Runs once: the flag is stored, so
+   items the user later deletes stay deleted. */
+function seedFirstRun(){
+  if (state.seeded) return;
+  if (!state.items.length){
+    for (var i = 0; i < DEFAULT_ITEMS.length; i++){
+      var d = DEFAULT_ITEMS[i];
+      var item = { id: uid(), name: d[0], price: d[1], unit: d[2],
+                   supplier: d[4] || '', tax: d[5] || 0, counted: d[6] !== false };
+      state.items.push(item);
+      if (d[3]) qtys(DEFAULT_MONTH)[item.id] = d[3];
+    }
+    // recipes reference items by name in the shop's sheet; resolve to ids here
+    for (var r = 0; r < DEFAULT_RECIPES.length; r++){
+      var recipe = { id: uid(), name: DEFAULT_RECIPES[r][0], lines: [] };
+      var lines = DEFAULT_RECIPES[r][1];
+      for (var n = 0; n < lines.length; n++){
+        var found = null;
+        for (var k = 0; k < state.items.length; k++){
+          if (state.items[k].name === lines[n][0]){ found = state.items[k]; break; }
+        }
+        if (found) recipe.lines.push({ itemId: found.id, qty: lines[n][1] });
+      }
+      state.recipes.push(recipe);
+    }
+  }
+  state.seeded = true;
+  save();
+}
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); return true; }
+  catch(e){ toast('保存できませんでした', true); return false; }
+}
+
+var saveTimer = null;
+function saveSoon(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){ saveTimer = null; save(); }, 400);
+}
+// Write straight away when the user leaves a field or hides the app, so the
+// last keystroke can never sit in the debounce window when the app goes away.
+function flushSave(){
+  if (!saveTimer) return;
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  save();
+}
+
+function uid(){
+  return 'i_' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+}
+
+/* ============================================================
+   Month selection
+   ============================================================ */
+
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+function monthKey(){
+  return $('selYear').value + '-' + pad2(parseInt($('selMonth').value, 10));
+}
+function monthLabel(mk){
+  var p = mk.split('-');
+  return p[0] + '年' + parseInt(p[1], 10) + '月';
+}
+function qtys(mk){
+  if (!state.months[mk]) state.months[mk] = {};
+  return state.months[mk];
+}
+function qtyOf(mk, id){
+  var q = qtys(mk)[id];
+  return typeof q === 'number' && isFinite(q) ? q : 0;
+}
+function valueOf(item, q){
+  return round2(parseNum(item.price) * q);
+}
+
+function setupMonths(){
+  var now = new Date();
+  var cy = now.getFullYear(), cm = now.getMonth() + 1;
+  var ys = '', ms = '';
+  for (var y = cy - 3; y <= cy + 1; y++){
+    ys += '<option value="' + y + '"' + (y === cy ? ' selected' : '') + '>' + y + '</option>';
+  }
+  for (var m = 1; m <= 12; m++){
+    ms += '<option value="' + m + '"' + (m === cm ? ' selected' : '') + '>' + m + '</option>';
+  }
+  $('selYear').innerHTML = ys;
+  $('selMonth').innerHTML = ms;
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+
+function renderCount(){
+  var mk = monthKey();
+  var host = $('countList');
+
+  var list = countedItems();
+  if (!list.length){
+    host.innerHTML =
+      '<div class="empty">まだ品目が登録されていません。<br>まず「品目マスタ」で品目を追加してください。' +
+      '<div class="btnrow"><button class="btn b-primary" id="goMaster">品目マスタを開く</button></div></div>';
+    var g = $('goMaster');
+    if (g) g.addEventListener('click', function(){ switchTab('master'); });
+    $('countActions').style.display = 'none';
+    renderTotal();
+    return;
+  }
+  $('countActions').style.display = 'flex';
+
+  var html = '';
+  for (var i = 0; i < list.length; i++){
+    var it = list[i];
+    var q = qtyOf(mk, it.id);
+    var val = valueOf(it, q);
+    html +=
+      '<div class="item">' +
+        '<div class="top">' +
+          '<div class="nm">' + esc(it.name) + '</div>' +
+          '<div class="val' + (val ? '' : ' zero') + '" data-val="' + esc(it.id) + '">' + fmtMoney(val) + '</div>' +
+        '</div>' +
+        '<div class="bottom">' +
+          '<div class="meta">' + esc(it.unit) + ' ・ ' + fmtMoney(parseNum(it.price)) + '</div>' +
+          '<div class="qtywrap">' +
+            '<input type="text" inputmode="decimal" enterkeyhint="done" data-id="' + esc(it.id) + '"' +
+              ' value="' + (q ? esc(String(q)) : '') + '" placeholder="0" aria-label="' + esc(it.name) + ' の数量">' +
+            '<span class="u">' + esc(it.unit) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  host.innerHTML = html;
+  renderTotal();
+}
+
+function renderTotal(){
+  var mk = monthKey();
+  var list = countedItems();
+  var total = 0, filled = 0;
+  for (var i = 0; i < list.length; i++){
+    var q = qtyOf(mk, list[i].id);
+    if (q > 0) filled++;
+    total += valueOf(list[i], q);
+  }
+  $('totalAmt').textContent = fmtMoney(round2(total));
+  $('totalCount').textContent = filled + ' / ' + list.length;
+}
+
+/* ---------- suppliers ---------- */
+
+function renderSuppliers(){
+  var host = $('supplierList');
+
+  var order = [], groups = {};
+  for (var i = 0; i < state.items.length; i++){
+    var it = state.items[i];
+    var key = (it.supplier || '').trim() || '（仕入先なし）';
+    if (!groups[key]){ groups[key] = []; order.push(key); }
+    groups[key].push(it);
+  }
+  if (!order.length){
+    host.innerHTML = '<div class="empty">品目がありません。</div>';
+    return;
+  }
+
+  var html = '';
+  for (var g = 0; g < order.length; g++){
+    var items = groups[order[g]];
+    // the shop's pivot tracks the highest price at each tax rate per supplier
+    var max8 = 0, max10 = 0;
+    for (var j = 0; j < items.length; j++){
+      var p = parseNum(items[j].price);
+      if (items[j].tax === 10){ if (p > max10) max10 = p; }
+      else if (items[j].tax === 8){ if (p > max8) max8 = p; }
+    }
+
+    html += '<div class="sup">' +
+      '<div class="stop"><div class="sname">' + esc(order[g]) + '</div>' +
+      '<div class="scount">' + items.length + '品目</div></div>';
+
+    for (var k = 0; k < items.length; k++){
+      var it2 = items[k];
+      html += '<div class="srow"><div class="sn">' + esc(it2.name) + '</div>' +
+        '<div class="sp">' + fmtMoney(parseNum(it2.price)) +
+        (it2.tax ? '（' + it2.tax + '%）' : '') + '</div></div>';
+    }
+
+    html += '<div class="ssum">' +
+      '<span>最大 / 8% <b>' + fmtMoney(max8) + '</b></span>' +
+      '<span>最大 / 10% <b>' + fmtMoney(max10) + '</b></span>' +
+      '<span>合計 <b>' + fmtMoney(round2(max8 + max10)) + '</b></span>' +
+      '</div></div>';
+  }
+  host.innerHTML = html;
+}
+
+/* ---------- recipes ---------- */
+
+// Recipe costs keep three decimals: 味玉 works out to 2,651.336 and one of its
+// lines to 26.136, and the shop's sheet carries that precision.
+function round3(n){ return Math.round(n * 1000) / 1000; }
+
+function lineCost(line){
+  var it = findItem(line.itemId);
+  return it ? round3(parseNum(it.price) * (line.qty || 0)) : 0;
+}
+
+function recipeTotal(recipe){
+  var sum = 0;
+  for (var i = 0; i < recipe.lines.length; i++) sum += lineCost(recipe.lines[i]);
+  return round3(sum);
+}
+
+function renderRecipes(){
+  var host = $('recipeList');
+  if (!state.recipes.length){
+    host.innerHTML = '<div class="empty">まだレシピがありません。<br>下のボタンから追加してください。</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < state.recipes.length; i++){
+    var rec = state.recipes[i];
+    var total = recipeTotal(rec);
+
+    html += '<div class="recipe">' +
+      '<div class="rtop">' +
+        '<div class="rname">' + esc(rec.name) + '</div>' +
+        '<div class="rtotal" data-rtotal="' + esc(rec.id) + '">' + fmtMoney3(total) + '</div>' +
+      '</div>';
+
+    if (!rec.lines.length){
+      html += '<p class="rnote">材料がまだありません。</p>';
+    }
+
+    for (var j = 0; j < rec.lines.length; j++){
+      var line = rec.lines[j];
+      var it = findItem(line.itemId);
+      if (!it) continue;
+      var cost = lineCost(line);
+      html +=
+        '<div class="rline">' +
+          '<div class="rli">' +
+            '<b>' + esc(it.name) + '</b>' +
+            '<small>' + fmtMoney(parseNum(it.price)) + ' / ' + esc(it.unit) + '</small>' +
+          '</div>' +
+          '<div class="qtywrap">' +
+            '<input type="text" inputmode="decimal" enterkeyhint="done"' +
+              ' data-rq="' + esc(rec.id) + '" data-line="' + esc(line.itemId) + '"' +
+              ' value="' + (line.qty ? esc(String(line.qty)) : '') + '" placeholder="0"' +
+              ' aria-label="' + esc(it.name) + ' の使用量">' +
+            '<span class="u">' + esc(it.unit) + '</span>' +
+          '</div>' +
+          '<div class="rlc' + (cost ? '' : ' zero') + '" data-rcost="' + esc(rec.id) + '|' + esc(line.itemId) + '">' +
+            fmtMoney3(cost) + '</div>' +
+          '<button class="rmv" data-rmline="' + esc(rec.id) + '|' + esc(line.itemId) + '" aria-label="削除">✕</button>' +
+        '</div>';
+    }
+
+    html += '<div class="ractions">' +
+      '<button class="icobtn" data-addline="' + esc(rec.id) + '">材料を追加</button>' +
+      '<button class="icobtn danger" data-delrecipe="' + esc(rec.id) + '">レシピを削除</button>' +
+      '</div></div>';
+  }
+  host.innerHTML = html;
+}
+
+function findRecipe(id){
+  for (var i = 0; i < state.recipes.length; i++){
+    if (state.recipes[i].id === id) return state.recipes[i];
+  }
+  return null;
+}
+
+function renderMaster(){
+  var host = $('itemList');
+  if (!state.items.length){
+    host.innerHTML = '<div class="empty">まだ品目がありません。<br>上のフォームから追加してください。</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < state.items.length; i++){
+    var it = state.items[i];
+    html +=
+      '<div class="mitem">' +
+        '<div class="info">' +
+          '<b>' + esc(it.name) + '</b>' +
+          '<small>' + esc(it.unit) + ' ・ ' + fmtMoney(parseNum(it.price)) +
+            (it.supplier ? ' ・ ' + esc(it.supplier) : '') +
+            (it.counted === false ? ' ・ 棚卸対象外' : '') + '</small>' +
+        '</div>' +
+        '<button class="icobtn" data-edit="' + esc(it.id) + '">編集</button>' +
+        '<button class="icobtn danger" data-del="' + esc(it.id) + '">削除</button>' +
+      '</div>';
+  }
+  host.innerHTML = html;
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+
+function switchTab(name){
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove('show');
+  $('page-' + name).classList.add('show');
+
+  var btns = document.querySelectorAll('nav button');
+  for (var j = 0; j < btns.length; j++){
+    btns[j].classList.toggle('active', btns[j].getAttribute('data-tab') === name);
+  }
+  // the total bar belongs to the counting screen only
+  document.querySelector('.totalbar').style.display = (name === 'count') ? 'block' : 'none';
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   Excel export
+   ============================================================ */
+
+function exportExcel(){
+  var list = countedItems();
+  if (!list.length){ toast('品目がありません', true); return; }
+  var mk = monthKey();
+  var S = XLSX_S;
+
+  var total = 0;
+  var data = [];
+  for (var i = 0; i < list.length; i++){
+    var it = list[i];
+    var q = qtyOf(mk, it.id);
+    var val = valueOf(it, q);
+    total += val;
+    data.push([
+      it.name,
+      { v: parseNum(it.price), s: S.num },   // displayed #,##0, as in the shop's sheet
+      { v: q, s: S.qty },
+      { v: val, s: S.amount },
+      '1' + it.unit                          // 備考 carries the unit, e.g. 1個
+    ]);
+  }
+
+  // Layout mirrors the shop's own workbook: the grand total sits alone on
+  // row 1 in column C on a yellow fill, the header is row 2, data starts row 3.
+  var rows = [];
+  rows.push([null, null, { v: round2(total), s: S.total }]);
+  rows.push([
+    { v: '品目', s: S.bold }, { v: '単価', s: S.bold }, { v: '数量', s: S.bold },
+    { v: '金額', s: S.bold }, { v: '備考', s: S.bold }
+  ]);
+  for (var j = 0; j < data.length; j++) rows.push(data[j]);
+
+  // The recipe block sits to the right of the table, in columns G/H, exactly
+  // where the shop keeps it: a recipe header row followed by its ingredients.
+  var at = 1;                                  // 0-based; row 2
+  for (var q = 0; q < state.recipes.length; q++){
+    var rec = state.recipes[q];
+
+    var head = rows[at] || [];
+    while (head.length < 6) head.push(null);
+    head[6] = { v: rec.name, s: S.bold };
+    head[7] = { v: recipeTotal(rec), s: S.money3 };
+    rows[at] = head;
+    at++;
+
+    for (var m = 0; m < rec.lines.length; m++){
+      var ln = rec.lines[m];
+      var li = findItem(ln.itemId);
+      if (!li) continue;
+      var lrow = rows[at] || [];
+      while (lrow.length < 6) lrow.push(null);
+      lrow[6] = li.name;
+      lrow[7] = { v: lineCost(ln), s: S.money3 };
+      rows[at] = lrow;
+      at++;
+    }
+    at++;                                      // blank row between recipes
+  }
+
+  // Two sheets, matching the shop's workbook: the count on the first, the
+  // supplier pivot on the second.
+  var bytes = buildXlsx([
+    { name: sheetName(mk), cols: [44, 9, 9, 12, 10, 3, 32, 12], rows: rows },
+    { name: '仕入先',       cols: [46, 12, 12, 12], rows: supplierSheet(S) }
+  ]);
+  downloadFile(bytes, '棚卸_' + sheetName(mk) + '.xlsx',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  toast('Excelを書き出しました');
+}
+
+/* The supplier sheet reproduces the shop's pivot: one block per 仕入先, its
+   最大 / 8% and 最大 / 10%, then each item with its price in the column for
+   its tax rate. The 総計 row aggregates with MAX too, as the pivot does. */
+function supplierSheet(S){
+  var rows = [[], [],
+    [{ v: '行ラベル', s: S.bold }, { v: '最大 / 8%', s: S.bold },
+     { v: '最大 / 10%', s: S.bold }, { v: '合計', s: S.bold }]];
+
+  var order = [], groups = {};
+  for (var i = 0; i < state.items.length; i++){
+    var it = state.items[i];
+    var key = (it.supplier || '').trim() || '（空白）';
+    if (!groups[key]){ groups[key] = []; order.push(key); }
+    groups[key].push(it);
+  }
+
+  var top8 = 0, top10 = 0;
+  for (var g = 0; g < order.length; g++){
+    var items = groups[order[g]];
+    var max8 = 0, max10 = 0;
+    for (var j = 0; j < items.length; j++){
+      var p = parseNum(items[j].price);
+      if (items[j].tax === 10){ if (p > max10) max10 = p; }
+      else if (items[j].tax === 8){ if (p > max8) max8 = p; }
+    }
+    if (max8 > top8) top8 = max8;
+    if (max10 > top10) top10 = max10;
+
+    rows.push([{ v: order[g], s: S.bold },
+               { v: max8, s: S.amount }, { v: max10, s: S.amount },
+               { v: round2(max8 + max10), s: S.num }]);
+
+    for (var k = 0; k < items.length; k++){
+      var e = items[k];
+      var pv = parseNum(e.price);
+      rows.push([e.name,
+                 e.tax === 10 ? null : { v: pv, s: S.amount },
+                 e.tax === 10 ? { v: pv, s: S.amount } : null,
+                 { v: pv, s: S.num }]);
+    }
+  }
+
+  rows.push([{ v: '総計', s: S.bold },
+             { v: top8, s: S.amount }, { v: top10, s: S.amount },
+             { v: round2(top8 + top10), s: S.num }]);
+  return rows;
+}
+
+// The shop names each month's sheet 2025.8, so mirror that (no leading zero).
+function sheetName(mk){
+  var p = mk.split('-');
+  return p[0] + '.' + parseInt(p[1], 10);
+}
+
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+}
+
+function downloadFile(bytes, filename, mime){
+  var blob = new Blob([bytes], { type: mime });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();                 // must stay synchronous with the tap
+  document.body.removeChild(a);
+  // Safari may still read the blob after the user confirms the save sheet,
+  // so hold the URL for a while instead of revoking it right away.
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+}
+
+/* ============================================================
+   Backup / restore
+   ============================================================ */
+
+function exportBackup(){
+  var text = JSON.stringify(state, null, 2);
+  downloadFile(new TextEncoder().encode(text),
+    '棚卸バックアップ_' + todayStr() + '.json', 'application/json');
+  toast('バックアップを書き出しました');
+}
+
+function importBackup(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    var s;
+    try{ s = JSON.parse(String(reader.result)); }
+    catch(e){ toast('ファイルを読み込めません', true); return; }
+
+    if (!s || !Array.isArray(s.items) || typeof s.months !== 'object' || s.months === null){
+      toast('バックアップの形式が違います', true); return;
+    }
+    if (!confirm('現在のデータを、読み込んだ内容で置き換えます。よろしいですか？')) return;
+
+    state.items = s.items;
+    state.months = s.months;
+    state.recipes = Array.isArray(s.recipes) ? s.recipes : [];
+    state.seeded = true;
+    save();
+    renderAll();
+    toast('読み込みました');
+  };
+  reader.onerror = function(){ toast('ファイルを読み込めません', true); };
+  reader.readAsText(file);
+}
+
+/* ============================================================
+   Item master actions
+   ============================================================ */
+
+function addItem(name, price, unit, supplier, tax, counted){
+  state.items.push({ id: uid(), name: name, price: parseNum(price), unit: unit,
+                     supplier: supplier || '', tax: tax || 0, counted: counted !== false });
+  save();
+  renderAll();
+}
+
+function findItem(id){
+  for (var i = 0; i < state.items.length; i++){
+    if (state.items[i].id === id) return state.items[i];
+  }
+  return null;
+}
+
+// Items the shop actually counts at month end. Drinks, freight and the like
+// live in the supplier list but never appear on the 棚卸 sheet.
+function countedItems(){
+  return state.items.filter(function(x){ return x.counted !== false; });
+}
+
+function deleteItem(id){
+  var it = findItem(id);
+  if (!it) return;
+  if (!confirm('「' + it.name + '」を削除します。\n過去の棚卸に入力したこの品目の数量も消えます。よろしいですか？')) return;
+
+  state.items = state.items.filter(function(x){ return x.id !== id; });
+  // drop the quantities recorded for the removed item in every month
+  Object.keys(state.months).forEach(function(mk){
+    if (state.months[mk]) delete state.months[mk][id];
+  });
+  save();
+  renderAll();
+  toast('削除しました');
+}
+
+/* ============================================================
+   Edit sheet
+   ============================================================ */
+
+var editingId = null;
+
+function openEdit(id){
+  var it = findItem(id);
+  if (!it) return;
+  editingId = id;
+  $('editSub').textContent = it.name;
+  $('eName').value = it.name;
+  $('ePrice').value = String(parseNum(it.price));
+  $('eUnit').value = it.unit;
+  $('eSupplier').value = it.supplier || '';
+  $('eTax').value = String(it.tax || 0);
+  $('eCounted').checked = it.counted !== false;
+  $('editModal').classList.add('show');
+}
+
+function closeEdit(){
+  editingId = null;
+  $('editModal').classList.remove('show');
+}
+
+/* ---------- add-ingredient sheet ---------- */
+
+var lineRecipeId = null;
+
+function openLine(recipeId){
+  var rec = findRecipe(recipeId);
+  if (!rec) return;
+  lineRecipeId = recipeId;
+  $('lineSub').textContent = rec.name;
+
+  var opts = '';
+  for (var i = 0; i < state.items.length; i++){
+    var it = state.items[i];
+    opts += '<option value="' + esc(it.id) + '">' + esc(it.name) +
+            '（' + esc(it.unit) + '）</option>';
+  }
+  $('lItem').innerHTML = opts;
+  $('lQty').value = '';
+  $('lineModal').classList.add('show');
+}
+
+function closeLine(){
+  lineRecipeId = null;
+  $('lineModal').classList.remove('show');
+}
+
+function deleteRecipe(id){
+  var rec = findRecipe(id);
+  if (!rec) return;
+  if (!confirm('レシピ「' + rec.name + '」を削除します。よろしいですか？')) return;
+  state.recipes = state.recipes.filter(function(r){ return r.id !== id; });
+  save(); renderRecipes();
+  toast('削除しました');
+}
+
+/* ============================================================
+   Helpers + wiring
+   ============================================================ */
+
+function $(id){ return document.getElementById(id); }
+
+function toast(msg, isErr){
+  var t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.style.display = 'none';
+  void t.offsetWidth;            // restart the entry animation on every message
+  t.style.display = 'block';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+
+function renderAll(){
+  renderCount();
+  renderMaster();
+  renderRecipes();
+  renderSuppliers();
+  fillSupplierList();
+}
+
+// suggestions for the 仕入先 field, drawn from what is already in use
+function fillSupplierList(){
+  var seen = {}, opts = '';
+  for (var i = 0; i < state.items.length; i++){
+    var s = (state.items[i].supplier || '').trim();
+    if (s && !seen[s]){ seen[s] = 1; opts += '<option value="' + esc(s) + '"></option>'; }
+  }
+  $('supplierOptions').innerHTML = opts;
+}
+
+function init(){
+  load();
+  setupMonths();
+  seedFirstRun();
+
+  // --- tabs
+  var btns = document.querySelectorAll('nav button');
+  for (var i = 0; i < btns.length; i++){
+    btns[i].addEventListener('click', function(){ switchTab(this.getAttribute('data-tab')); });
+  }
+
+  // --- month change re-renders the sheet for that month
+  $('selYear').addEventListener('change', renderCount);
+  $('selMonth').addEventListener('change', renderCount);
+
+  // --- quantity entry: update in place so the keyboard and focus survive
+  $('countList').addEventListener('input', function(e){
+    var inp = e.target;
+    if (!inp || inp.tagName !== 'INPUT' || !inp.getAttribute('data-id')) return;
+    var id = inp.getAttribute('data-id');
+    var q = parseNum(inp.value);
+    var mk = monthKey();
+    if (q) qtys(mk)[id] = q; else delete qtys(mk)[id];
+
+    var it = findItem(id);
+    var val = it ? valueOf(it, q) : 0;
+    var cell = document.querySelector('[data-val="' + id + '"]');
+    if (cell){
+      cell.textContent = fmtMoney(val);
+      cell.className = 'val' + (val ? '' : ' zero');
+    }
+    renderTotal();
+    saveSoon();
+  });
+
+  // --- tidy the field up once the user leaves it (full-width -> plain, 1.50 -> 1.5)
+  $('countList').addEventListener('change', function(e){
+    var inp = e.target;
+    if (!inp || inp.tagName !== 'INPUT' || !inp.getAttribute('data-id')) return;
+    var q = parseNum(inp.value);
+    inp.value = q ? String(q) : '';
+    flushSave();
+  });
+
+  // --- save / export
+  $('btnSave').addEventListener('click', function(){
+    clearTimeout(saveTimer);
+    if (save()) toast('保存しました');
+  });
+  $('btnExport').addEventListener('click', exportExcel);
+
+  // --- add item
+  $('itemForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = $('fName').value.trim();
+    var price = parseNum($('fPrice').value);
+    var unit = $('fUnit').value.trim();
+    if (!name){ toast('品目名を入力してください', true); return; }
+    if (!price){ toast('単価を入力してください', true); return; }
+    if (!unit){ toast('単位を入力してください', true); return; }
+
+    addItem(name, price, unit, $('fSupplier').value.trim(),
+            parseInt($('fTax').value, 10) || 0, $('fCounted').checked);
+    this.reset();
+    $('fCounted').checked = true;
+    $('fName').focus();
+    toast('「' + name + '」を追加しました');
+  });
+
+  // --- master list: edit / delete by delegation
+  $('itemList').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var ed = btn.getAttribute('data-edit');
+    var dl = btn.getAttribute('data-del');
+    if (ed) openEdit(ed);
+    else if (dl) deleteItem(dl);
+  });
+
+  // --- edit sheet
+  $('btnCloseEdit').addEventListener('click', closeEdit);
+  $('btnCancelEdit').addEventListener('click', closeEdit);
+  $('editModal').addEventListener('click', function(e){ if (e.target === this) closeEdit(); });
+
+  $('editForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var it = findItem(editingId);
+    if (!it){ closeEdit(); return; }
+    var name = $('eName').value.trim();
+    var price = parseNum($('ePrice').value);
+    var unit = $('eUnit').value.trim();
+    if (!name || !price || !unit){ toast('未入力の項目があります', true); return; }
+
+    it.name = name; it.price = price; it.unit = unit;
+    it.supplier = $('eSupplier').value.trim();
+    it.tax = parseInt($('eTax').value, 10) || 0;
+    it.counted = $('eCounted').checked;
+    save();
+    renderAll();
+    closeEdit();
+    toast('更新しました');
+  });
+
+  // --- backup
+  $('btnBackup').addEventListener('click', exportBackup);
+  $('btnRestore').addEventListener('click', function(){ $('fileRestore').click(); });
+  $('fileRestore').addEventListener('change', function(){
+    if (this.files && this.files[0]) importBackup(this.files[0]);
+    this.value = '';
+  });
+
+  // --- recipes: 使用量 entry updates the line cost and the recipe total in place
+  $('recipeList').addEventListener('input', function(e){
+    var inp = e.target;
+    if (!inp || inp.tagName !== 'INPUT' || !inp.getAttribute('data-rq')) return;
+    var rec = findRecipe(inp.getAttribute('data-rq'));
+    if (!rec) return;
+    var qty = parseNum(inp.value);
+    for (var i = 0; i < rec.lines.length; i++){
+      if (rec.lines[i].itemId === inp.getAttribute('data-line')){ rec.lines[i].qty = qty; break; }
+    }
+    var cost = lineCost({ itemId: inp.getAttribute('data-line'), qty: qty });
+    var cell = document.querySelector('[data-rcost="' + inp.getAttribute('data-rq') + '|' + inp.getAttribute('data-line') + '"]');
+    if (cell){
+      cell.textContent = fmtMoney3(cost);
+      cell.className = 'rlc' + (cost ? '' : ' zero');
+    }
+    var rt = document.querySelector('[data-rtotal="' + rec.id + '"]');
+    if (rt) rt.textContent = fmtMoney3(recipeTotal(rec));
+    saveSoon();
+  });
+
+  $('recipeList').addEventListener('change', function(e){
+    var inp = e.target;
+    if (!inp || inp.tagName !== 'INPUT' || !inp.getAttribute('data-rq')) return;
+    var q = parseNum(inp.value);
+    inp.value = q ? String(q) : '';
+    flushSave();
+  });
+
+  $('recipeList').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+
+    var addTo = btn.getAttribute('data-addline');
+    var delRec = btn.getAttribute('data-delrecipe');
+    var rmLine = btn.getAttribute('data-rmline');
+
+    if (addTo) openLine(addTo);
+    else if (delRec) deleteRecipe(delRec);
+    else if (rmLine){
+      var parts = rmLine.split('|');
+      var rec = findRecipe(parts[0]);
+      if (!rec) return;
+      rec.lines = rec.lines.filter(function(l){ return l.itemId !== parts[1]; });
+      save(); renderRecipes();
+      toast('材料を削除しました');
+    }
+  });
+
+  $('btnAddRecipe').addEventListener('click', function(){
+    var name = prompt('レシピ名を入力してください（例：鶏スープ(70L)）');
+    if (!name || !name.trim()) return;
+    state.recipes.push({ id: uid(), name: name.trim(), lines: [] });
+    save(); renderRecipes();
+    toast('レシピを追加しました');
+  });
+
+  // --- add-ingredient sheet
+  $('btnCloseLine').addEventListener('click', closeLine);
+  $('btnCancelLine').addEventListener('click', closeLine);
+  $('lineModal').addEventListener('click', function(e){ if (e.target === this) closeLine(); });
+
+  $('lineForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var rec = findRecipe(lineRecipeId);
+    if (!rec){ closeLine(); return; }
+    var itemId = $('lItem').value;
+    var qty = parseNum($('lQty').value);
+    if (!itemId){ toast('品目を選んでください', true); return; }
+    if (!qty){ toast('使用量を入力してください', true); return; }
+
+    var existing = null;
+    for (var i = 0; i < rec.lines.length; i++){
+      if (rec.lines[i].itemId === itemId){ existing = rec.lines[i]; break; }
+    }
+    if (existing) existing.qty = qty;
+    else rec.lines.push({ itemId: itemId, qty: qty });
+
+    save(); renderRecipes(); closeLine();
+    toast('材料を追加しました');
+  });
+
+  // --- never lose a pending edit when the app is backgrounded or closed
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) flushSave(); });
+  window.addEventListener('pagehide', flushSave);
+
+  renderAll();
+
+  // --- offline support (no-op when opened straight off the filesystem)
+  if ('serviceWorker' in navigator && location.protocol !== 'file:'){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
