@@ -1859,8 +1859,9 @@ function startCloud(){
 function subscribeShared(){
   cloud.unsub = cloud.db.collection('zaiko').doc('state').onSnapshot(function(snap){
     if (snap.metadata.hasPendingWrites) return;   // ignore the echo of our own write
+    var firstEver = !snap.exists;
     cloud.applying = true;
-    if (snap.exists){
+    if (!firstEver){
       var d = snap.data() || {};
       state.items   = Array.isArray(d.items) ? d.items : [];
       state.months  = (d.months && typeof d.months === 'object') ? d.months : {};
@@ -1868,10 +1869,11 @@ function subscribeShared(){
       state.audit   = (d.audit && typeof d.audit === 'object') ? d.audit : {};
       state.seeded  = true;
       try { localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
-    } else {
-      pushState();                                 // nothing shared yet: publish this device
     }
+    // clear the flag BEFORE pushing: pushState bails out while it is set, which
+    // is exactly why the first device used to upload nothing
     cloud.applying = false;
+    if (firstEver) pushState();                    // nothing shared yet: publish this device
     renderAll();
     renderWho();
   }, function(err){
