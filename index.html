@@ -192,6 +192,23 @@
 
   /* Anchored above the bottom bars rather than at the top, so it never covers
      the page title, and it lands where the eye already is after a tap. */
+  /* ---------- login gate ---------- */
+  .gate{position:fixed; inset:0; background:var(--bg); z-index:300; display:none;
+    align-items:center; justify-content:center; padding:24px;}
+  .gate.show{display:flex;}
+  .gate .box{width:100%; max-width:380px; background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid #2e3560; border-radius:var(--radius); padding:26px 22px;}
+  .gate h2{margin:0 0 6px; font-size:1.25rem;}
+  .gate p{margin:0 0 14px; color:var(--muted); font-size:.83rem; line-height:1.55;}
+  .gate .err{color:var(--bad); font-size:.82rem; min-height:1.3em; margin-top:10px; line-height:1.4;}
+  .whoami{display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
+    color:var(--muted); font-size:.75rem; margin:0 0 4px;}
+  .whoami b{color:var(--text); font-weight:600;}
+  .whoami button{background:none; border:none; color:var(--accent); font-size:.75rem;
+    font-family:inherit; cursor:pointer; padding:2px 4px; text-decoration:underline;}
+  .doneby{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;
+    color:var(--muted); font-size:.78rem; margin:-6px 0 12px; text-align:center;}
+
   .toast{
     position:fixed; left:50%; transform:translateX(-50%);
     bottom:calc(var(--navh) + 92px + env(safe-area-inset-bottom));
@@ -211,6 +228,7 @@
 <body>
 
 <div class="app">
+  <div class="whoami" id="whoami" hidden></div>
 
   <!-- ================= 棚卸 ================= -->
   <section id="page-count" class="page show">
@@ -223,6 +241,7 @@
       <select id="selYear" aria-label="年"></select><span class="sfx">年</span>
       <select id="selMonth" aria-label="月"></select><span class="sfx">月</span>
     </div>
+    <div class="doneby" id="doneBy" hidden></div>
 
     <div id="countList"></div>
 
@@ -405,6 +424,23 @@
         <button type="submit" class="btn b-primary">保存する</button>
       </div>
     </form>
+  </div>
+</div>
+
+<div class="gate" id="gate">
+  <div class="box">
+    <h2>棚卸</h2>
+    <p>メールアドレスとパスワードでログインしてください。</p>
+    <form id="loginForm" autocomplete="on">
+      <label for="lgEmail">メールアドレス</label>
+      <input id="lgEmail" type="email" autocomplete="username" required>
+      <label for="lgPass">パスワード</label>
+      <input id="lgPass" type="password" autocomplete="current-password" required>
+      <div class="btnrow">
+        <button type="submit" class="btn b-primary" id="lgBtn">ログイン</button>
+      </div>
+    </form>
+    <div class="err" id="lgErr"></div>
   </div>
 </div>
 
@@ -847,7 +883,7 @@ var DEFAULT_MONTH = '2025-08';
    the master lives in localStorage, not in this file. */
 var PRICE_REV = 2;
 
-var state = { v: 1, items: [], months: {}, recipes: [], seeded: false, priceRev: 0 };
+var state = { v: 1, items: [], months: {}, recipes: [], audit: {}, seeded: false, priceRev: 0 };
 
 function load(){
   try{
@@ -860,6 +896,7 @@ function load(){
       state.recipes = Array.isArray(s.recipes) ? s.recipes : [];
       state.seeded = s.seeded === true;
       state.priceRev = s.priceRev || 0;
+      state.audit = (s.audit && typeof s.audit === 'object') ? s.audit : {};
     }
   }catch(e){ /* corrupt storage: start clean rather than break the app */ }
 }
@@ -918,8 +955,9 @@ function applyPriceRevision(){
 }
 
 function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify(state)); return true; }
-  catch(e){ toast('保存できませんでした', true); return false; }
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  pushState();
+  return true;
 }
 
 var saveTimer = null;
@@ -985,6 +1023,7 @@ function setupMonths(){
 function renderCount(){
   var mk = monthKey();
   var host = $('countList');
+  if (typeof renderDoneBy === 'function') renderDoneBy();
 
   var list = countedItems();
   if (!list.length){
@@ -1560,6 +1599,7 @@ function init(){
       cell.className = 'val' + (val ? '' : ' zero');
     }
     renderTotal();
+    markAudit();
     saveSoon();
   });
 
@@ -1727,10 +1767,167 @@ function init(){
 
   renderAll();
 
+  // --- login form
+  $('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    $('lgErr').textContent = '';
+    $('lgBtn').disabled = true;
+    cloud.auth.signInWithEmailAndPassword($('lgEmail').value.trim(), $('lgPass').value)
+      .catch(function(err){
+        var msg = {
+          'auth/wrong-password':    'パスワードが違います。',
+          'auth/invalid-credential':'メールまたはパスワードが違います。',
+          'auth/user-not-found':    'このメールは登録されていません。',
+          'auth/invalid-email':     'メールアドレスの形式が正しくありません。',
+          'auth/too-many-requests': '試行回数が多すぎます。少し待ってから再度お試しください。',
+          'auth/network-request-failed': '通信できません。電波を確認してください。'
+        };
+        $('lgErr').textContent = msg[err.code] || ('ログインできません（' + err.code + '）');
+      })
+      .then(function(){ $('lgBtn').disabled = false; });
+  });
+
+  // --- cloud sync, when a Firebase config is present
+  startCloud();
+
   // --- offline support (no-op when opened straight off the filesystem)
   if ('serviceWorker' in navigator && location.protocol !== 'file:'){
     navigator.serviceWorker.register('./sw.js').catch(function(){});
   }
+}
+
+
+/* ============================================================
+   Cloud sync (optional)
+   ------------------------------------------------------------
+   Paste the firebaseConfig from your Firebase project below to turn the app
+   from per-device storage into one shared copy that every device sees. While
+   it stays null the app behaves exactly as before and keeps everything local.
+   ============================================================ */
+
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCN0PLODPT_2md8C-vn9g-Iwppy4-7c_Es",
+  authDomain: "takemura-zaiko.firebaseapp.com",
+  projectId: "takemura-zaiko",
+  storageBucket: "takemura-zaiko.firebasestorage.app",
+  messagingSenderId: "75919418188",
+  appId: "1:75919418188:web:8bee4cd5f9afd7e2c665e9"
+};
+
+var cloud = { on:false, auth:null, db:null, user:null, unsub:null, applying:false, timer:null };
+
+function cloudReady(){ return !!(FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey); }
+
+function loadFirebase(cb){
+  var files = ['firebase-app-compat.js', 'firebase-auth-compat.js', 'firebase-firestore-compat.js'];
+  var left = files.length;
+  for (var i = 0; i < files.length; i++){
+    (function(f){
+      var sc = document.createElement('script');
+      // dynamically inserted scripts default to async, which lets auth/firestore
+      // execute before the core bundle; keep them in order
+      sc.async = false;
+      sc.src = 'https://www.gstatic.com/firebasejs/10.12.0/' + f;
+      sc.onload = function(){ if (--left === 0) cb(); };
+      sc.onerror = function(){ $('lgErr').textContent = 'Firebase を読み込めません。通信を確認してください。'; };
+      document.head.appendChild(sc);
+    })(files[i]);
+  }
+}
+
+function startCloud(){
+  if (!cloudReady()) return;
+  $('gate').classList.add('show');
+  loadFirebase(function(){
+    try { firebase.initializeApp(FIREBASE_CONFIG); }
+    catch(e){ $('lgErr').textContent = '設定が正しくありません。'; return; }
+    cloud.on = true;
+    cloud.auth = firebase.auth();
+    cloud.db = firebase.firestore();
+    try { cloud.db.enablePersistence({ synchronizeTabs: true }); }catch(e){}
+
+    cloud.auth.onAuthStateChanged(function(u){
+      cloud.user = u;
+      if (cloud.unsub){ cloud.unsub(); cloud.unsub = null; }
+      if (u){ $('gate').classList.remove('show'); subscribeShared(); }
+      else  { $('gate').classList.add('show'); $('lgPass').value = ''; }
+      renderWho();
+    });
+  });
+}
+
+function subscribeShared(){
+  cloud.unsub = cloud.db.collection('zaiko').doc('state').onSnapshot(function(snap){
+    if (snap.metadata.hasPendingWrites) return;   // ignore the echo of our own write
+    cloud.applying = true;
+    if (snap.exists){
+      var d = snap.data() || {};
+      state.items   = Array.isArray(d.items) ? d.items : [];
+      state.months  = (d.months && typeof d.months === 'object') ? d.months : {};
+      state.recipes = Array.isArray(d.recipes) ? d.recipes : [];
+      state.audit   = (d.audit && typeof d.audit === 'object') ? d.audit : {};
+      state.seeded  = true;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+    } else {
+      pushState();                                 // nothing shared yet: publish this device
+    }
+    cloud.applying = false;
+    renderAll();
+    renderWho();
+  }, function(err){
+    toast('同期できません（' + err.code + '）', true);
+  });
+}
+
+function pushState(){
+  if (!cloud.on || !cloud.user || cloud.applying) return;
+  clearTimeout(cloud.timer);
+  cloud.timer = setTimeout(function(){
+    cloud.db.collection('zaiko').doc('state').set({
+      items:   state.items,
+      months:  state.months,
+      recipes: state.recipes,
+      audit:   state.audit || {},
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: cloud.user.email || cloud.user.uid
+    }).catch(function(e){ toast('保存できません（' + e.code + '）', true); });
+  }, 1200);
+}
+
+/* Who counted this month. Recorded on every quantity edit. */
+function markAudit(){
+  if (!cloud.user) return;
+  var mk = monthKey();
+  if (!state.audit) state.audit = {};
+  state.audit[mk] = { by: cloud.user.email || cloud.user.uid, at: new Date().toISOString() };
+  renderDoneBy();
+}
+
+function fmtStamp(iso){
+  var d = new Date(iso);
+  if (isNaN(d)) return '';
+  var p = function(n){ return (n < 10 ? '0' : '') + n; };
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+         ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+
+function renderDoneBy(){
+  var el = $('doneBy');
+  if (!el) return;
+  var a = state.audit && state.audit[monthKey()];
+  if (!a){ el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = 'この月の棚卸: <b>' + esc(a.by) + '</b> ・ ' + esc(fmtStamp(a.at));
+}
+
+function renderWho(){
+  var el = $('whoami');
+  if (!el) return;
+  if (!cloud.on || !cloud.user){ el.hidden = true; el.innerHTML = ''; return; }
+  el.hidden = false;
+  el.innerHTML = 'ログイン中: <b>' + esc(cloud.user.email || '') + '</b>' +
+    ' <button type="button" id="btnSignOut">ログアウト</button>';
+  $('btnSignOut').addEventListener('click', function(){ cloud.auth.signOut(); });
 }
 
 document.addEventListener('DOMContentLoaded', init);
