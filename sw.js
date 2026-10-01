@@ -3,10 +3,10 @@
    been offline for a week still picks up the new version on its next launch.
    Bump CACHE when the shell changes; the old cache is dropped on activate. */
 
-var CACHE = 'zaiko-v3';
+var CACHE = 'zaiko-v2';
 var ASSETS = [
   './',
-  './app-zaiko.html',
+  './index.html',
   './manifest.json',
   './icon-180.png',
   './icon-512.png'
@@ -46,7 +46,7 @@ self.addEventListener('fetch', function(e){
     }).catch(function(){
       // offline: serve what we cached, and for a navigation fall back to the shell
       return caches.match(e.request).then(function(hit){
-        return hit || caches.match('./app-zaiko.html');
+        return hit || caches.match('./index.html');
       });
     })
   );
