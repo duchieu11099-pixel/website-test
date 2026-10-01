@@ -4,7 +4,7 @@
   "description": "月末の在庫数量を入力すると金額を自動計算し、Excelに書き出せます。",
   "lang": "ja",
   "dir": "ltr",
-  "start_url": "./",
+  "start_url": "./app-zaiko.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
