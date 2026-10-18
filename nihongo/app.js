@@ -409,7 +409,7 @@ function switchTab(tab){
   render(); window.scrollTo(0, 0);
 }
 function render(){
-  var fn = { vocab:renderVocab, grammar:renderGrammar, reading:renderReading, practice:renderPractice, tutor:renderTutor }[curTab];
+  var fn = { vocab:renderVocab, grammar:renderGrammar, reading:renderReading, practice:renderPractice, exam:renderExam, tutor:renderTutor }[curTab];
   removeChatbar();
   if (fn) fn();
 }
@@ -460,7 +460,7 @@ function renderVocab(){
     '<div class="row" style="margin:10px 0">' +
       '<button class="pill" id="vSelAll">' + t('selectAll') + '</button>' +
       '<button class="pill" id="vClear">' + t('clearSel') + '</button>' +
-      '<span class="small muted grow" style="white-space:nowrap">' + t('nSelected', { n:nSel }) + '</span>' +
+      '<span class="small muted grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:60px">' + t('nSelected', { n:nSel }) + '</span>' +
       '<button class="pill on" id="vImport">' + t('importData') + '</button>' +
     '</div>' +
     '<div class="row" style="margin-bottom:10px"><button class="btn primary grow" id="vTest">▶ ' + t('testLesson') + ' (' + pool.length + ')</button></div>' +
@@ -900,11 +900,12 @@ function renderSummary(){
 function removeChatbar(){ var b = $('chatbar'); if (b) b.remove(); }
 function renderTutor(){
   var code = tutorCode();
-  var html = '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 ' + t('tutorTitle') + '</h2>' + (chat.length ? '<button class="pill" id="cClear">' + t('clearChat') + '</button>' : '') + '</div>';
+  var html = (ui.exam && !ui.exam.submitted ? '<button class="btn warn block" id="exBackBtn" style="margin-bottom:8px">' + t('exBackToExam') + '</button>' : '') + '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 ' + t('tutorTitle') + '</h2>' + (chat.length ? '<button class="pill" id="cClear">' + t('clearChat') + '</button>' : '') + '</div>';
   if (!code){
     html += '<div class="card">' + esc(t('tutorNoKey')) + '<div style="height:10px"></div><button class="btn primary" id="cGo">⚙ ' + t('tutorCode') + '</button></div>';
     view.innerHTML = html;
     $('cGo').onclick = openSettings;
+    if ($('exBackBtn')) $('exBackBtn').onclick = function(){ switchTab('exam'); };
     if ($('cClear')) $('cClear').onclick = function(){ chat = []; saveChat(); renderTutor(); };
     return;
   }
@@ -914,6 +915,7 @@ function renderTutor(){
     '<div style="height:140px"></div>';
   view.innerHTML = html;
   if ($('cClear')) $('cClear').onclick = function(){ chat = []; saveChat(); renderTutor(); };
+  if ($('exBackBtn')) $('exBackBtn').onclick = function(){ switchTab('exam'); };
   if ($('cCtxX')) $('cCtxX').onclick = function(){ pendingCtx = ''; renderTutor(); };
   var bar = h('<div class="chatbar" id="chatbar"><div class="inner"><textarea id="chatInput" class="grow" rows="1" placeholder="' + esc(t('tutorPh')) + '"></textarea><button class="btn primary" id="cSend">' + t('send') + '</button></div></div>');
   document.body.appendChild(bar);
@@ -1153,6 +1155,274 @@ function commitImport(){
   $('dAll').onclick = function(){ doAdd(fresh.concat(dups)); };
   $('dCancel').onclick = function(){ var keep = IMP; openImport(); IMP = keep; $('iText').value = ''; renderImportRows(); };
 }
+
+/* ======================= exams (tab Thi) ======================= */
+var TE = {
+ vi:{ tabExam:'Thi', exHome:'Thi & kiểm tra', exGeneral:'Kiểm tra tổng quát', exGeneralSub:'Trộn ngẫu nhiên từ vựng + ngữ pháp của tất cả các bài.',
+  exChapter:'Kiểm tra theo chương', exChapterSub:'Chọn một chương từ vựng hoặc một phần ngữ pháp.', exJlpt:'Đề thi thử JLPT N2', exJlptSub:'5 đề soạn theo đúng cấu trúc đề N2: 文字・語彙, 文法, 読解 (không có phần nghe). 40 câu / 60 phút.',
+  exQ:'Số câu', exMin:'Thời gian (phút)', exStart:'▶ Bắt đầu làm bài', exResume:'▶ Tiếp tục bài đang làm', exBest:'Cao nhất', exTimes:'Đã làm {n} lần', exNever:'Chưa làm',
+  exHistory:'Lịch sử làm bài', exSubmit:'Nộp bài', exConfirmSubmit:'Còn {n} câu chưa làm. Vẫn nộp bài?', exConfirmSubmit0:'Nộp bài và chấm điểm?', exTimeUp:'Hết giờ! Bài đã được nộp tự động.',
+  exPrev:'← Câu trước', exNext:'Câu sau →', exFlag:'⚑ Đánh dấu', exUnflag:'⚑ Bỏ dấu', exGrid:'Danh sách câu', exHint:'💬 Hỏi gia sư (gợi ý)', exQuitConfirm:'Thoát bài thi? Bài làm sẽ bị hủy.', exQuit:'Hủy bài',
+  exResult:'Kết quả bài thi', exScore:'Điểm', exCorrect:'Đúng {a}/{b} câu', exTimeUsed:'Thời gian làm: {t}', exLang:'言語知識 (Từ vựng・Ngữ pháp)', exRead:'読解 (Đọc hiểu)',
+  exPass:'Ước tính: ĐẠT ✓', exFail:'Ước tính: CHƯA ĐẠT', exPassNote:'Ước tính theo chuẩn N2 (tổng ≥ 50% và mỗi phần ≥ 19/60), chưa tính phần nghe.',
+  exAI:'🎓 Gia sư chấm điểm & nhận xét', exAIwait:'Gia sư đang chấm bài…', exAInokey:'Nhập mã gia sư trong ⚙ Cài đặt để gia sư nhận xét bài làm.', exAIretry:'Nhờ gia sư nhận xét lại',
+  exReview:'Xem lại từng câu', exOnlyWrong:'Chỉ câu sai', exAll:'Tất cả', exYour:'Bạn chọn', exNone:'(chưa làm)', exBack:'← Về trang Thi', exRetake:'Làm lại đề này',
+  exBackToExam:'↩ Quay lại bài thi', exInExam:'Bạn đang làm bài thi', secMoji:'文字・語彙', secBunpo:'文法', secDokkai:'読解', exPick:'Chọn chương / phần',
+  gPart1:'Ngữ pháp I — ことがらを説明する (1–10課)', gPart2:'Ngữ pháp II — 主観を含めて説明する (11–21課)', gPart3:'Ngữ pháp III — 主観を述べる (22–26課)', exChapterTitle:'Kiểm tra: {c}', exGeneralTitle:'Kiểm tra tổng quát', qMeaning:'Chọn nghĩa đúng của từ:', qReading:'Chọn cách đọc đúng:', qWord:'Chọn từ tiếng Nhật đúng với nghĩa:', qGmean:'Chọn nghĩa đúng của mẫu ngữ pháp:', qGfill:'Chọn từ thích hợp điền vào chỗ trống:' },
+ my:{ tabExam:'စာမေးပွဲ', exHome:'စာမေးပွဲ နှင့် စစ်ဆေးမှု', exGeneral:'အထွေထွေ စစ်ဆေးမှု', exGeneralSub:'သင်ခန်းစာအားလုံးမှ ဝေါဟာရ + သဒ္ဒါ ကျပန်း ရောနှော။',
+  exChapter:'အခန်းအလိုက် စစ်ဆေးမှု', exChapterSub:'ဝေါဟာရ အခန်း သို့မဟုတ် သဒ္ဒါ အပိုင်းကို ရွေးပါ။', exJlpt:'JLPT N2 စမ်းသပ်စာမေးပွဲ', exJlptSub:'N2 ပုံစံအတိုင်း ရေးထားသော မေးခွန်းလွှာ ၅ ခု: 文字・語彙, 文法, 読解 (နားထောင်ခြင်း မပါ)။ မေးခွန်း ၄၀ / ၆၀ မိနစ်။',
+  exQ:'မေးခွန်းအရေအတွက်', exMin:'အချိန် (မိနစ်)', exStart:'▶ စတင်ဖြေဆိုမည်', exResume:'▶ ဖြေဆိုနေသည်ကို ဆက်မည်', exBest:'အမြင့်ဆုံး', exTimes:'{n} ကြိမ် ဖြေပြီး', exNever:'မဖြေရသေး',
+  exHistory:'ဖြေဆိုမှု မှတ်တမ်း', exSubmit:'အဖြေလွှာ တင်မည်', exConfirmSubmit:'မဖြေရသေးသော မေးခွန်း {n} ခု ရှိသည်။ တင်မလား?', exConfirmSubmit0:'တင်ပြီး အမှတ်ပေးမလား?', exTimeUp:'အချိန်ကုန်ပြီ! အလိုအလျောက် တင်လိုက်ပြီ။',
+  exPrev:'← ရှေ့မေးခွန်း', exNext:'နောက်မေးခွန်း →', exFlag:'⚑ မှတ်ထား', exUnflag:'⚑ မှတ်ချက်ဖြုတ်', exGrid:'မေးခွန်းစာရင်း', exHint:'💬 ဆရာကို မေးရန် (အရိပ်အမြွက်)', exQuitConfirm:'စာမေးပွဲမှ ထွက်မလား? ဖြေထားတာ ပျက်မည်။', exQuit:'ဖျက်မည်',
+  exResult:'စာမေးပွဲ ရလဒ်', exScore:'အမှတ်', exCorrect:'မှန် {a}/{b}', exTimeUsed:'ဖြေဆိုချိန်: {t}', exLang:'言語知識 (ဝေါဟာရ・သဒ္ဒါ)', exRead:'読解 (စာဖတ်)',
+  exPass:'ခန့်မှန်း: အောင် ✓', exFail:'ခန့်မှန်း: မအောင်သေး', exPassNote:'N2 စံနှုန်းဖြင့် ခန့်မှန်း (စုစုပေါင်း ≥ ၅၀% နှင့် အပိုင်းတိုင်း ≥ ၁၉/၆၀)၊ နားထောင်ခြင်း မပါ။',
+  exAI:'🎓 ဆရာ၏ အမှတ်ပေးချက်နှင့် မှတ်ချက်', exAIwait:'ဆရာ စစ်ဆေးနေသည်…', exAInokey:'ဆရာ မှတ်ချက်ပေးရန် ⚙ ဆက်တင်တွင် ဆရာ ကုဒ် ထည့်ပါ။', exAIretry:'ဆရာကို ထပ်မံ မှတ်ချက်ပေးခိုင်း',
+  exReview:'မေးခွန်းတစ်ခုချင်း ပြန်ကြည့်', exOnlyWrong:'မှားတာသာ', exAll:'အားလုံး', exYour:'သင်ရွေးခဲ့တာ', exNone:'(မဖြေရသေး)', exBack:'← စာမေးပွဲ စာမျက်နှာ', exRetake:'ထပ်ဖြေမည်',
+  exBackToExam:'↩ စာမေးပွဲသို့ ပြန်', exInExam:'စာမေးပွဲ ဖြေနေဆဲ', secMoji:'文字・語彙', secBunpo:'文法', secDokkai:'読解', exPick:'အခန်း / အပိုင်း ရွေးရန်',
+  gPart1:'သဒ္ဒါ I — ことがらを説明する (1–10課)', gPart2:'သဒ္ဒါ II — 主観を含めて説明する (11–21課)', gPart3:'သဒ္ဒါ III — 主観を述べる (22–26課)', exChapterTitle:'စစ်ဆေးမှု: {c}', exGeneralTitle:'အထွေထွေ စစ်ဆေးမှု', qMeaning:'စကားလုံး၏ အဓိပ္ပာယ်မှန် ရွေးပါ:', qReading:'အသံထွက်မှန် ရွေးပါ:', qWord:'အဓိပ္ပာယ်နှင့်ကိုက်သော ဂျပန်စကားလုံး ရွေးပါ:', qGmean:'သဒ္ဒါပုံစံ၏ အဓိပ္ပာယ်မှန် ရွေးပါ:', qGfill:'ကွက်လပ်တွင် သင့်တော်သည်ကို ရွေးပါ:' }
+};
+['vi','my'].forEach(function(l){ for (var k in TE[l]) T[l][k] = TE[l][k]; });
+if (!S.exams) S.exams = [];
+var KEY_EXAM = 'nihongo_exam_live_v1';
+
+function parseExams(src){
+  var out = [], cur = null, sec = null, inst = '', psg = null;
+  (src || '').split('\n').forEach(function(line){
+    line = line.trim(); if (!line) return;
+    var f = line.split('|');
+    if (f[0] === 'E'){ cur = { id:f[1], title:f[2], min:+f[3] || 60, qs:[] }; out.push(cur); psg = null; }
+    else if (f[0] === 'S'){ sec = f[1]; psg = null; }
+    else if (f[0] === 'T'){ inst = f[1]; psg = null; }
+    else if (f[0] === 'P'){ psg = { ja:f[1], vi:f[2], my:f[3] }; }
+    else if (f[0] === 'Q' && cur){ cur.qs.push({ sec:sec, inst:inst, psg:psg, q:f[1], opts:[f[2], f[3], f[4], f[5]], why:{ vi:f[6], my:f[7] } }); }
+  });
+  return out;
+}
+var EXAMS = parseExams(window.DATA_EXAM);
+function exText(s){ return esc(s).replace(/\[\[([^\]]+)\]\]/g, '<u>$1</u>').replace(/¶/g, '<br>'); }
+function exPlain(s){ return String(s || '').replace(/\[\[([^\]]+)\]\]/g, '「$1」').replace(/¶/g, '\n'); }
+
+/* build a normalized exam question from a mock-exam row */
+function fromMock(q){
+  var order = shuffle([0, 1, 2, 3]);
+  return { sec:q.sec, inst:q.inst, psg:q.psg ? { ja:q.psg.ja, vi:q.psg.vi, my:q.psg.my } : null,
+    qhtml:exText(q.q), opts:order.map(function(i){ return exText(q.opts[i]); }), a:order.indexOf(0),
+    why:q.why, ctx:(q.psg ? 'Bài đọc: ' + exPlain(q.psg.ja) + '\n' : '') + q.inst + '\nCâu hỏi: ' + exPlain(q.q) + '\nLựa chọn: ' + order.map(function(i, k){ return (k + 1) + '. ' + exPlain(q.opts[i]); }).join(' / ') };
+}
+/* build exam questions from vocab / grammar items (chapter & general tests) */
+function fromItem(it){
+  var types, ty;
+  if (it.kind === 'v'){ types = ['meaning', 'word']; if (reHasKanji.test(it.w) && it.r) types.push('reading'); }
+  else types = gfillParts(it) ? ['gfill', 'gfill', 'gmean'] : ['gmean'];
+  ty = types[Math.floor(Math.random() * types.length)];
+  var key, prompt, show, inst;
+  if (ty === 'meaning'){ key = function(x){ return L(x, ''); }; inst = t('qMeaning'); prompt = '<span class="word">' + wordRuby(it.w, it.r) + '</span>'; show = function(x){ return esc(key(x)); }; }
+  else if (ty === 'word'){ key = function(x){ return x.w; }; inst = t('qWord'); prompt = '<b>' + esc(L(it, '')) + '</b>'; show = function(x){ return wordRuby(x.w, x.r); }; }
+  else if (ty === 'reading'){ key = function(x){ return x.r; }; inst = t('qReading'); prompt = '<span class="word">' + esc(it.w) + '</span>'; show = function(x){ return esc(x.r); }; }
+  else if (ty === 'gmean'){ key = function(x){ return L(x, ''); }; inst = t('qGmean'); prompt = '<span class="word" style="font-size:1.2rem">' + esc(it.p) + '</span>'; show = function(x){ return esc(key(x)); }; }
+  else { key = function(x){ return plain(gfillParts(x)); }; inst = t('qGfill'); prompt = '<span class="jp">' + ruby(it.exJa.replace(/【[^】]*】/, '【＿＿＿＿】')) + '</span>'; show = function(x){ return ruby(gfillParts(x)); }; }
+  var ds = distractors(it, 3, key);
+  var all = shuffle([it].concat(ds));
+  var name = function(x){ return x.kind === 'v' ? x.w + '（' + x.r + '）' : x.p; };
+  var why = { vi:'', my:'' };
+  ['vi', 'my'].forEach(function(lg){
+    var m = function(x){ return lg === 'my' ? x.my : x.vi; };
+    var s = name(it) + ' = ' + m(it);
+    if (it.kind === 'g') s += '. ' + (lg === 'my' ? it.useMy : it.useVi) + ' (' + it.form + ')';
+    ds.forEach(function(d){ s += ' · ' + name(d) + ' = ' + m(d); });
+    var tp = lg === 'my' ? it.tipMy : it.tipVi; if (tp) s += ' 💡 ' + tp;
+    why[lg] = s;
+  });
+  return { sec:it.kind === 'v' ? 'moji' : 'bunpo', inst:inst, psg:null, qhtml:prompt, opts:all.map(show), a:all.indexOf(it), why:why, itemId:it.id,
+    ctx:ctxOfItem(it) + '\nLựa chọn: ' + all.map(function(x, k){ return (k + 1) + '. ' + name(x) + ' (' + x.vi + ')'; }).join(' / ') };
+}
+
+function vocabChapters(){
+  var m = {}, out = [];
+  VL.forEach(function(l){ var k = l.title.split(' — ')[0]; if (!m[k]){ m[k] = { key:k, title:k, items:[] }; out.push(m[k]); } m[k].items = m[k].items.concat(l.items); });
+  return out;
+}
+function grammarParts(){
+  var parts = [[t('gPart1'), 1, 10], [t('gPart2'), 11, 21], [t('gPart3'), 22, 26]];
+  return parts.map(function(p){ var items = []; GL.forEach(function(l){ var n = parseInt(l.id.slice(1), 10); if (n >= p[1] && n <= p[2]) items = items.concat(l.items); }); return { key:'g' + p[1], title:p[0], items:items }; });
+}
+
+var EXU = { chapter:'', chCount:20, genCount:30, filterWrong:false };
+var exTimer = null;
+function exSave(){ try { if (ui.exam && !ui.exam.submitted) localStorage.setItem(KEY_EXAM, JSON.stringify(ui.exam)); else localStorage.removeItem(KEY_EXAM); } catch(e){} }
+(function(){ try { var x = JSON.parse(localStorage.getItem(KEY_EXAM) || 'null'); if (x && !x.submitted) ui.exam = x; } catch(e){} })();
+
+function startExam(kind, id, title, qs, minutes){
+  ui.exam = { kind:kind, id:id, title:title, qs:qs, ans:qs.map(function(){ return -1; }), flags:{}, cur:0, startAt:Date.now(), endAt:Date.now() + minutes * 60000, minutes:minutes, submitted:false };
+  exSave(); runTimer();
+  if (curTab !== 'exam') switchTab('exam'); else renderExam();
+}
+function fmtTime(ms){ ms = Math.max(0, ms); var s = Math.floor(ms / 1000), m = Math.floor(s / 60); s = s % 60; return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
+function runTimer(){
+  clearInterval(exTimer);
+  if (!ui.exam || ui.exam.submitted) return;
+  exTimer = setInterval(function(){
+    if (!ui.exam || ui.exam.submitted){ clearInterval(exTimer); return; }
+    var left = ui.exam.endAt - Date.now();
+    var el = $('exTimer'); if (el){ el.textContent = '⏱ ' + fmtTime(left); el.classList.toggle('low', left < 5 * 60000); }
+    var bt = $('exBackBtn'); if (bt) bt.textContent = t('exBackToExam') + ' ⏱ ' + fmtTime(left);
+    if (left <= 0){ toast(t('exTimeUp'), true); submitExam(true); }
+  }, 1000);
+}
+function renderExam(){
+  var ex = ui.exam;
+  if (ex && !ex.submitted) return renderExamQ();
+  if (ex && ex.submitted) return renderExamResult();
+  renderExamHome();
+}
+function bestOf(id){ var b = null, n = 0; (S.exams || []).forEach(function(r){ if (r.id === id){ n++; if (b === null || r.pct > b) b = r.pct; } }); return { best:b, n:n }; }
+function renderExamHome(){
+  var vch = vocabChapters(), gps = grammarParts();
+  var chs = vch.concat(gps);
+  if (!EXU.chapter) EXU.chapter = chs[0].key;
+  var ch = chs.filter(function(c){ return c.key === EXU.chapter; })[0] || chs[0];
+  var hist = (S.exams || []).slice(-8).reverse();
+  view.innerHTML = '<h2>📝 ' + t('exHome') + '</h2>' +
+    '<div class="card"><h3 style="margin-top:0">🌐 ' + t('exGeneral') + '</h3><div class="small muted">' + t('exGeneralSub') + '</div>' +
+      '<div class="row" style="margin-top:8px"><span class="small">' + t('exQ') + '</span><input type="number" id="gCount" min="5" max="100" value="' + EXU.genCount + '" style="max-width:90px"><span class="small muted">⏱ ' + EXU.genCount + ' ' + (S.lang === 'my' ? 'မိနစ်' : 'phút') + '</span></div>' +
+      '<button class="btn primary block" style="margin-top:10px" id="gGo">' + t('exStart') + '</button></div>' +
+    '<div class="card"><h3 style="margin-top:0">📚 ' + t('exChapter') + '</h3><div class="small muted">' + t('exChapterSub') + '</div>' +
+      '<select id="chSel" style="margin-top:8px"><optgroup label="語彙">' + vch.map(function(c){ return '<option value="' + esc(c.key) + '"' + (c.key === ch.key ? ' selected' : '') + '>' + esc(c.title) + ' (' + c.items.length + ')</option>'; }).join('') + '</optgroup><optgroup label="文法">' +
+        gps.map(function(c){ return '<option value="' + esc(c.key) + '"' + (c.key === ch.key ? ' selected' : '') + '>' + esc(c.title) + ' (' + c.items.length + ')</option>'; }).join('') + '</optgroup></select>' +
+      '<div class="row" style="margin-top:8px"><span class="small">' + t('exQ') + '</span><input type="number" id="chCount" min="5" max="' + ch.items.length + '" value="' + Math.min(EXU.chCount, ch.items.length) + '" style="max-width:90px"><span class="small muted">⏱ ' + Math.min(EXU.chCount, ch.items.length) + ' ' + (S.lang === 'my' ? 'မိနစ်' : 'phút') + '</span></div>' +
+      '<button class="btn primary block" style="margin-top:10px" id="chGo">' + t('exStart') + '</button></div>' +
+    '<h3>🎌 ' + t('exJlpt') + '</h3><div class="small muted" style="margin-bottom:8px">' + t('exJlptSub') + '</div>' +
+    EXAMS.map(function(e){ var b = bestOf(e.id);
+      return '<div class="card row"><div class="grow"><b>' + esc(e.title) + '</b><div class="small muted">' + e.qs.length + ' câu · ' + e.min + ' ' + (S.lang === 'my' ? 'မိနစ်' : 'phút') + ' · ' + (b.n ? t('exTimes', { n:b.n }) + ' · ' + t('exBest') + ' ' + b.best + '%' : t('exNever')) + '</div></div><button class="btn primary" data-exam="' + e.id + '">▶</button></div>'; }).join('') +
+    (hist.length ? '<h3>🕘 ' + t('exHistory') + '</h3>' + hist.map(function(r){ return '<div class="card small row"><div class="grow"><b>' + esc(r.title) + '</b><div class="muted">' + new Date(r.at).toLocaleString() + ' · ' + fmtTime(r.dur) + '</div></div><b style="font-size:1.1rem;color:' + (r.pct >= 60 ? 'var(--good)' : 'var(--warn)') + '">' + r.pct + '%</b></div>'; }).join('') : '');
+  $('gCount').onchange = function(){ EXU.genCount = Math.max(5, Math.min(100, parseInt(this.value, 10) || 30)); renderExamHome(); };
+  $('chSel').onchange = function(){ EXU.chapter = this.value; renderExamHome(); };
+  $('chCount').onchange = function(){ EXU.chCount = Math.max(5, parseInt(this.value, 10) || 20); renderExamHome(); };
+  $('gGo').onclick = function(){
+    var all = []; VL.forEach(function(l){ all = all.concat(l.items); }); GL.forEach(function(l){ all = all.concat(l.items); });
+    var items = shuffle(all).slice(0, EXU.genCount);
+    var qs = items.map(fromItem).sort(function(a, b){ return a.sec === b.sec ? 0 : (a.sec === 'moji' ? -1 : 1); });
+    startExam('general', 'general', t('exGeneralTitle'), qs, EXU.genCount);
+  };
+  $('chGo').onclick = function(){
+    var n = Math.min(EXU.chCount, ch.items.length);
+    startExam('chapter', 'ch:' + ch.key, t('exChapterTitle', { c:ch.title }), shuffle(ch.items).slice(0, n).map(fromItem), n);
+  };
+  view.querySelectorAll('[data-exam]').forEach(function(b){ b.onclick = function(){
+    var e = EXAMS.filter(function(x){ return x.id === b.getAttribute('data-exam'); })[0];
+    startExam('jlpt', e.id, e.title, e.qs.map(fromMock), e.min);
+  }; });
+}
+function secName(s){ return t({ moji:'secMoji', bunpo:'secBunpo', dokkai:'secDokkai' }[s] || 'secMoji'); }
+function renderExamQ(){
+  var ex = ui.exam, i = ex.cur, q = ex.qs[i], n = ex.qs.length;
+  var answered = ex.ans.filter(function(a){ return a >= 0; }).length;
+  view.innerHTML =
+    '<div class="exbar"><span id="exTimer" class="extimer">⏱ ' + fmtTime(ex.endAt - Date.now()) + '</span><span class="small muted grow">' + (i + 1) + ' / ' + n + ' · ✓' + answered + '</span><button class="btn primary" id="exSubmit">' + t('exSubmit') + '</button></div>' +
+    '<div class="progress"><i style="width:' + Math.round(answered / n * 100) + '%"></i></div>' +
+    '<div class="small muted">' + esc(ex.title) + ' · <b>' + secName(q.sec) + '</b></div>' +
+    '<div class="small" style="margin:6px 0 8px">' + esc(q.inst) + '</div>' +
+    (q.psg ? '<div class="card"><div class="jp" style="font-size:1rem">' + exText(q.psg.ja) + '</div></div>' : '') +
+    '<div class="card"><div class="small muted">' + (S.lang === 'my' ? 'မေးခွန်း ' : 'Câu ') + (i + 1) + (ex.flags[i] ? ' <span style="color:var(--warn)">⚑</span>' : '') + '</div><div class="jp" style="font-size:1.1rem">' + q.qhtml + '</div></div>' +
+    '<div id="exOpts">' + q.opts.map(function(o, k){ return '<button class="opt' + (ex.ans[i] === k ? ' picked' : '') + '" data-k="' + k + '">' + (k + 1) + '. ' + o + '</button>'; }).join('') + '</div>' +
+    '<div class="navbtns" style="margin-top:6px"><button class="btn" id="exPrev"' + (i ? '' : ' disabled') + '>' + t('exPrev') + '</button><button class="btn warn" id="exFlag">' + (ex.flags[i] ? t('exUnflag') : t('exFlag')) + '</button><button class="btn" id="exNext"' + (i < n - 1 ? '' : ' disabled') + '>' + t('exNext') + '</button></div>' +
+    '<div class="actions" style="justify-content:center"><button id="exHint">' + t('exHint') + '</button><button id="exQuit">' + t('exQuit') + '</button></div>' +
+    '<h3>' + t('exGrid') + '</h3><div class="exgrid">' + ex.qs.map(function(x, k){ return '<button data-go="' + k + '" class="' + (k === i ? 'cur ' : '') + (ex.ans[k] >= 0 ? 'done ' : '') + (ex.flags[k] ? 'flag' : '') + '">' + (k + 1) + '</button>'; }).join('') + '</div>';
+  view.querySelectorAll('#exOpts .opt').forEach(function(b){ b.onclick = function(){ ex.ans[i] = +b.getAttribute('data-k'); exSave(); if (i < n - 1){ ex.cur++; exSave(); } renderExamQ(); window.scrollTo(0, 0); }; });
+  $('exPrev').onclick = function(){ ex.cur--; exSave(); renderExamQ(); };
+  $('exNext').onclick = function(){ ex.cur++; exSave(); renderExamQ(); };
+  $('exFlag').onclick = function(){ if (ex.flags[i]) delete ex.flags[i]; else ex.flags[i] = 1; exSave(); renderExamQ(); };
+  view.querySelectorAll('[data-go]').forEach(function(b){ b.onclick = function(){ ex.cur = +b.getAttribute('data-go'); exSave(); renderExamQ(); window.scrollTo(0, 0); }; });
+  $('exSubmit').onclick = function(){
+    var left = n - ex.ans.filter(function(a){ return a >= 0; }).length;
+    if (confirm(left ? t('exConfirmSubmit', { n:left }) : t('exConfirmSubmit0'))) submitExam(false);
+  };
+  $('exQuit').onclick = function(){ if (confirm(t('exQuitConfirm'))){ ui.exam = null; exSave(); clearInterval(exTimer); renderExamHome(); } };
+  $('exHint').onclick = function(){
+    var hint = S.lang === 'my' ? 'စာမေးပွဲ ဖြေနေတုန်းပါ။ အဖြေကို တိုက်ရိုက် မပြောဘဲ စဉ်းစားပုံ အရိပ်အမြွက်သာ ပေးပါ။' : 'Mình đang làm bài thi. Đừng nói thẳng đáp án, chỉ gợi ý cách suy nghĩ (nghĩa của từ khóa, mẫu ngữ pháp liên quan) để mình tự chọn.';
+    askTutor('[Đang làm bài thi — CHỈ GỢI Ý, KHÔNG nói đáp án] ' + ex.title + '\n' + q.ctx, hint);
+  };
+  runTimer();
+}
+function submitExam(auto){
+  var ex = ui.exam; if (!ex || ex.submitted) return;
+  ex.submitted = true; clearInterval(exTimer);
+  var dur = Math.min(Date.now(), ex.endAt) - ex.startAt;
+  var sec = { moji:[0, 0], bunpo:[0, 0], dokkai:[0, 0] }, ok = 0;
+  ex.qs.forEach(function(q, k){
+    var right = ex.ans[k] === q.a; if (right) ok++;
+    sec[q.sec][1]++; if (right) sec[q.sec][0]++;
+    if (q.itemId && ex.ans[k] >= 0) recordAnswer(q.itemId, right, 'exam');
+    else logDay(right);
+  });
+  var langT = sec.moji[1] + sec.bunpo[1], langOk = sec.moji[0] + sec.bunpo[0];
+  var res = { ok:ok, total:ex.qs.length, pct:Math.round(ok / ex.qs.length * 100), dur:dur, sec:sec,
+    langScore: langT ? Math.round(langOk / langT * 60) : null, readScore: sec.dokkai[1] ? Math.round(sec.dokkai[0] / sec.dokkai[1] * 60) : null };
+  if (ex.kind === 'jlpt') res.pass = res.langScore >= 19 && res.readScore >= 19 && (res.langScore + res.readScore) >= 60;
+  ex.result = res; ex.ai = '';
+  S.exams = S.exams || [];
+  S.exams.push({ id:ex.id, title:ex.title, kind:ex.kind, pct:res.pct, ok:ok, total:res.total, dur:dur, at:Date.now(), lang:res.langScore, read:res.readScore });
+  if (S.exams.length > 60) S.exams = S.exams.slice(-60);
+  save(); exSave();
+  try { localStorage.setItem(KEY_EXAM + '_last', JSON.stringify(ex)); } catch(e){}
+  if (curTab !== 'exam') switchTab('exam'); else renderExamResult();
+  if (tutorCode()) aiGrade();
+}
+function aiGrade(){
+  var ex = ui.exam; if (!ex || !ex.result) return;
+  ex.ai = '…';
+  if (curTab === 'exam') renderExamResult();
+  var r = ex.result;
+  var wrong = [];
+  ex.qs.forEach(function(q, k){ if (ex.ans[k] !== q.a) wrong.push('- [' + q.sec + '] ' + q.ctx.split('\n').slice(-2).join(' ').slice(0, 220) + ' | Chọn: ' + (ex.ans[k] >= 0 ? (ex.ans[k] + 1) : 'bỏ trống') + ' | Đúng: ' + (q.a + 1)); });
+  var prompt = 'Hãy đóng vai giáo viên chấm bài thi tiếng Nhật cho mình.\nBài: ' + ex.title + '\nĐiểm: ' + r.ok + '/' + r.total + ' (' + r.pct + '%). Thời gian làm: ' + fmtTime(r.dur) + ' / ' + ex.minutes + ' phút.\n' +
+    'Theo phần: 文字・語彙 ' + r.sec.moji[0] + '/' + r.sec.moji[1] + ', 文法 ' + r.sec.bunpo[0] + '/' + r.sec.bunpo[1] + ', 読解 ' + r.sec.dokkai[0] + '/' + r.sec.dokkai[1] + '.\n' +
+    (ex.kind === 'jlpt' ? 'Điểm quy đổi: 言語知識 ' + r.langScore + '/60, 読解 ' + r.readScore + '/60.\n' : '') +
+    'Các câu sai:\n' + (wrong.slice(0, 25).join('\n') || '(không có)') +
+    '\n\nYêu cầu: 1) Nhận xét tổng quát và mức độ so với chuẩn N2. 2) Điểm mạnh, điểm yếu theo từng phần. 3) Phân tích lỗi sai hay gặp (nhóm theo loại). 4) Kế hoạch ôn tập cụ thể 3–5 bước. Ngắn gọn, rõ ràng.';
+  callTutor(prompt, '').then(function(ans){
+    ex.ai = ans || '';
+    var last = S.exams[S.exams.length - 1]; if (last) last.ai = (ans || '').slice(0, 2500);
+    save();
+    if (curTab === 'exam' && ui.exam === ex) renderExamResult();
+  }).catch(function(e){ ex.ai = '⚠ ' + e.message; if (curTab === 'exam' && ui.exam === ex) renderExamResult(); });
+}
+function renderExamResult(){
+  var ex = ui.exam, r = ex.result;
+  var secRow = function(k){ var s = r.sec[k]; if (!s[1]) return ''; return '<div class="row small"><span class="grow">' + secName(k) + '</span><b>' + s[0] + '/' + s[1] + '</b></div>'; };
+  var aiBox = ex.ai === '…' ? '<span class="spinner"></span> ' + t('exAIwait') : (ex.ai ? mdLite(ex.ai).replace(/\n/g, '<br>') : (tutorCode() ? '<button class="btn" id="exAIgo">' + t('exAIretry') + '</button>' : esc(t('exAInokey'))));
+  var list = ex.qs.map(function(q, k){
+    var right = ex.ans[k] === q.a;
+    if (EXU.filterWrong && right) return '';
+    return '<div class="card" data-rv="' + k + '"><div class="small muted">' + (k + 1) + ' · ' + secName(q.sec) + ' · ' + esc(q.inst) + '</div>' +
+      (q.psg ? '<div class="small" style="margin:6px 0;line-height:1.9">' + exText(q.psg.ja) + '</div>' + hideBox(esc(q.psg[S.lang] || q.psg.vi)) : '') +
+      '<div class="jp">' + q.qhtml + '</div>' +
+      q.opts.map(function(o, j){ return '<div class="opt' + (j === q.a ? ' right' : (j === ex.ans[k] ? ' wrong' : '')) + '" style="cursor:default">' + (j + 1) + '. ' + o + '</div>'; }).join('') +
+      (ex.ans[k] < 0 ? '<div class="small" style="color:var(--warn)">' + t('exYour') + ': ' + t('exNone') + '</div>' : '') +
+      '<div class="explain"><div class="verdict ' + (right ? 'ok' : 'ng') + '">' + (right ? '✓ ' + t('correct') : '✗ ' + t('wrongA')) + '</div><b>' + t('why') + '</b> ' + esc(q.why[S.lang] || q.why.vi) +
+      '<div class="actions"><button data-ask="' + k + '">' + t('askTutor') + '</button></div></div></div>';
+  }).join('');
+  view.innerHTML = '<div class="card" style="text-align:center"><h2 style="margin-top:0">' + t('exResult') + '</h2><div class="small muted">' + esc(ex.title) + '</div>' +
+    '<div style="font-size:2.6rem;font-weight:800;color:' + (r.pct >= 60 ? 'var(--good)' : 'var(--warn)') + '">' + r.pct + '%</div>' +
+    '<div>' + t('exCorrect', { a:r.ok, b:r.total }) + ' · ' + t('exTimeUsed', { t:fmtTime(r.dur) }) + '</div>' +
+    (ex.kind === 'jlpt' ? '<div class="row" style="justify-content:center;gap:14px;margin-top:8px"><div><div class="small muted">' + t('exLang') + '</div><b style="font-size:1.3rem">' + r.langScore + '/60</b></div><div><div class="small muted">' + t('exRead') + '</div><b style="font-size:1.3rem">' + r.readScore + '/60</b></div></div>' +
+      '<div style="margin-top:8px;font-weight:700;color:' + (r.pass ? 'var(--good)' : 'var(--bad)') + '">' + (r.pass ? t('exPass') : t('exFail')) + '</div><div class="small muted">' + t('exPassNote') + '</div>' : '') +
+    '<div style="text-align:left;margin-top:10px">' + secRow('moji') + secRow('bunpo') + secRow('dokkai') + '</div></div>' +
+    '<div class="card"><h3 style="margin-top:0">' + t('exAI') + '</h3><div style="line-height:1.7">' + aiBox + '</div></div>' +
+    '<div class="row"><button class="btn grow" id="exHome">' + t('exBack') + '</button>' + (ex.kind === 'jlpt' ? '<button class="btn primary grow" id="exAgain">' + t('exRetake') + '</button>' : '') + '</div>' +
+    '<div class="row" style="margin:14px 0 8px"><h3 class="grow" style="margin:0">' + t('exReview') + '</h3><button class="pill' + (EXU.filterWrong ? '' : ' on') + '" id="fAll">' + t('exAll') + '</button><button class="pill' + (EXU.filterWrong ? ' on' : '') + '" id="fWrong">' + t('exOnlyWrong') + '</button></div>' + list;
+  if ($('exAIgo')) $('exAIgo').onclick = aiGrade;
+  $('exHome').onclick = function(){ ui.exam = null; exSave(); renderExamHome(); };
+  if ($('exAgain')) $('exAgain').onclick = function(){ var e = EXAMS.filter(function(x){ return x.id === ex.id; })[0]; startExam('jlpt', e.id, e.title, e.qs.map(fromMock), e.min); };
+  $('fAll').onclick = function(){ EXU.filterWrong = false; renderExamResult(); };
+  $('fWrong').onclick = function(){ EXU.filterWrong = true; renderExamResult(); };
+  view.querySelectorAll('.reveal').forEach(function(b){ b.onclick = function(){ revealToggle(b); }; });
+  view.querySelectorAll('[data-ask]').forEach(function(b){ b.onclick = function(){
+    var k = +b.getAttribute('data-ask'), q = ex.qs[k];
+    askTutor('[Bài thi đã nộp] ' + ex.title + '\n' + q.ctx + '\nĐáp án đúng: ' + (q.a + 1) + '. Mình chọn: ' + (ex.ans[k] >= 0 ? ex.ans[k] + 1 : 'bỏ trống') + '\nGiải thích có sẵn: ' + q.why.vi, defaultQ('q'));
+  }; });
+}
+if (ui.exam && !ui.exam.submitted) runTimer();
 
 /* ======================= boot ======================= */
 document.querySelectorAll('#tabs button').forEach(function(b){ b.onclick = function(){ if (b.getAttribute('data-tab') === 'practice' && curTab === 'practice' && ui.practice){} switchTab(b.getAttribute('data-tab')); }; });
