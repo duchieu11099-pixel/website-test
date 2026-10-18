@@ -45,7 +45,12 @@ var T = {
   ofLesson:'Bài',showMeaning:'Hiện nghĩa',
   explainCorrect:'Đáp án đúng là {x}',chosenMeans:'"{x}" có nghĩa là: {m}',
   needLogin:'Đăng nhập để đồng bộ',
-  ttsNone:'Máy không hỗ trợ đọc tiếng Nhật'
+  ttsNone:'Máy không hỗ trợ đọc tiếng Nhật',
+  prevW:'← Lùi',nextW:'Tiếp →',hardW:'↓ Từ khó',unhard:'Bỏ đánh dấu khó',isHard:'Từ khó',
+  swipeHelp:'Vuốt trái → phải: từ tiếp · Vuốt phải → trái: lùi lại · Vuốt xuống: từ khó · Chạm: lật thẻ',
+  shuffleW:'🔀 Xáo trộn',reverseW:'⇅ Đảo ngược',shuffled:'Đã xáo trộn thứ tự',reversed:'Đã đảo ngược thứ tự',firstCard:'Đây là thẻ đầu tiên',
+  order:'Thứ tự',orderLesson:'Theo bài',orderShuffle:'Xáo trộn',orderReverse:'Đảo ngược',srcHard:'Từ khó (đã vuốt xuống)',hardList:'Từ khó',
+  knownN:'Đã thuộc: {n}',hardN:'Từ khó: {n}'
  },
  my:{
   tabVocab:'ဝေါဟာရ',tabGrammar:'သဒ္ဒါ',tabReading:'စာဖတ်',tabPractice:'လေ့ကျင့်',tabTutor:'ဆရာ',
@@ -84,13 +89,18 @@ var T = {
   ofLesson:'သင်ခန်းစာ',showMeaning:'အဓိပ္ပာယ်ပြ',
   explainCorrect:'အဖြေမှန်က {x} ဖြစ်သည်',chosenMeans:'"{x}" ၏ အဓိပ္ပာယ်: {m}',
   needLogin:'ချိန်ကိုက်ရန် ဝင်ရောက်ပါ',
-  ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ'
+  ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ',
+  prevW:'← နောက်ပြန်',nextW:'ရှေ့ဆက် →',hardW:'↓ ခက်သောစကားလုံး',unhard:'ခက်သည် မှတ်ချက်ဖြုတ်',isHard:'ခက်',
+  swipeHelp:'ဘယ်မှ ညာသို့ ပွတ်: နောက်တစ်လုံး · ညာမှ ဘယ်သို့ ပွတ်: နောက်ပြန် · အောက်သို့ ပွတ်: ခက်သောစကားလုံး · နှိပ်: ကတ်လှန်',
+  shuffleW:'🔀 ရောမွှေ',reverseW:'⇅ ပြောင်းပြန်',shuffled:'အစီအစဉ် ရောမွှေပြီး',reversed:'အစီအစဉ် ပြောင်းပြန်လုပ်ပြီး',firstCard:'ဒါက ပထမဆုံးကတ်ပါ',
+  order:'အစီအစဉ်',orderLesson:'သင်ခန်းစာအတိုင်း',orderShuffle:'ရောမွှေ',orderReverse:'ပြောင်းပြန်',srcHard:'ခက်သောစကားလုံး (အောက်ပွတ်ထား)',hardList:'ခက်သောစကားလုံး',
+  knownN:'မှတ်မိပြီး: {n}',hardN:'ခက်: {n}'
  }
 };
 
 /* ======================= state ======================= */
 var KEY = 'nihongo_state_v1', KEY_CODE = 'nihongo_tutor_code', KEY_CHAT = 'nihongo_chat_v1';
-var defaults = { lang:'vi', furi:true, goal:20, srs:{}, marked:{}, selected:{}, wrong:{}, custom:[], days:{}, log:[], reading:{}, updatedAt:0 };
+var defaults = { lang:'vi', furi:true, goal:20, srs:{}, marked:{}, selected:{}, wrong:{}, hard:{}, custom:[], days:{}, log:[], reading:{}, updatedAt:0 };
 var S = load();
 function load(){
   var s; try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
@@ -407,6 +417,7 @@ function render(){
 /* ---------- vocab ---------- */
 function vocabPool(lessonId){
   if (lessonId === '__marked') return Object.keys(S.marked).map(function(id){ return ITEMS[id]; }).filter(function(i){ return i && i.kind === 'v'; });
+  if (lessonId === '__hard') return Object.keys(S.hard).map(function(id){ return ITEMS[id]; }).filter(function(i){ return i && i.kind === 'v'; });
   if (lessonId === '__sel') return Object.keys(S.selected).map(function(id){ return ITEMS[id]; }).filter(function(i){ return i && i.kind === 'v'; });
   if (lessonId === '__all') { var a = []; allVocabLessons().forEach(function(l){ a = a.concat(l.items); }); return a; }
   var l = lessonById(lessonId); return l ? l.items : [];
@@ -417,7 +428,7 @@ function lessonOptions(lessons, cur, extra){
   return html;
 }
 function vocabCard(it){
-  var st = isLearned(it.id) ? '<span class="tag ok">' + t('learned') + '</span>' : (isDue(it.id) ? '<span class="tag due">' + t('dueToday') + '</span>' : '');
+  var st = (S.hard[it.id] ? '<span class="tag due">' + t('isHard') + '</span>' : '') + (isLearned(it.id) ? '<span class="tag ok">' + t('learned') + '</span>' : (isDue(it.id) ? '<span class="tag due">' + t('dueToday') + '</span>' : ''));
   return '<div class="card listitem" data-id="' + esc(it.id) + '">' +
     '<div class="head"><input type="checkbox" class="sel" data-act="sel"' + (S.selected[it.id] ? ' checked' : '') + '>' +
     '<div class="grow"><div class="word">' + wordRuby(it.w, it.r) + (S.marked[it.id] ? ' <span style="color:var(--warn);font-size:.9rem">★</span>' : '') + '</div>' +
@@ -443,7 +454,7 @@ function renderVocab(){
   view.innerHTML =
     statsBar() +
     '<div class="row" style="margin-bottom:8px"><select id="vLesson" class="grow">' +
-      lessonOptions(lessons, ui.vLesson, [['__all', t('allLessons')], ['__marked', t('marked')], ['__sel', t('selectedW')]]) +
+      lessonOptions(lessons, ui.vLesson, [['__all', t('allLessons')], ['__hard', t('hardList')], ['__marked', t('marked')], ['__sel', t('selectedW')]]) +
     '</select></div>' +
     '<input type="text" id="vSearch" placeholder="' + esc(t('search')) + '" value="' + esc(ui.vSearch) + '">' +
     '<div class="row" style="margin:10px 0">' +
@@ -578,7 +589,8 @@ function renderPassage(d){
 }
 
 /* ---------- practice config ---------- */
-var P = { type:'v', src:'lessons', mode:'flash', count:20, dir:'ja', lessons:{} };
+var P = { type:'v', src:'lessons', mode:'flash', count:20, dir:'ja', order:'shuffle', lessons:{} };
+function orderItems(list, order){ if (order === 'lesson') return list.slice(); if (order === 'reverse') return list.slice().reverse(); return shuffle(list); }
 function practicePool(){
   var lessons = P.type === 'v' ? allVocabLessons() : GL;
   var all = []; lessons.forEach(function(l){ all = all.concat(l.items); });
@@ -588,6 +600,7 @@ function practicePool(){
   else if (P.src === 'due') pool = all.filter(function(i){ return isDue(i.id); });
   else if (P.src === 'marked') pool = all.filter(function(i){ return S.marked[i.id]; });
   else if (P.src === 'wrong') pool = all.filter(function(i){ return S.wrong[i.id]; }).sort(function(a, b){ return S.wrong[b.id] - S.wrong[a.id]; });
+  else if (P.src === 'hard') pool = all.filter(function(i){ return S.hard[i.id]; });
   else if (P.src === 'new') pool = all.filter(function(i){ return !S.srs[i.id]; });
   return pool || [];
 }
@@ -597,7 +610,7 @@ function renderPractice(){
   if (!Object.keys(P.lessons).length && lessons[0]) P.lessons[lessons[0].id] = true;
   var modes = P.type === 'v' ? [['flash', t('mFlash')], ['meaning', t('mMeaning')], ['reading', t('mReading')], ['type', t('mType')]] : [['gfill', t('mGrammar')], ['gmean', t('mGMean')], ['flash', t('mFlash')]];
   if (!modes.some(function(m){ return m[0] === P.mode; })) P.mode = modes[0][0];
-  var srcs = [['lessons', t('srcLessons')], ['selected', t('srcSelected') + ' (' + Object.keys(S.selected).filter(function(k){ return ITEMS[k] && ITEMS[k].kind === P.type; }).length + ')'], ['due', t('srcDue')], ['marked', t('srcMarked')], ['wrong', t('srcWrong')], ['new', t('srcNew')]];
+  var srcs = [['lessons', t('srcLessons')], ['selected', t('srcSelected') + ' (' + Object.keys(S.selected).filter(function(k){ return ITEMS[k] && ITEMS[k].kind === P.type; }).length + ')'], ['due', t('srcDue')], ['marked', t('srcMarked')], ['hard', t('srcHard')], ['wrong', t('srcWrong')], ['new', t('srcNew')]];
   var pool = practicePool();
   view.innerHTML = statsBar() +
     '<div class="card"><h3 style="margin-top:0">' + t('pType') + '</h3><div class="chips">' +
@@ -610,18 +623,20 @@ function renderPractice(){
     (P.mode === 'flash' ? '<h3>' + t('pDir') + '</h3><div class="chips"><button class="pill' + (P.dir === 'ja' ? ' on' : '') + '" data-dir="ja">' + t('dirJa') + '</button><button class="pill' + (P.dir === 'mean' ? ' on' : '') + '" data-dir="mean">' + t('dirMean') + '</button></div>' : '') +
     '<h3>' + t('pCount') + '</h3><div class="row"><input type="number" id="pCount" min="1" max="' + Math.max(1, pool.length) + '" value="' + Math.min(P.count, Math.max(1, pool.length)) + '" style="max-width:110px">' +
       '<span class="small muted">' + t('poolSize', { n:pool.length }) + '</span></div>' +
+    '<h3>' + t('order') + '</h3><div class="chips">' + [['lesson', t('orderLesson')], ['shuffle', t('orderShuffle')], ['reverse', t('orderReverse')]].map(function(o){ return '<button class="pill' + (P.order === o[0] ? ' on' : '') + '" data-order="' + o[0] + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
     '<div style="height:12px"></div><button class="btn primary block" id="pStart"' + (pool.length ? '' : ' disabled') + '>▶ ' + t('start') + '</button></div>' +
     methodsCard();
   view.querySelectorAll('[data-type]').forEach(function(b){ b.onclick = function(){ P.type = b.getAttribute('data-type'); P.lessons = {}; renderPractice(); }; });
   view.querySelectorAll('[data-src]').forEach(function(b){ b.onclick = function(){ P.src = b.getAttribute('data-src'); renderPractice(); }; });
+  view.querySelectorAll('[data-order]').forEach(function(b){ b.onclick = function(){ P.order = b.getAttribute('data-order'); renderPractice(); }; });
   view.querySelectorAll('[data-dir]').forEach(function(b){ b.onclick = function(){ P.dir = b.getAttribute('data-dir'); renderPractice(); }; });
   view.querySelectorAll('[data-les]').forEach(function(c){ c.onchange = function(){ P.lessons[c.getAttribute('data-les')] = c.checked; renderPractice(); }; });
   view.querySelectorAll('input[name=mode]').forEach(function(r){ r.onchange = function(){ P.mode = r.value; renderPractice(); }; });
   $('pCount').onchange = function(){ P.count = Math.max(1, parseInt(this.value, 10) || 1); };
   $('pStart').onclick = function(){
     P.count = Math.max(1, parseInt($('pCount').value, 10) || 1);
-    var items = P.src === 'wrong' ? pool.slice(0, P.count) : shuffle(pool).slice(0, P.count);
-    startSession({ type:P.type, mode:P.mode, dir:P.dir, items:shuffle(items) });
+    var items = (P.src === 'wrong' || P.order !== 'shuffle') ? pool.slice(0, P.count) : shuffle(pool).slice(0, P.count);
+    startSession({ type:P.type, mode:P.mode, dir:P.dir, items:orderItems(items, P.order) });
   };
 }
 function methodsCard(){
@@ -648,7 +663,7 @@ function methodsCard(){
 
 /* ---------- practice session ---------- */
 function startSession(cfg){
-  ui.practice = { cfg:cfg, queue:cfg.items.slice(), idx:0, done:0, ok:0, wrongs:[], flipped:false, answered:false, total:cfg.items.length };
+  ui.practice = { cfg:cfg, queue:cfg.items.slice(), idx:0, done:0, ok:0, wrongs:[], flipped:false, answered:false, total:cfg.items.length, marks:{}, graded:{} };
   if (curTab !== 'practice') switchTab('practice'); else renderSession();
 }
 function curItem(){ var p = ui.practice; return p.queue[p.idx]; }
@@ -683,35 +698,96 @@ function backSide(it){
     '<div class="small" style="text-align:left;margin-top:4px">' + esc(L(it, 'use')) + '</div>' +
     '<div class="jp" style="text-align:left">' + ruby(it.exJa) + '</div>' + hideBox(esc(L(it, 'ex'))) + tipBox(it);
 }
-function renderFlash(head, it, cfg){
-  var p = ui.practice;
-  var front = it.kind === 'v'
+function flashFront(it, cfg){
+  return it.kind === 'v'
     ? (cfg.dir === 'ja' ? '<div class="front">' + wordRuby(it.w, it.r) + '</div>' : '<div class="front" style="font-size:1.4rem">' + esc(L(it, '')) + '</div>')
     : (cfg.dir === 'ja' ? '<div class="front" style="font-size:1.6rem">' + esc(it.p) + '</div>' : '<div class="front" style="font-size:1.3rem">' + esc(L(it, '')) + '</div>');
-  view.innerHTML = head +
-    '<div class="card flash" id="fCard">' + (p.flipped ? '<div style="width:100%">' + backSide(it) + '</div>' : front + '<div class="hint">' + t('tapFlip') + '</div>') + '</div>' +
-    (p.flipped ? '<div class="srsbtns">' +
-      '<button class="btn bad" data-q="0">' + t('again') + '<small>' + nextLabel(it.id, 0) + '</small></button>' +
-      '<button class="btn warn" data-q="3">' + t('hard') + '<small>' + nextLabel(it.id, 3) + '</small></button>' +
-      '<button class="btn good" data-q="4">' + t('good') + '<small>' + nextLabel(it.id, 4) + '</small></button>' +
-      '<button class="btn primary" data-q="5">' + t('easy') + '<small>' + nextLabel(it.id, 5) + '</small></button></div>' +
-      '<div class="actions"><button id="fSpeak">' + t('speak') + '</button><button id="fTutor">' + t('askTutor') + '</button></div>' : '');
-  bindQuit();
-  $('fCard').onclick = function(e){
-    if (e.target.closest('.hidebox')){ if (e.target.getAttribute('data-act') === 'reveal') revealToggle(e.target); return; }
-    if (!p.flipped){ p.flipped = true; renderSession(); if (it.kind === 'v') speak(it.w); }
-  };
-  if (p.flipped){
-    view.querySelectorAll('[data-q]').forEach(function(b){ b.onclick = function(){
-      var q = +b.getAttribute('data-q');
-      grade(it.id, q);
-      if (q < 3){ p.queue.push(it); p.wrongs.push(it); } else { p.ok++; p.done++; }
-      p.idx++; p.flipped = false; renderSession();
-    }; });
-    $('fSpeak').onclick = function(){ speak(it.kind === 'v' ? it.w : it.exJa); };
-    $('fTutor').onclick = function(){ askTutor(ctxOfItem(it), defaultQ(it.kind)); };
-  }
 }
+function renderFlash(head, it, cfg){
+  var p = ui.practice, n = p.queue.length;
+  var hardNow = !!S.hard[it.id];
+  view.innerHTML =
+    '<div class="row"><span class="small muted grow">' + (p.idx + 1) + ' / ' + n + '</span>' +
+      '<button class="pill" id="fShuf">' + t('shuffleW') + '</button><button class="pill" id="fRev">' + t('reverseW') + '</button>' +
+      '<button class="pill" id="sQuit">' + t('quit') + '</button></div>' +
+    '<div class="progress"><i style="width:' + Math.round(p.idx / Math.max(1, n) * 100) + '%"></i></div>' +
+    '<div class="swipewrap"><div class="swipelabel" id="fLab"></div>' +
+    '<div class="card flash swipe' + (hardNow ? ' ishard' : '') + '" id="fCard">' +
+      (hardNow ? '<span class="tag due hardtag">' + t('isHard') + '</span>' : '') +
+      (p.flipped ? '<div style="width:100%">' + backSide(it) + '</div>' : flashFront(it, cfg) + '<div class="hint">' + t('tapFlip') + '</div>') +
+    '</div></div>' +
+    '<div class="small muted" style="text-align:center;margin:8px 0">' + esc(t('swipeHelp')) + '</div>' +
+    '<div class="navbtns"><button class="btn" id="fPrev"' + (p.idx ? '' : ' disabled') + '>' + t('prevW') + '</button>' +
+      '<button class="btn warn" id="fHard">' + (hardNow ? t('unhard') : t('hardW')) + '</button>' +
+      '<button class="btn primary" id="fNext">' + t('nextW') + '</button></div>' +
+    '<div class="actions" style="justify-content:center"><button id="fSpeak">' + t('speak') + '</button><button id="fTutor">' + t('askTutor') + '</button></div>';
+  bindQuit();
+  var card = $('fCard'), lab = $('fLab');
+  function flip(){ p.flipped = !p.flipped; renderSession(); if (p.flipped && it.kind === 'v') speak(it.w); }
+  function fly(dx, dy, then){
+    card.style.transition = 'transform .18s ease-out, opacity .18s';
+    card.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + (dx / 25) + 'deg)';
+    card.style.opacity = '0';
+    setTimeout(then, 170);
+  }
+  card.addEventListener('pointerdown', function(e){
+    if (e.target.closest('.hidebox') || e.target.closest('button')) return;
+    var x0 = e.clientX, y0 = e.clientY, dx = 0, dy = 0, moved = false;
+    card.setPointerCapture(e.pointerId);
+    card.style.transition = 'none';
+    function mv(ev){
+      dx = ev.clientX - x0; dy = ev.clientY - y0;
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) moved = true;
+      if (!moved) return;
+      var down = dy > 0 && dy > Math.abs(dx);
+      card.style.transform = down ? 'translate(0,' + dy + 'px)' : 'translate(' + dx + 'px,0) rotate(' + (dx / 25) + 'deg)';
+      var txt = '', cls = '';
+      if (down && dy > 40){ txt = hardNow ? t('unhard') : t('hardW'); cls = 'warn'; }
+      else if (dx > 40){ txt = t('nextW'); cls = 'good'; }
+      else if (dx < -40){ txt = t('prevW'); cls = 'muted'; }
+      lab.textContent = txt; lab.className = 'swipelabel ' + cls + (txt ? ' show' : '');
+    }
+    function up(){
+      card.removeEventListener('pointermove', mv); card.removeEventListener('pointerup', up); card.removeEventListener('pointercancel', up);
+      lab.className = 'swipelabel';
+      if (!moved) return flip();
+      if (dy > 90 && dy > Math.abs(dx)) return fly(0, 600, flashHard);
+      if (dx > 80) return fly(500, 0, flashNext);
+      if (dx < -80){ if (p.idx === 0){ toast(t('firstCard')); } else return fly(-500, 0, flashPrev); }
+      card.style.transition = 'transform .2s'; card.style.transform = '';
+    }
+    card.addEventListener('pointermove', mv); card.addEventListener('pointerup', up); card.addEventListener('pointercancel', up);
+  });
+  card.addEventListener('click', function(e){ if (e.target.getAttribute('data-act') === 'reveal') revealToggle(e.target); });
+  $('fNext').onclick = function(){ fly(500, 0, flashNext); };
+  $('fPrev').onclick = function(){ if (p.idx) fly(-500, 0, flashPrev); };
+  $('fHard').onclick = function(){ fly(0, 600, flashHard); };
+  $('fShuf').onclick = function(){ var done = p.queue.slice(0, p.idx + 1), rest = p.queue.slice(p.idx + 1); p.queue = done.concat(shuffle(rest)); toast(t('shuffled')); };
+  $('fRev').onclick = function(){ var done = p.queue.slice(0, p.idx + 1), rest = p.queue.slice(p.idx + 1); p.queue = done.concat(rest.reverse()); toast(t('reversed')); };
+  $('fSpeak').onclick = function(){ speak(it.kind === 'v' ? it.w : it.exJa); };
+  $('fTutor').onclick = function(){ askTutor(ctxOfItem(it), defaultQ(it.kind)); };
+}
+function flashNext(){
+  var p = ui.practice, it = curItem();
+  if (!p.marks[it.id]){ p.marks[it.id] = 'ok'; if (!p.graded[it.id]){ p.graded[it.id] = 1; grade(it.id, 4); } }
+  p.idx++; p.flipped = false; renderSession();
+}
+function flashPrev(){ var p = ui.practice; if (p.idx > 0) p.idx--; p.flipped = false; renderSession(); }
+function flashHard(){
+  var p = ui.practice, it = curItem();
+  if (S.hard[it.id]){ delete S.hard[it.id]; delete p.marks[it.id]; save(); p.flipped = false; renderSession(); return; }
+  S.hard[it.id] = 1; p.marks[it.id] = 'hard';
+  grade(it.id, 0); p.graded[it.id] = 1;
+  p.idx++; p.flipped = false; renderSession();
+}
+document.addEventListener('keydown', function(e){
+  if (curTab !== 'practice' || !ui.practice || ui.practice.cfg.mode !== 'flash' || ui.practice.idx >= ui.practice.queue.length) return;
+  if (/INPUT|TEXTAREA|SELECT/.test((e.target.tagName || ''))) return;
+  if (e.key === 'ArrowRight'){ e.preventDefault(); flashNext(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); flashPrev(); }
+  else if (e.key === 'ArrowDown'){ e.preventDefault(); flashHard(); }
+  else if (e.key === ' '){ e.preventDefault(); ui.practice.flipped = !ui.practice.flipped; renderSession(); }
+});
 function finishAnswer(it, ok, explainHtml, ctx){
   var p = ui.practice;
   p.answered = true; p.done++;
@@ -804,9 +880,13 @@ function renderType(head, it){
 }
 function renderSummary(){
   var p = ui.practice;
+  if (p.cfg.mode === 'flash'){
+    p.total = p.queue.length; p.ok = 0; p.wrongs = [];
+    p.queue.forEach(function(it){ if (p.marks[it.id] === 'hard') p.wrongs.push(it); else if (p.marks[it.id] === 'ok') p.ok++; });
+  }
   var uniqWrong = []; var seen = {};
   p.wrongs.forEach(function(w){ if (!seen[w.id]){ seen[w.id] = 1; uniqWrong.push(w); } });
-  view.innerHTML = '<div class="card" style="text-align:center"><h2>' + t('result') + '</h2><div style="font-size:2.2rem;font-weight:800">' + t('score', { a:p.ok, b:p.total }) + '</div>' +
+  view.innerHTML = '<div class="card" style="text-align:center"><h2>' + t('result') + '</h2><div style="font-size:' + (p.cfg.mode === 'flash' ? '1.4rem' : '2.2rem') + ';font-weight:800">' + (p.cfg.mode === 'flash' ? t('knownN', { n:p.ok }) + ' · ' + t('hardN', { n:p.wrongs.length }) : t('score', { a:p.ok, b:p.total })) + '</div>' +
     '<div class="progress"><i style="width:' + Math.round(p.ok / Math.max(1, p.total) * 100) + '%"></i></div>' +
     '<div class="small muted">' + (cloud.user ? '☁ ' + t('syncOk') : t('notLogged')) + '</div></div>' +
     (uniqWrong.length ? '<h3>✗ (' + uniqWrong.length + ')</h3>' + uniqWrong.map(function(w){ return '<div class="card small"><b>' + (w.kind === 'v' ? wordRuby(w.w, w.r) : esc(w.p)) + '</b> — ' + esc(L(w, '')) + '</div>'; }).join('') : '') +

@@ -111,6 +111,13 @@ table.imp tr.dup td{background:rgba(251,191,36,.08)}
 .empty{text-align:center;color:var(--muted);padding:30px 10px}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--muted);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
 @keyframes sp{to{transform:rotate(360deg)}}
+.swipewrap{position:relative}
+.flash.swipe{touch-action:none;user-select:none;-webkit-user-select:none;position:relative;min-height:300px}
+.flash.ishard{border:1px solid var(--warn)}
+.hardtag{position:absolute;top:10px;right:10px}
+.swipelabel{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:5;padding:6px 14px;border-radius:999px;font-weight:700;opacity:0;transition:opacity .1s;pointer-events:none;background:var(--card2)}
+.swipelabel.show{opacity:1}.swipelabel.good{background:var(--good);color:#06281c}.swipelabel.warn{background:var(--warn);color:#3a2a00}
+.navbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .hidden{display:none!important}
 </style>
 </head>
