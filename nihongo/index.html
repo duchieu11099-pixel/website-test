@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1220">
+<title>日本語マスター N2・N1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1220; --card:#1a1f35; --card2:#232a4a; --line:#2c3459; --text:#eef1ff; --muted:#9aa3c7;
+  --accent:#6c8cff; --accent2:#8b5cf6; --good:#34d399; --warn:#fbbf24; --bad:#f87171; --mark:#f9a8d4;
+  --radius:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text)}
+body{font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic","Noto Sans Myanmar","Padauk",sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+body.lang-my{font-family:system-ui,-apple-system,"Noto Sans Myanmar","Padauk","Hiragino Sans","Noto Sans JP",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:640px;margin:0 auto;padding:0 14px 110px}
+header.top{position:sticky;top:0;z-index:40;background:rgba(15,18,32,.94);backdrop-filter:blur(8px);display:flex;align-items:center;gap:8px;padding:10px 14px;margin:0 -14px 10px;border-bottom:1px solid var(--line)}
+header.top h1{flex:1;margin:0;font-size:1.05rem;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-size:.82rem;cursor:pointer}
+.pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.iconbtn{border:none;background:var(--card);border-radius:12px;width:36px;height:36px;cursor:pointer;font-size:1.05rem;display:inline-flex;align-items:center;justify-content:center}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:#12162a;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;border:none;background:none;color:var(--muted);padding:8px 2px 10px;font-size:.72rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.tabs button b{font-size:1.15rem;font-weight:400}
+nav.tabs button.active{color:var(--accent)}
+.card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.card.flat{background:transparent;border:1px dashed var(--line)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:.82rem}
+.btn{border:none;border-radius:12px;padding:10px 14px;background:var(--card2);cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+.btn.good{background:var(--good);color:#06281c}.btn.bad{background:var(--bad);color:#3a0a0a}.btn.warn{background:var(--warn);color:#3a2a00}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+select,input[type=text],input[type=number],input[type=email],input[type=password],textarea{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:9px 11px;width:100%;outline:none}
+textarea{resize:vertical;min-height:70px}
+label.chk{display:flex;align-items:center;gap:8px;cursor:pointer}
+h2{font-size:1.05rem;margin:14px 0 8px}
+h3{font-size:.95rem;margin:10px 0 6px}
+.jp{font-size:1.05rem;line-height:2.1}
+.word{font-size:1.45rem;font-weight:700;line-height:2}
+ruby rt{font-size:.52em;color:#b9c3ff;font-weight:400}
+body.nofuri ruby rt{visibility:hidden}
+mark.g{background:rgba(139,92,246,.28);color:#fff;border-radius:5px;padding:0 3px}
+.tag{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--card2);color:var(--muted);margin-right:4px}
+.tag.ok{background:rgba(52,211,153,.18);color:var(--good)}
+.tag.due{background:rgba(251,191,36,.18);color:var(--warn)}
+.hidebox{margin-top:6px}
+.hidebox .reveal{border:1px dashed var(--line);background:none;border-radius:10px;padding:6px 10px;color:var(--muted);cursor:pointer;font-size:.84rem}
+.hidebox .content{display:none;margin-top:6px;padding:8px 10px;background:var(--card2);border-radius:10px}
+.hidebox.open .content{display:block}
+.tip{margin-top:8px;padding:8px 10px;border-left:3px solid var(--warn);background:rgba(251,191,36,.08);border-radius:0 10px 10px 0;font-size:.9rem}
+.tip b{color:var(--warn)}
+.actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.actions button{border:none;background:var(--card2);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:.82rem}
+.actions button.on{background:rgba(108,140,255,.25);color:#cfd8ff}
+.listitem{cursor:pointer}
+.listitem .head{display:flex;align-items:flex-start;gap:10px}
+.listitem .more{display:none;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+.listitem.open .more{display:block}
+.sel{width:22px;height:22px;accent-color:var(--accent);flex:none;margin-top:6px}
+.stats{display:flex;gap:8px;margin:6px 0 12px}
+.stat{flex:1;background:var(--card);border-radius:14px;padding:9px 6px;text-align:center}
+.stat b{display:block;font-size:1.2rem}
+.stat span{font-size:.7rem;color:var(--muted)}
+.progress{height:6px;background:var(--card2);border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0}
+.flash{min-height:250px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;perspective:800px}
+.flash .front{font-size:2rem;font-weight:700;line-height:2.2}
+.flash .hint{color:var(--muted);font-size:.8rem;margin-top:10px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:11px 13px;margin-bottom:8px;cursor:pointer;line-height:1.9}
+.opt.right{border-color:var(--good);background:rgba(52,211,153,.15)}
+.opt.wrong{border-color:var(--bad);background:rgba(248,113,113,.15)}
+.explain{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--card2)}
+.explain .verdict{font-weight:700;margin-bottom:4px}
+.verdict.ok{color:var(--good)}.verdict.ng{color:var(--bad)}
+.srsbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.srsbtns button{border:none;border-radius:12px;padding:10px 2px;cursor:pointer;font-weight:700;font-size:.85rem}
+.srsbtns small{display:block;font-weight:400;font-size:.68rem;opacity:.8}
+.chat{display:flex;flex-direction:column;gap:8px}
+.msg{padding:10px 12px;border-radius:14px;max-width:92%;white-space:pre-wrap;word-wrap:break-word}
+.msg.me{align-self:flex-end;background:rgba(108,140,255,.22)}
+.msg.ai{align-self:flex-start;background:var(--card)}
+.msg.ctx{align-self:stretch;background:transparent;border:1px dashed var(--line);font-size:.82rem;color:var(--muted);max-width:100%}
+.chatbar{position:fixed;left:0;right:0;bottom:58px;z-index:45;background:rgba(15,18,32,.96);border-top:1px solid var(--line);padding:8px 14px calc(8px + env(safe-area-inset-bottom))}
+.chatbar .inner{max-width:640px;margin:0 auto;display:flex;gap:8px;align-items:flex-end}
+.chatbar textarea{min-height:44px;max-height:140px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#2a325c;color:#fff;padding:9px 14px;border-radius:12px;z-index:200;font-size:.88rem;max-width:90%;box-shadow:0 6px 24px rgba(0,0,0,.4);display:none}
+.toast.bad{background:#7f1d1d}
+.overlay{position:fixed;inset:0;z-index:150;background:rgba(5,7,15,.75);display:none;align-items:flex-end;justify-content:center}
+.overlay.show{display:flex}
+.sheet{background:var(--bg);border:1px solid var(--line);border-bottom:none;border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.gate{position:fixed;inset:0;z-index:300;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
+.gate.show{display:flex}
+.gate .box{width:100%;max-width:380px}
+.err{color:var(--bad);font-size:.85rem;min-height:1.2em;margin-top:6px}
+table.imp{width:100%;border-collapse:collapse;font-size:.85rem}
+table.imp td{padding:4px 3px;border-bottom:1px solid var(--line);vertical-align:top}
+table.imp input:not([type=checkbox]){background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:6px 7px;font-size:.85rem;width:100%;outline:none}
+table.imp tr.dup td{background:rgba(251,191,36,.08)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.lessonlist{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:6px 10px}
+.lessonlist label{font-size:.85rem;padding:3px 0}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--muted);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1 id="appTitle">日本語マスター</h1>
+    <button class="pill" id="btnFuri" title="Furigana">ふりがな</button>
+    <button class="pill" id="btnLang">VI</button>
+    <button class="iconbtn" id="btnSettings" aria-label="Settings">⚙</button>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="vocab"><b>語</b><span data-t="tabVocab"></span></button>
+  <button data-tab="grammar"><b>文</b><span data-t="tabGrammar"></span></button>
+  <button data-tab="reading"><b>読</b><span data-t="tabReading"></span></button>
+  <button data-tab="practice"><b>練</b><span data-t="tabPractice"></span></button>
+  <button data-tab="tutor"><b>師</b><span data-t="tabTutor"></span></button>
+</nav>
+
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+
+<div class="gate" id="gate">
+  <div class="box">
+    <h2 style="font-size:1.3rem;margin-bottom:4px">日本語マスター N2・N1</h2>
+    <p class="muted small" id="gateSub"></p>
+    <label class="small muted" data-t="email"></label>
+    <input type="email" id="lgEmail" value="duchieu11099@gmail.com" autocomplete="username">
+    <div style="height:8px"></div>
+    <label class="small muted" data-t="password"></label>
+    <input type="password" id="lgPass" autocomplete="current-password">
+    <div class="err" id="lgErr"></div>
+    <button class="btn primary block" id="lgLogin" data-t="login"></button>
+    <div style="height:8px"></div>
+    <button class="btn block" id="lgSignup" data-t="signup"></button>
+    <div class="row" style="justify-content:space-between;margin-top:12px">
+      <button class="pill" id="lgReset" data-t="forgot"></button>
+      <button class="pill" id="lgSkip" data-t="skipLogin"></button>
+    </div>
+    <div class="row" style="justify-content:center;margin-top:16px">
+      <button class="pill" data-setlang="vi">Tiếng Việt</button>
+      <button class="pill" data-setlang="my">မြန်မာ</button>
+    </div>
+  </div>
+</div>
+
+<script src="data-goi1.js"></script>
+<script src="data-goi2.js"></script>
+<script src="data-bun1.js"></script>
+<script src="data-bun2.js"></script>
+<script src="data-dok.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
