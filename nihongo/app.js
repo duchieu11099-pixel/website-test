@@ -46,6 +46,7 @@ var T = {
   explainCorrect:'Đáp án đúng là {x}',chosenMeans:'"{x}" có nghĩa là: {m}',
   needLogin:'Đăng nhập để đồng bộ',
   ttsNone:'Máy không hỗ trợ đọc tiếng Nhật',
+  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
   prevW:'← Lùi',nextW:'Tiếp →',hardW:'↓ Từ khó',unhard:'Bỏ đánh dấu khó',isHard:'Từ khó',
   swipeHelp:'Vuốt trái → phải: từ tiếp · Vuốt phải → trái: lùi lại · Vuốt xuống: từ khó · Chạm: lật thẻ',
   shuffleW:'🔀 Xáo trộn',reverseW:'⇅ Đảo ngược',shuffled:'Đã xáo trộn thứ tự',reversed:'Đã đảo ngược thứ tự',firstCard:'Đây là thẻ đầu tiên',
@@ -90,6 +91,7 @@ var T = {
   explainCorrect:'အဖြေမှန်က {x} ဖြစ်သည်',chosenMeans:'"{x}" ၏ အဓိပ္ပာယ်: {m}',
   needLogin:'ချိန်ကိုက်ရန် ဝင်ရောက်ပါ',
   ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ',
+  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
   prevW:'← နောက်ပြန်',nextW:'ရှေ့ဆက် →',hardW:'↓ ခက်သောစကားလုံး',unhard:'ခက်သည် မှတ်ချက်ဖြုတ်',isHard:'ခက်',
   swipeHelp:'ဘယ်မှ ညာသို့ ပွတ်: နောက်တစ်လုံး · ညာမှ ဘယ်သို့ ပွတ်: နောက်ပြန် · အောက်သို့ ပွတ်: ခက်သောစကားလုံး · နှိပ်: ကတ်လှန်',
   shuffleW:'🔀 ရောမွှေ',reverseW:'⇅ ပြောင်းပြန်',shuffled:'အစီအစဉ် ရောမွှေပြီး',reversed:'အစီအစဉ် ပြောင်းပြန်လုပ်ပြီး',firstCard:'ဒါက ပထမဆုံးကတ်ပါ',
@@ -194,13 +196,38 @@ function toast(msg, bad){
   var el = $('toast'); el.textContent = msg; el.className = 'toast' + (bad ? ' bad' : ''); el.style.display = 'block';
   clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.style.display = 'none'; }, 2600);
 }
+/* ---- phát âm tiếng Nhật ----
+   Luôn đọc bằng chữ kana (cách đọc) và chỉ dùng giọng tiếng Nhật, để không bị đọc theo âm Trung. */
+var KEY_VOICE = 'nihongo_voice';
+var jaVoices = [], jaVoice = null;
+function loadVoices(){
+  if (!('speechSynthesis' in window)) return;
+  var vs = speechSynthesis.getVoices() || [];
+  jaVoices = vs.filter(function(v){ return /^ja([-_]|$)/i.test(v.lang) || /japan|日本|kyoko|otoya|o-ren|haruka|ayumi|ichiro|nanami|keita|sayaka/i.test(v.name); });
+  var want = ''; try { want = localStorage.getItem(KEY_VOICE) || ''; } catch(e){}
+  var rank = function(v){ return (v.name === want ? 100 : 0) + (/google|enhanced|premium|natural|neural|online/i.test(v.name) ? 10 : 0) + (v.localService ? 1 : 0); };
+  jaVoices.sort(function(a, b){ return rank(b) - rank(a); });
+  jaVoice = jaVoices[0] || null;
+}
+if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function kanaText(s){
+  // 漢字{かな} → かな ; bỏ dấu 【】 [[ ]] ¶
+  return String(s || '').replace(new RegExp('[' + KANJI + ']+\\{([^}]*)\\}', 'g'), '$1').replace(/\{[^}]*\}/g, '').replace(/[【】]|\[\[|\]\]/g, '').replace(/¶/g, '。');
+}
+function speakItem(it){ if (!it) return; speak(it.kind === 'v' ? (it.r || it.w) : it.exJa); }
 function speak(text){
   if (!('speechSynthesis' in window)){ toast(t('ttsNone'), true); return; }
-  speechSynthesis.cancel();
-  var u = new SpeechSynthesisUtterance(plain(text)); u.lang = 'ja-JP'; u.rate = 0.9;
-  var v = speechSynthesis.getVoices().filter(function(x){ return /ja/i.test(x.lang); })[0];
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
+  var say = kanaText(text);
+  var go = function(){
+    if (!jaVoice){ toast(t('ttsNoJa'), true); return; }
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(say);
+    u.voice = jaVoice; u.lang = jaVoice.lang || 'ja-JP'; u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  if (jaVoice) return go();
+  // danh sách giọng có thể chưa tải xong — đợi tối đa ~1.5 giây
+  var tries = 0, iv = setInterval(function(){ loadVoices(); if (jaVoice || ++tries > 15){ clearInterval(iv); go(); } }, 100);
 }
 function hideBox(textHtml){
   return '<div class="hidebox"><button class="reveal" data-act="reveal">' + t('showTrans') + '</button><div class="content">' + textHtml + '</div></div>';
@@ -480,7 +507,7 @@ function bindItemList(root){
     var act = e.target.getAttribute('data-act');
     if (act === 'sel'){ if (e.target.checked) S.selected[id] = 1; else delete S.selected[id]; save(); e.stopPropagation(); return; }
     if (act === 'reveal'){ revealToggle(e.target); return; }
-    if (act === 'speak'){ speak(it.kind === 'v' ? it.w : it.exJa); return; }
+    if (act === 'speak'){ speakItem(it); return; }
     if (act === 'speakEx'){ speak(it.exJa); return; }
     if (act === 'mark'){ if (S.marked[id]) delete S.marked[id]; else S.marked[id] = 1; save(); card.outerHTML = (it.kind === 'v' ? vocabCard(it) : grammarCard(it)); var nc = root.querySelector('[data-id="' + CSS.escape(id) + '"]'); if (nc) nc.classList.add('open'); return; }
     if (act === 'tutor'){ askTutor(ctxOfItem(it), defaultQ(it.kind)); return; }
@@ -723,7 +750,7 @@ function renderFlash(head, it, cfg){
     '<div class="actions" style="justify-content:center"><button id="fSpeak">' + t('speak') + '</button><button id="fTutor">' + t('askTutor') + '</button></div>';
   bindQuit();
   var card = $('fCard'), lab = $('fLab');
-  function flip(){ p.flipped = !p.flipped; renderSession(); if (p.flipped && it.kind === 'v') speak(it.w); }
+  function flip(){ p.flipped = !p.flipped; renderSession(); if (p.flipped && it.kind === 'v') speakItem(it); }
   function fly(dx, dy, then){
     card.style.transition = 'transform .18s ease-out, opacity .18s';
     card.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + (dx / 25) + 'deg)';
@@ -764,7 +791,7 @@ function renderFlash(head, it, cfg){
   $('fHard').onclick = function(){ fly(0, 600, flashHard); };
   $('fShuf').onclick = function(){ var done = p.queue.slice(0, p.idx + 1), rest = p.queue.slice(p.idx + 1); p.queue = done.concat(shuffle(rest)); toast(t('shuffled')); };
   $('fRev').onclick = function(){ var done = p.queue.slice(0, p.idx + 1), rest = p.queue.slice(p.idx + 1); p.queue = done.concat(rest.reverse()); toast(t('reversed')); };
-  $('fSpeak').onclick = function(){ speak(it.kind === 'v' ? it.w : it.exJa); };
+  $('fSpeak').onclick = function(){ speakItem(it); };
   $('fTutor').onclick = function(){ askTutor(ctxOfItem(it), defaultQ(it.kind)); };
 }
 function flashNext(){
@@ -954,6 +981,7 @@ function openSettings(){
     '<h3>' + t('language') + '</h3><div class="chips"><button class="pill' + (S.lang === 'vi' ? ' on' : '') + '" data-l="vi">Tiếng Việt</button><button class="pill' + (S.lang === 'my' ? ' on' : '') + '" data-l="my">မြန်မာ</button></div>' +
     '<h3>ふりがな</h3><label class="chk"><input type="checkbox" id="xFuri"' + (S.furi ? ' checked' : '') + '> ' + t('furigana') + '</label>' +
     '<h3>' + t('dailyGoal') + '</h3><input type="number" id="xGoal" min="5" max="500" value="' + S.goal + '" style="max-width:120px">' +
+    '<h3>🔊 ' + t('voice') + '</h3>' + (jaVoices.length ? '<div class="row"><select id="xVoice" class="grow">' + jaVoices.map(function(v){ return '<option value="' + esc(v.name) + '"' + (jaVoice && v.name === jaVoice.name ? ' selected' : '') + '>' + esc(v.name) + ' (' + esc(v.lang) + ')</option>'; }).join('') + '</select><button class="btn" id="xVoiceTest">' + t('voiceTest') + '</button></div>' : '<div class="small" style="color:var(--warn)">' + esc(t('voiceNone')) + '</div>') + '<div class="small muted" style="margin-top:4px">' + esc(t('voiceHelp')) + '</div>' +
     '<h3>🎓 ' + t('tutorCode') + '</h3><div class="small muted">' + esc(t('tutorCodeHelp')) + '</div>' +
     '<div class="small" style="margin:6px 0;color:' + (code ? 'var(--good)' : 'var(--warn)') + '">' + (code ? '● ' + t('codeOn') + ' (••••' + esc(code.slice(-4)) + ')' : '○ ' + t('codeOff')) + '</div>' +
     '<div class="row"><input type="password" id="xCode" class="grow" placeholder="' + esc(t('tutorCode')) + '" autocomplete="off"><button class="btn primary" id="xCodeSave">' + t('save') + '</button></div>' +
@@ -965,6 +993,8 @@ function openSettings(){
     '<button class="btn bad" style="margin-top:10px" id="xReset">' + t('resetP') + '</button>');
   $('xClose').onclick = closeSheet;
   document.querySelectorAll('#sheet [data-l]').forEach(function(b){ b.onclick = function(){ S.lang = b.getAttribute('data-l'); save(); applyPrefs(); render(); openSettings(); }; });
+  if ($('xVoice')) $('xVoice').onchange = function(){ try { localStorage.setItem(KEY_VOICE, this.value); } catch(e){} loadVoices(); speak('こんにちは。日本語{にほんご}の勉強{べんきょう}を始{はじ}めましょう。'); };
+  if ($('xVoiceTest')) $('xVoiceTest').onclick = function(){ speak('こんにちは。日本語{にほんご}の勉強{べんきょう}を始{はじ}めましょう。'); };
   $('xFuri').onchange = function(){ S.furi = this.checked; save(); applyPrefs(); };
   $('xGoal').onchange = function(){ S.goal = Math.max(5, parseInt(this.value, 10) || 20); save(); render(); };
   $('xCodeSave').onclick = function(){
