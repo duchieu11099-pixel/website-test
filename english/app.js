@@ -673,8 +673,15 @@ function parseBT(src){
     if (f[0] === 'Q') cur.qs.push({ t:'mc', q:f[1] || '', opts:(f[2] || '').split('~'), a:'ABCDEF'.indexOf((f[3] || 'A').trim().toUpperCase()), why:f[4] || '', hint:f[5] || '', kn:f[6] || '', vi:f[7] || '', psg:psg });
     else if (f[0] === 'W') cur.qs.push({ t:'w', q:f[1] || '', ans:(f[2] || '').split('/').map(function(x){ return x.trim(); }).filter(Boolean), why:f[3] || '', hint:f[4] || '', kn:f[5] || '', vi:f[6] || '', psg:psg });
   });
-  for (var k in out) out[k].forEach(function(s){ s.qs.forEach(function(q, i){ q.id = 'b_' + s.id + '_' + (i + 1); q.n = i + 1; q.set = s; }); });
+  for (var k in out) out[k].forEach(function(s){ s.qs.forEach(function(q, i){ q.id = 'b_' + s.id + '_' + (i + 1); q.n = i + 1; q.set = s; if (q.t === 'mc' && !/\[\[/.test(q.q)) btMix(q); }); });
   return out;
+}
+/* xáo vị trí đáp án cố định theo mã câu (mỗi lần mở vẫn giữ nguyên thứ tự) */
+function btMix(q){
+  var h = 2166136261; for (var i = 0; i < q.id.length; i++){ h ^= q.id.charCodeAt(i); h = Math.imul(h, 16777619); }
+  var idx = q.opts.map(function(_, i){ return i; });
+  for (var j = idx.length - 1; j > 0; j--){ h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0; var r = h % (j + 1); var t = idx[j]; idx[j] = idx[r]; idx[r] = t; }
+  q.opts = idx.map(function(i){ return q.opts[i]; }); q.a = idx.indexOf(q.a);
 }
 BT = parseBT(window.DATA_BT || '');
 function btSets(lid){ return BT[lid] || []; }
@@ -790,7 +797,7 @@ function renderBtQ(l){
   if (q.t === 'mc') html += q.opts.map(function(o, i){
     var cls = r ? (i === q.a ? ' right' : (i === r.pick ? ' wrong' : '')) : '';
     return '<button class="opt' + cls + '" data-o="' + i + '">' + String.fromCharCode(65 + i) + '. ' + fmt(o) + '</button>'; }).join('');
-  else html += '<div class="row"><input type="text" id="btIn" class="grow" placeholder="Gõ đáp án…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + esc(r ? r.pick : '') + '"' + (r ? ' disabled' : '') + '>' + (r ? '' : '<button class="btn primary" id="btGo">Kiểm tra</button>') + '</div>';
+  else html += (q.ans[0].split(';').length > 1 ? '<div class="small muted" style="margin-bottom:6px">Câu có ' + q.ans[0].split(';').length + ' chỗ trống — gõ lần lượt, cách nhau bằng dấu phẩy.</div>' : '') + '<div class="row"><input type="text" id="btIn" class="grow" placeholder="Gõ đáp án…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + esc(r ? r.pick : '') + '"' + (r ? ' disabled' : '') + '>' + (r ? '' : '<button class="btn primary" id="btGo">Kiểm tra</button>') + '</div>';
   html += '</div>' +
     (q.hint && !r ? '<div class="hidebox hintbox"><button class="reveal">💡 Gợi ý (bấm khi bế tắc)</button><div class="content">' + fmt(q.hint) + '</div></div>' : '') +
     '<div id="btExp">' + (r ? btExplain(q, r) : '') + '</div></div>' +
@@ -825,7 +832,12 @@ function renderBtQ(l){
     $('btIn').addEventListener('keydown', function(e){ if (e.key === 'Enter' && !e.isComposing) go(); });
   }
 }
-function btNorm(s){ return String(s || '').toLowerCase().replace(/[’‘`]/g, "'").replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+function btNorm(s){
+  s = String(s || '').toLowerCase().replace(/[’‘`]/g, "'");
+  s = s.replace(/\bwon't\b/g, 'will not').replace(/\bcan't\b/g, 'can not').replace(/\bcannot\b/g, 'can not').replace(/\bshan't\b/g, 'shall not')
+    .replace(/n't\b/g, ' not').replace(/'m\b/g, ' am').replace(/'re\b/g, ' are').replace(/'ve\b/g, ' have').replace(/'ll\b/g, ' will');
+  return s.replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
 function btCheckW(q, v){ var n = btNorm(v); return q.ans.some(function(a){ return btNorm(plain(a)) === n; }); }
 function btAnswer(q, pick, ok){
   S.bt = S.bt || {};

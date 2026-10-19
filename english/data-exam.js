@@ -1,8 +1,8 @@
-/* Đề ôn tập — theo các mốc Revision trong sách 25 chuyên đề (câu hỏi do app tự soạn).
+/* Đề luyện thêm — app tự soạn theo các nhóm chuyên đề (đề Revision thật của sách ở data-exam2.js).
    E|mã|tên đề|phút   S|pron/vocab/grammar/reading   T|hướng dẫn   P|đoạn văn|dịch
    Q|câu hỏi ([[gạch chân]])|ĐÁP ÁN ĐÚNG|sai 1|sai 2|sai 3|giải thích   (app tự xáo trộn vị trí đáp án) */
 window.DATA_EXAM = (window.DATA_EXAM || '') + `
-E|rev1|Revision 1 · Chuyên đề 1–5|20
+E|rev1|Đề luyện thêm 1 · Chuyên đề 1–5|20
 S|pron
 T|Chọn từ có phần gạch chân phát âm khác với các từ còn lại.
 Q|Chọn từ có phần gạch chân phát âm khác.|want[[ed]]|stopp[[ed]]|watch[[ed]]|laugh[[ed]]|wanted đọc /ɪd/ (tận cùng âm /t/); stopped, watched, laughed đọc /t/ (âm vô thanh /p/, /tʃ/, /f/).
@@ -28,7 +28,7 @@ Q|Neither my parents nor my sister _____ coffee.|likes|like|are liking|have like
 Q|The teacher, as well as the students, _____ excited.|is|are|were|have been|A as well as B → chia theo A (the teacher, số ít).
 Q|Ten years _____ a long time.|is|are|were|have|Khoảng thời gian được coi là một khối → số ít.
 Q|The rich _____ not always happy.|are|is|was|has|The + tính từ chỉ nhóm người → số nhiều.
-E|rev2|Revision 2 · Chuyên đề 6–10|20
+E|rev2|Đề luyện thêm 2 · Chuyên đề 6–10|20
 S|grammar
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|You _____ smoke in the hospital. It's forbidden.|mustn't|don't have to|needn't|might not|mustn't = cấm; don't have to/needn't = không cần.
@@ -49,7 +49,7 @@ Q|I'm late, _____?|aren't I|am not I|amn't I|isn't it|I am → đuôi aren't I.
 Q|Let's go to the beach, _____?|shall we|will we|don't we|let's we|Let's… → shall we.
 Q|He never eats meat, _____?|does he|doesn't he|is he|did he|never mang nghĩa phủ định → đuôi khẳng định.
 Q|Everyone is here, _____?|aren't they|isn't he|isn't it|are they|Chủ ngữ everyone → đuôi dùng they.
-E|rev3|Revision 3 · Chuyên đề 1–12|25
+E|rev3|Đề luyện thêm 3 · Chuyên đề 1–12|25
 S|grammar
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|She is _____ her brother.|as tall as|as taller as|tall as|so tall than|So sánh ngang bằng: as + adj + as.
@@ -71,7 +71,7 @@ S|pron
 T|Chọn từ có trọng âm chính khác với các từ còn lại.
 Q|Chọn từ có trọng âm khác.|machine|mountain|pretty|happy|machine là ngoại lệ, trọng âm âm 2 (ma'chine); các từ còn lại âm 1.
 Q|Chọn từ có trọng âm khác.|economic|photography|biology|democracy|eco'nomic: -ic → trọng âm âm ngay trước (âm 3); các từ còn lại trọng âm âm 2.
-E|rev4|Revision 4 · Chuyên đề 13–17|20
+E|rev4|Đề luyện thêm 4 · Chuyên đề 13–17|20
 S|grammar
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|He waited for _____ hour.|an|a|the|Ø (không mạo từ)|h câm, hour bắt đầu bằng âm nguyên âm → an.
@@ -92,7 +92,7 @@ Q|_____ he was tired, he kept working.|Although|Despite|In spite of|However|Sau 
 Q|The coffee was _____ hot that I couldn't drink it.|so|such|too|very|so + adj + that.
 Q|You will be late _____ you hurry.|unless|if|as long as|so that|unless = if not: bạn sẽ muộn nếu không nhanh lên.
 Q|The test was hard. _____, most students passed.|However|Therefore|Because|Moreover|Hai ý tương phản → However.
-E|rev5|Revision 5 · Chuyên đề 18–22|20
+E|rev5|Đề luyện thêm 5 · Chuyên đề 18–22|20
 S|grammar
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|English _____ all over the world.|is spoken|speaks|is speaking|spoke|Bị động thì hiện tại đơn: is + V3.
@@ -115,7 +115,7 @@ Q|That's the boy _____ father is a pilot.|whose|who|whom|which|Sở hữu + danh
 Q|This is the house _____ I was born.|where|which|when|who|Nơi chốn, sau là mệnh đề đầy đủ → where.
 Q|The man _____ next to me is my uncle.|sitting|sat|is sitting|who sitting|Rút gọn mệnh đề quan hệ chủ động → V-ing.
 Q|She was the first woman _____ the prize.|to win|winning|won|wins|the first + N + to V.
-E|rev6|Revision 6 · Chuyên đề 23–25|15
+E|rev6|Đề luyện thêm 6 · Chuyên đề 23–25|15
 S|vocab
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|The test was a piece of _____. Everyone finished early.|cake|bread|pie|candy|a piece of cake = rất dễ.
@@ -134,7 +134,7 @@ Q|She is _____ to travel alone.|old enough|enough old|too old|so old|adj + enoug
 Q|This film is worth _____.|watching|to watch|watch|watched|be worth + V-ing.
 Q|It was not until 10 p.m. _____ he finished his work.|that|when|then|which|It was not until… that…
 Q|I couldn't help _____ at his joke.|laughing|to laugh|laugh|laughed|can't help + V-ing.
-E|rev7|Revision 7 · Tổng ôn chuyên đề 13–25|30
+E|rev7|Đề luyện thêm 7 · Tổng ôn chuyên đề 13–25|30
 S|grammar
 T|Chọn đáp án đúng để hoàn thành câu.
 Q|A large number of students _____ joined the club.|have|has|is|was|A large number of + N số nhiều → động từ số nhiều.
