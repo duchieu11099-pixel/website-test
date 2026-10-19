@@ -9,8 +9,8 @@
 
 /* ======================= state ======================= */
 var KEY = 'english_state_v1', KEY_CODE = 'english_tutor_code', KEY_CHAT = 'english_chat_v1', KEY_VOICE = 'english_voice', KEY_SHARE = 'english_tutor_share', KEY_EXAM = 'english_exam_live_v1';
-var APP_VER = '2026-10-19b';
-var defaults = { ipa:true, accent:'us', rate:0.9, goal:20, srs:{}, marked:{}, selected:{}, wrong:{}, hard:{}, custom:[], packs:[], gen:{}, days:{}, log:[], reading:{}, exams:[], bt:{}, last:null, updatedAt:0 };
+var APP_VER = '2026-10-20a';
+var defaults = { ipa:true, accent:'us', rate:0.9, goal:20, srs:{}, marked:{}, selected:{}, wrong:{}, hard:{}, custom:[], packs:[], gen:{}, days:{}, log:[], reading:{}, exams:[], bt:{}, pos:{}, roadmap:'', updatedAt:0 };
 var S = load();
 function load(){
   var s; try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
@@ -187,6 +187,8 @@ function save(){
   clearTimeout(saveTimer); saveTimer = setTimeout(cloudPush, 1200);
 }
 function logDay(ok){ var d = today(); var o = S.days[d] || (S.days[d] = { n:0, ok:0 }); o.n++; if (ok) o.ok++; }
+/* Ghi lại nơi vừa học — mở lại từ chỗ này lần sau */
+function markPos(kind, data){ S.pos = S.pos || {}; S.pos[kind] = Object.assign({ at:Date.now() }, data); save(); }
 function streak(){
   var n = 0, d = new Date();
   if (!S.days[today()]) d.setDate(d.getDate() - 1);
@@ -216,6 +218,7 @@ function recordAnswer(id, ok, extra){
   grade(id, ok ? 4 : 0);
   S.log.push({ id:id, ok:ok, at:Date.now(), x:extra || '' });
   if (S.log.length > 300) S.log = S.log.slice(-300);
+  var it = ITEMS[id]; if (it){ markPos(it.kind === 'v' ? 'vocab' : 'grammar', { id:id, lesson:it.lesson }); }
   save();
 }
 
@@ -329,6 +332,14 @@ function studyContext(){
       r.miss.slice(0, 12).forEach(function(m){ lines.push('  · [' + secName(m.sec) + '] ' + m.q + ' → chọn: ' + (m.pick || '(bỏ trống)') + ' | đúng: ' + m.a); });
     });
     var rd = Object.keys(S.reading || {}).length; if (rd) lines.push('- Đã làm ' + rd + ' bài đọc hiểu.');
+    var p = S.pos || {}; var ago = function(t){ var s = Math.floor((Date.now() - t) / 60000); return s < 60 ? (s + ' phút trước') : (s < 1440 ? (Math.floor(s/60) + ' giờ trước') : (Math.floor(s/1440) + ' ngày trước')); };
+    var posL = [];
+    if (p.vocab && ITEMS[p.vocab.id]){ var l = lessonById(p.vocab.lesson); posL.push('Từ vựng: đang ở bài "' + (l ? l.title : p.vocab.lesson) + '", từ gần nhất "' + ITEMS[p.vocab.id].w + '" (' + ago(p.vocab.at) + ')'); }
+    if (p.grammar && ITEMS[p.grammar.id]){ var l2 = lessonById(p.grammar.lesson); posL.push('Ngữ pháp: đang ở "' + (l2 ? l2.title : p.grammar.lesson) + '" (' + ago(p.grammar.at) + ')'); }
+    if (p.bt){ var l3 = lessonById(p.bt.lesson); posL.push('Bài tập: đang làm "' + (l3 ? l3.title : p.bt.lesson) + '" (' + ago(p.bt.at) + ')'); }
+    if (p.reading && p.reading.title) posL.push('Đọc hiểu: bài "' + p.reading.title + '" (' + ago(p.reading.at) + ')');
+    if (posL.length) lines.push('- Nơi vừa dừng lại:\n  · ' + posL.join('\n  · '));
+    if (S.roadmap) lines.push('- Lộ trình gia sư đã lập trước đó (cách đây ' + ago(S.roadmap_at || 0) + '): ' + S.roadmap.slice(0, 500) + (S.roadmap.length > 500 ? '…' : ''));
     var bs = {}; Object.keys(S.bt || {}).forEach(function(id){ var m = id.match(/^b_(.+?)_\d+_\d+$/); if (!m) return; var l = lessonById(m[1]); var k = l ? l.title : m[1]; bs[k] = bs[k] || { n:0, ok:0 }; bs[k].n++; if (S.bt[id].ok) bs[k].ok++; });
     var bk = Object.keys(bs); if (bk.length) lines.push('- Bài tập theo chuyên đề (đúng/đã làm): ' + bk.map(function(k){ return k + ' ' + bs[k].ok + '/' + bs[k].n; }).join('; ') + '.');
     var P = progressSummary();
@@ -492,7 +503,56 @@ function statsBar(){
     '<div class="stat"><b>' + d.n + '/' + S.goal + '</b><span>Hôm nay</span></div>' +
     '<div class="stat"><b>' + due + '</b><span>Cần ôn</span></div>' +
     '<div class="stat"><b>' + learned + '</b><span>Đã thuộc</span></div>' +
-    '<div class="stat"><b>🔥' + streak() + '</b><span>Chuỗi ngày</span></div></div>';
+    '<div class="stat"><b>🔥' + streak() + '</b><span>Chuỗi ngày</span></div></div>' + resumeBar();
+}
+function fmtAgo(t){
+  if (!t) return ''; var s = Math.max(1, Math.floor((Date.now() - t) / 1000));
+  if (s < 60) return s + ' giây trước'; if (s < 3600) return Math.floor(s / 60) + ' phút trước';
+  if (s < 86400) return Math.floor(s / 3600) + ' giờ trước'; var d = Math.floor(s / 86400);
+  return d < 7 ? (d + ' ngày trước') : (new Date(t).toLocaleDateString('vi-VN'));
+}
+function resumeBar(){
+  var p = S.pos || {}; var cards = [];
+  if (p.vocab && ITEMS[p.vocab.id]){ var it = ITEMS[p.vocab.id], l = lessonById(p.vocab.lesson);
+    cards.push({ k:'vocab', emoji:'Aa', title:'Từ vựng', sub:(l ? l.title : '') + ' · ' + it.w, when:p.vocab.at,
+      act:function(){ ui.vLesson = p.vocab.lesson; switchTab('vocab'); } }); }
+  if (p.grammar && ITEMS[p.grammar.id]){ var l2 = lessonById(p.grammar.lesson);
+    cards.push({ k:'grammar', emoji:'Gr', title:'Ngữ pháp', sub:(l2 ? l2.title : ''), when:p.grammar.at,
+      act:function(){ ui.gLesson = p.grammar.lesson; ui.gMode = 't'; ui.gOpen = p.grammar.id; switchTab('grammar'); } }); }
+  if (p.bt){ var l3 = lessonById(p.bt.lesson), set = (BT[p.bt.lesson] || []).filter(function(x){ return x.id === p.bt.setId; })[0];
+    if (set){ cards.push({ k:'bt', emoji:'✍', title:'Bài tập', sub:(l3 ? l3.title : '') + ' · ' + set.no, when:p.bt.at,
+      act:function(){ ui.gLesson = p.bt.lesson; ui.gMode = 'b'; var i = 0; for (; i < set.qs.length; i++){ if (!btRes(set.qs[i])) break; } if (i >= set.qs.length) i = Math.max(0, set.qs.length - 1); ui.bt = { qs:set.qs, idx:i, title:set.no }; switchTab('grammar'); } }); } }
+  if (p.reading){ cards.push({ k:'reading', emoji:'Rd', title:'Đọc hiểu', sub:p.reading.title || '', when:p.reading.at,
+    act:function(){ ui.readId = p.reading.id; switchTab('reading'); } }); }
+  if (p.exam){ cards.push({ k:'exam', emoji:'✓', title:'Bài thi', sub:p.exam.title || '', when:p.exam.at,
+    act:function(){ switchTab('exam'); } }); }
+  if (!cards.length) return '';
+  cards.sort(function(a, b){ return b.when - a.when; });
+  cards = cards.slice(0, 4);
+  var html = '<div class="resume"><div class="row"><b class="grow">↩ Tiếp tục học</b><button class="pill" id="rbRoadmap">🗺 Lộ trình học</button></div>' +
+    '<div class="resgrid">' + cards.map(function(c, i){ return '<button class="rescard" data-rb="' + i + '"><span class="rblabel">' + c.emoji + ' ' + c.title + '</span><div class="rbsub">' + esc(c.sub) + '</div><div class="rbwhen">' + fmtAgo(c.when) + '</div></button>'; }).join('') + '</div></div>';
+  setTimeout(function(){
+    view.querySelectorAll('[data-rb]').forEach(function(b){ b.onclick = function(){ cards[+b.getAttribute('data-rb')].act(); }; });
+    var r = $('rbRoadmap'); if (r) r.onclick = openRoadmap;
+  }, 0);
+  return html;
+}
+function openRoadmap(){
+  openSheet('<div class="row"><b class="grow">🗺 Lộ trình học cá nhân</b><button class="pill" id="rmClose">✕</button></div>' +
+    '<div class="small muted" style="margin:6px 0 10px">Gia sư AI xem toàn bộ tiến trình của bạn (từ vựng đã học, bài tập đã làm, câu sai, điểm thi) rồi vạch lộ trình cụ thể cho những ngày tới.</div>' +
+    (S.roadmap ? '<div class="card flat"><div class="small muted">Lộ trình đã lưu (cập nhật ' + fmtAgo(S.roadmap_at || 0) + ')</div><div style="margin-top:6px">' + mdLite(S.roadmap) + '</div></div>' : '') +
+    (tutorCode() ?
+      '<div class="row"><button class="btn primary grow" id="rmGen">' + (S.roadmap ? '🔄 Cập nhật lộ trình' : '✨ Tạo lộ trình') + '</button>' + (S.roadmap ? '<button class="btn" id="rmClear">🗑 Xóa</button>' : '') + '</div>' +
+      '<div class="small muted" style="margin-top:10px">💡 Mẹo: Bấm "✦ Gia sư" bất kỳ lúc nào để hỏi "Hôm nay học gì tiếp?" — gia sư sẽ dựa trên dữ liệu học của bạn mà trả lời.</div>'
+    : '<div class="card">Bạn chưa nhập <b>mã gia sư</b>. Vào ⚙ Cài đặt để thêm mã, sau đó quay lại tạo lộ trình.</div>'));
+  $('rmClose').onclick = closeSheet;
+  if ($('rmClear')) $('rmClear').onclick = function(){ if (confirm('Xóa lộ trình đã lưu?')){ S.roadmap = ''; S.roadmap_at = 0; save(); openRoadmap(); } };
+  if ($('rmGen')) $('rmGen').onclick = function(){
+    var btn = $('rmGen'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Gia sư đang soạn lộ trình…';
+    var prompt = 'Dựa trên tiến trình học thực tế của mình trong app (đã kèm trong hệ thống), hãy soạn LỘ TRÌNH HỌC TIẾNG ANH cho 7–14 ngày tới. Yêu cầu: (1) Tóm tắt điểm mạnh/điểm yếu hiện tại trong 3–5 gạch đầu dòng. (2) Nêu các kiến thức/chuyên đề cần tập trung (dẫn tên chuyên đề cụ thể). (3) Lịch học từng ngày: ngày bao nhiêu, học gì, bao nhiêu từ/câu, tab nào trong app. (4) Mục tiêu đo lường được (vd: đạt 80% ở bài tập Chuyên đề 3). Trình bày rõ ràng, có emoji phân mục, không dùng bảng markdown.';
+    callTutor(prompt, '').then(function(a){ S.roadmap = a || ''; S.roadmap_at = Date.now(); save(); openRoadmap(); })
+      .catch(function(e){ toast('✗ ' + e.message, true); btn.disabled = false; btn.textContent = 'Thử lại'; });
+  };
 }
 function lessonOptions(lessons, cur, extra){
   var html = (extra || []).map(function(e){ return '<option value="' + e[0] + '"' + (e[0] === cur ? ' selected' : '') + '>' + esc(e[1]) + '</option>'; }).join('');
@@ -786,7 +846,7 @@ function renderBtQ(l){
   var b = ui.bt, q = b.qs[b.idx], s = q.set, r = btRes(q);
   if (s.lesson !== l.id){ ui.gLesson = s.lesson; l = lessonById(s.lesson) || l; }
   var st = btStat(b.qs);
-  var html = '<div class="exbar"><button class="pill" id="btBack">← Danh sách</button><div class="grow small"><b>' + esc(b.title) + '</b> · Câu ' + (b.idx + 1) + '/' + b.qs.length + '</div><span class="small muted">✓ ' + st.ok + '/' + st.done + '</span><button class="pill" id="btGridT">☷</button></div>' +
+  var html = '<div class="exbar"><button class="pill" id="btBack">← Danh sách</button><div class="grow"><b>Câu ' + (b.idx + 1) + '/' + b.qs.length + '</b></div><span class="small muted">✓ ' + st.ok + '/' + st.done + '</span><button class="pill" id="btGridT">☷</button></div>' +
     '<div id="btGridBox"' + (ui.btGrid ? '' : ' class="hidden"') + '>' + btGrid(b) + '</div>' +
     '<div class="small muted" style="margin-top:6px">' + esc(l.title) + ' · ' + esc(s.no) + ' · câu ' + q.n + '</div>' +
     '<div class="card flat" style="padding:10px 13px"><div style="font-weight:600">' + fmt(s.inst) + '</div>' + (s.instVi ? hideBox(fmt(s.instVi), '👁 Dịch đề') : '') + '</div>' +
@@ -797,7 +857,7 @@ function renderBtQ(l){
   if (q.t === 'mc') html += q.opts.map(function(o, i){
     var cls = r ? (i === q.a ? ' right' : (i === r.pick ? ' wrong' : '')) : '';
     return '<button class="opt' + cls + '" data-o="' + i + '">' + String.fromCharCode(65 + i) + '. ' + fmt(o) + '</button>'; }).join('');
-  else html += (q.ans[0].split(';').length > 1 ? '<div class="small muted" style="margin-bottom:6px">Câu có ' + q.ans[0].split(';').length + ' chỗ trống — gõ lần lượt, cách nhau bằng dấu phẩy.</div>' : '') + '<div class="row"><input type="text" id="btIn" class="grow" placeholder="Gõ đáp án…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + esc(r ? r.pick : '') + '"' + (r ? ' disabled' : '') + '>' + (r ? '' : '<button class="btn primary" id="btGo">Kiểm tra</button>') + '</div>';
+  else html += ((q.ans[0].split(';').length > 1 || /Ø/.test(q.ans.join(''))) ? '<div class="small muted" style="margin-bottom:6px">' + (q.ans[0].split(';').length > 1 ? 'Câu có ' + q.ans[0].split(';').length + ' chỗ trống — gõ lần lượt, cách nhau bằng dấu phẩy. ' : '') + (/Ø/.test(q.ans.join('')) ? 'Chỗ không cần mạo từ thì gõ 0.' : '') + '</div>' : '') + '<div class="row"><input type="text" id="btIn" class="grow" placeholder="Gõ đáp án…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="' + esc(r ? r.pick : '') + '"' + (r ? ' disabled' : '') + '>' + (r ? '' : '<button class="btn primary" id="btGo">Kiểm tra</button>') + '</div>';
   html += '</div>' +
     (q.hint && !r ? '<div class="hidebox hintbox"><button class="reveal">💡 Gợi ý (bấm khi bế tắc)</button><div class="content">' + fmt(q.hint) + '</div></div>' : '') +
     '<div id="btExp">' + (r ? btExplain(q, r) : '') + '</div></div>' +
@@ -833,7 +893,8 @@ function renderBtQ(l){
   }
 }
 function btNorm(s){
-  s = String(s || '').toLowerCase().replace(/[’‘`]/g, "'");
+  s = String(s || '').toLowerCase().replace(/[’‘`]/g, "'").replace(/[øØ∅]/g, ' zero ');
+  s = s.replace(/(^|[\s;,])(0|x|-|–|o|zero)(?=$|[\s;,])/g, '$1zero');
   s = s.replace(/\bwon't\b/g, 'will not').replace(/\bcan't\b/g, 'can not').replace(/\bcannot\b/g, 'can not').replace(/\bshan't\b/g, 'shall not')
     .replace(/n't\b/g, ' not').replace(/'m\b/g, ' am').replace(/'re\b/g, ' are').replace(/'ve\b/g, ' have').replace(/'ll\b/g, ' will');
   return s.replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -843,6 +904,7 @@ function btAnswer(q, pick, ok){
   S.bt = S.bt || {};
   S.bt[q.id] = { ok:ok, pick:pick, at:Date.now() };
   logDay(ok); S.log.push({ id:q.id, ok:ok, at:Date.now() });
+  markPos('bt', { lesson:q.set.lesson, setId:q.set.id, qid:q.id });
   knItems(q).forEach(function(it){ if (!ok) S.wrong[it.id] = (S.wrong[it.id] || 0) + 1; });
   save(); renderGrammar();
   var e = $('btExp'); if (e) e.scrollIntoView({ behavior:'smooth', block:'nearest' });
@@ -937,7 +999,9 @@ function renderPassage(d){
           askTutor('[Câu hỏi đọc hiểu] Bài: ' + d.title + '\n' + plain(d.text) + '\nCâu hỏi: ' + plain(q.q) + '\nĐáp án đúng: ' + plain(q.opts[0]) + '. Mình đã chọn: ' + plain(q.opts[oi]), defaultQ('q'));
         };
         var r = S.reading[d.id] || { n:0, ok:0 }; r.n++; if (ok) r.ok++; S.reading[d.id] = r;
-        logDay(ok); S.log.push({ id:'d_' + d.id + '_' + qi, ok:ok, at:Date.now() }); save();
+        logDay(ok); S.log.push({ id:'d_' + d.id + '_' + qi, ok:ok, at:Date.now() });
+        markPos('reading', { id:d.id, title:d.title });
+        save();
       };
     });
   });
@@ -1235,7 +1299,7 @@ function renderTutor(){
   var code = tutorCode();
   var html = (ui.exam && !ui.exam.submitted ? '<button class="btn warn block" id="exBackBtn" style="margin-bottom:8px">↩ Quay lại bài thi</button>' : '') +
     '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 Gia sư AI</h2>' + (chat.length ? '<button class="pill" id="cClear">Xóa cuộc trò chuyện</button>' : '') + '</div>' +
-    (code ? '<div class="chips" style="margin:4px 0 8px"><button class="pill on" id="cPlan">🗺 Tóm tắt & lộ trình</button><button class="pill" id="cProg">📊 Phân tích điểm mạnh/yếu</button><button class="pill" id="cTalk">🗣 Luyện hội thoại</button></div>' : '');
+    (code ? '<div class="chips" style="margin:4px 0 8px"><button class="pill on" id="cNext">▶ Hôm nay học gì?</button><button class="pill on" id="cPlan">🗺 Lộ trình học</button><button class="pill" id="cProg">📊 Điểm mạnh/yếu</button><button class="pill" id="cTalk">🗣 Hội thoại</button></div>' : '');
   if (!code){
     html += '<div class="card">Bạn chưa nhập mã gia sư. Vào ⚙ Cài đặt → Mã gia sư để nhập.<div style="height:10px"></div><button class="btn primary" id="cGo">⚙ Mã gia sư</button></div>';
     view.innerHTML = html;
@@ -1257,6 +1321,8 @@ function renderTutor(){
   $('cSend').onclick = sendChat;
   if ($('cPlan')) $('cPlan').onclick = function(){ $('chatInput').value = PLAN_Q; sendChat(); };
   if ($('cProg')) $('cProg').onclick = function(){ $('chatInput').value = 'Dựa trên tiến trình học của mình trong app, hãy nhận xét điểm mạnh, điểm yếu và lập kế hoạch ôn tập cụ thể cho mấy ngày tới.'; sendChat(); };
+  if ($('cNext')) $('cNext').onclick = function(){ $('chatInput').value = 'Dựa trên nơi mình vừa dừng lại và các câu/từ mình hay sai, hãy nói cụ thể hôm nay mình nên học TIẾP cái gì (chuyên đề nào, bài nào, bao nhiêu câu/từ, mất khoảng bao lâu). Nói ngắn gọn, có thứ tự ưu tiên.'; sendChat(); };
+  if ($('cPlan')) $('cPlan').onclick = openRoadmap;
   if ($('cTalk')) $('cTalk').onclick = function(){ $('chatInput').value = 'Hãy luyện hội thoại tiếng Anh với mình về chủ đề hằng ngày. Bạn hỏi 1 câu bằng tiếng Anh (kèm dịch), mình trả lời, rồi bạn sửa lỗi câu của mình và hỏi tiếp.'; sendChat(); };
   window.scrollTo(0, document.body.scrollHeight);
 }
@@ -1583,7 +1649,7 @@ function chapters(){
   GL.forEach(function(l){ if (l.items.length >= 2) out.push({ key:'g:' + l.id, group:'Ngữ pháp', title:l.title, items:l.items }); });
   return out;
 }
-function startExam(kind, id, title, qs, minutes){
+function startExam(kind, id, title, qs, minutes){ markPos('exam', { title:title, at:Date.now() });
   if (!qs.length){ toast('Không có câu hỏi', true); return; }
   ui.exam = { kind:kind, id:id, title:title, qs:qs, ans:qs.map(function(){ return -1; }), flags:{}, cur:0, startAt:Date.now(), endAt:Date.now() + minutes * 60000, minutes:minutes, submitted:false };
   exSave(); runTimer();
@@ -1747,5 +1813,5 @@ bindGate();
 applyPrefs();
 switchTab('vocab');
 if (location.protocol !== 'file:' || /firebase=1/.test(location.search)) startCloud();
-window.__en = { S:function(){ return S; }, ITEMS:function(){ return ITEMS; }, VL:VL, GL:function(){ return GL; }, DOC:function(){ return DOC; }, EXAMS:function(){ return EXAMS; }, parseVocabLines:parseVocabLines, startSession:startSession, cloud:cloud };
+window.__en = { S:function(){ return S; }, ITEMS:function(){ return ITEMS; }, VL:VL, GL:function(){ return GL; }, DOC:function(){ return DOC; }, EXAMS:function(){ return EXAMS; }, BT:function(){ return BT; }, parseVocabLines:parseVocabLines, startSession:startSession, cloud:cloud };
 })();
