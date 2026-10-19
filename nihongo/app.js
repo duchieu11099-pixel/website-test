@@ -46,7 +46,7 @@ var T = {
   explainCorrect:'Đáp án đúng là {x}',chosenMeans:'"{x}" có nghĩa là: {m}',
   needLogin:'Đăng nhập để đồng bộ',
   ttsNone:'Máy không hỗ trợ đọc tiếng Nhật',
-  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
+  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceSys:'Dùng giọng tiếng Nhật mặc định của máy (ja-JP).',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
   prevW:'← Lùi',nextW:'Tiếp →',hardW:'↓ Từ khó',unhard:'Bỏ đánh dấu khó',isHard:'Từ khó',
   swipeHelp:'Vuốt trái → phải: từ tiếp · Vuốt phải → trái: lùi lại · Vuốt xuống: từ khó · Chạm: lật thẻ',
   shuffleW:'🔀 Xáo trộn',reverseW:'⇅ Đảo ngược',shuffled:'Đã xáo trộn thứ tự',reversed:'Đã đảo ngược thứ tự',firstCard:'Đây là thẻ đầu tiên',
@@ -91,7 +91,7 @@ var T = {
   explainCorrect:'အဖြေမှန်က {x} ဖြစ်သည်',chosenMeans:'"{x}" ၏ အဓိပ္ပာယ်: {m}',
   needLogin:'ချိန်ကိုက်ရန် ဝင်ရောက်ပါ',
   ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ',
-  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
+  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceSys:'စက်၏ ပုံသေ ဂျပန်အသံ (ja-JP) ကို သုံးပါမည်။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
   prevW:'← နောက်ပြန်',nextW:'ရှေ့ဆက် →',hardW:'↓ ခက်သောစကားလုံး',unhard:'ခက်သည် မှတ်ချက်ဖြုတ်',isHard:'ခက်',
   swipeHelp:'ဘယ်မှ ညာသို့ ပွတ်: နောက်တစ်လုံး · ညာမှ ဘယ်သို့ ပွတ်: နောက်ပြန် · အောက်သို့ ပွတ်: ခက်သောစကားလုံး · နှိပ်: ကတ်လှန်',
   shuffleW:'🔀 ရောမွှေ',reverseW:'⇅ ပြောင်းပြန်',shuffled:'အစီအစဉ် ရောမွှေပြီး',reversed:'အစီအစဉ် ပြောင်းပြန်လုပ်ပြီး',firstCard:'ဒါက ပထမဆုံးကတ်ပါ',
@@ -219,10 +219,13 @@ function speak(text){
   if (!('speechSynthesis' in window)){ toast(t('ttsNone'), true); return; }
   var say = kanaText(text);
   var go = function(){
-    if (!jaVoice){ toast(t('ttsNoJa'), true); return; }
     speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(say);
-    u.voice = jaVoice; u.lang = jaVoice.lang || 'ja-JP'; u.rate = 0.9;
+    // Android Chrome thường không liệt kê giọng — khi đó vẫn đọc bằng lang ja-JP qua công cụ của máy (Google, tiếng Nhật)
+    if (jaVoice){ u.voice = jaVoice; u.lang = jaVoice.lang || 'ja-JP'; } else { u.lang = 'ja-JP'; }
+    u.rate = 0.9;
+    u.onerror = function(e){ if (e && e.error && e.error !== 'interrupted' && e.error !== 'canceled') toast(t('ttsNoJa'), true); };
+    try { speechSynthesis.resume(); } catch(e){}
     speechSynthesis.speak(u);
   };
   if (jaVoice) return go();
@@ -981,7 +984,7 @@ function openSettings(){
     '<h3>' + t('language') + '</h3><div class="chips"><button class="pill' + (S.lang === 'vi' ? ' on' : '') + '" data-l="vi">Tiếng Việt</button><button class="pill' + (S.lang === 'my' ? ' on' : '') + '" data-l="my">မြန်မာ</button></div>' +
     '<h3>ふりがな</h3><label class="chk"><input type="checkbox" id="xFuri"' + (S.furi ? ' checked' : '') + '> ' + t('furigana') + '</label>' +
     '<h3>' + t('dailyGoal') + '</h3><input type="number" id="xGoal" min="5" max="500" value="' + S.goal + '" style="max-width:120px">' +
-    '<h3>🔊 ' + t('voice') + '</h3>' + (jaVoices.length ? '<div class="row"><select id="xVoice" class="grow">' + jaVoices.map(function(v){ return '<option value="' + esc(v.name) + '"' + (jaVoice && v.name === jaVoice.name ? ' selected' : '') + '>' + esc(v.name) + ' (' + esc(v.lang) + ')</option>'; }).join('') + '</select><button class="btn" id="xVoiceTest">' + t('voiceTest') + '</button></div>' : '<div class="small" style="color:var(--warn)">' + esc(t('voiceNone')) + '</div>') + '<div class="small muted" style="margin-top:4px">' + esc(t('voiceHelp')) + '</div>' +
+    '<h3>🔊 ' + t('voice') + '</h3>' + (jaVoices.length ? '<div class="row"><select id="xVoice" class="grow">' + jaVoices.map(function(v){ return '<option value="' + esc(v.name) + '"' + (jaVoice && v.name === jaVoice.name ? ' selected' : '') + '>' + esc(v.name) + ' (' + esc(v.lang) + ')</option>'; }).join('') + '</select><button class="btn" id="xVoiceTest">' + t('voiceTest') + '</button></div>' : '<div class="row"><div class="small grow">' + esc(t('voiceSys')) + '</div><button class="btn" id="xVoiceTest">' + t('voiceTest') + '</button></div>') + '<div class="small muted" style="margin-top:4px">' + esc(t('voiceHelp')) + '</div>' +
     '<h3>🎓 ' + t('tutorCode') + '</h3><div class="small muted">' + esc(t('tutorCodeHelp')) + '</div>' +
     '<div class="small" style="margin:6px 0;color:' + (code ? 'var(--good)' : 'var(--warn)') + '">' + (code ? '● ' + t('codeOn') + ' (••••' + esc(code.slice(-4)) + ')' : '○ ' + t('codeOff')) + '</div>' +
     '<div class="row"><input type="password" id="xCode" class="grow" placeholder="' + esc(t('tutorCode')) + '" autocomplete="off"><button class="btn primary" id="xCodeSave">' + t('save') + '</button></div>' +
