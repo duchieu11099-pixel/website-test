@@ -380,7 +380,7 @@ function bindGate(){
 }
 
 /* ======================= tutor (DeepSeek) ======================= */
-var APP_VER = '2026-10-19c';
+var APP_VER = '2026-10-19d';
 var KEY_SHARE = 'nihongo_tutor_share';
 function shareProgress(){ try { return localStorage.getItem(KEY_SHARE) !== '0'; } catch(e){ return true; } }
 function tutorCode(){ try { return localStorage.getItem(KEY_CODE) || ''; } catch(e){ return ''; } }
@@ -1319,6 +1319,8 @@ function fromItem(it){
 function vocabChapters(){
   var m = {}, out = [];
   VL.forEach(function(l){ var k = l.title.split(' — ')[0]; if (!m[k]){ m[k] = { key:k, title:k, items:[] }; out.push(m[k]); } m[k].items = m[k].items.concat(l.items); });
+  // từ người học tự nạp: mỗi bài nạp là một chương riêng
+  customLessons().forEach(function(l){ if (l.items.length >= 2) out.push({ key:'c:' + l.id, title:l.title, items:l.items.slice() }); });
   return out;
 }
 function grammarParts(){
@@ -1378,7 +1380,7 @@ function renderExamHome(){
   $('chSel').onchange = function(){ EXU.chapter = this.value; renderExamHome(); };
   $('chCount').onchange = function(){ EXU.chCount = Math.max(5, parseInt(this.value, 10) || 20); renderExamHome(); };
   $('gGo').onclick = function(){
-    var all = []; VL.forEach(function(l){ all = all.concat(l.items); }); GL.forEach(function(l){ all = all.concat(l.items); });
+    var all = []; allVocabLessons().forEach(function(l){ all = all.concat(l.items); }); GL.forEach(function(l){ all = all.concat(l.items); });
     var items = shuffle(all).slice(0, EXU.genCount);
     var qs = items.map(fromItem).sort(function(a, b){ return a.sec === b.sec ? 0 : (a.sec === 'moji' ? -1 : 1); });
     startExam('general', 'general', t('exGeneralTitle'), qs, EXU.genCount);
