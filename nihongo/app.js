@@ -397,14 +397,40 @@ function defaultQ(kind){
   var my = { v:'ဒီစကားလုံးကို အသေးစိတ် ရှင်းပြပေးပါ: အနက်သွယ်ပုံ၊ ရောထွေးလွယ်တဲ့စကားလုံး၊ မှတ်နည်းနဲ့ ဥပမာ ၂ ကြောင်း။', g:'ဒီသဒ္ဒါကို အသေးစိတ် ရှင်းပြပေးပါ: ဘယ်အချိန်သုံးလဲ၊ ဆင်တူပုံစံနဲ့ ကွာခြားချက်၊ ဥပမာ ၂ ကြောင်း။', q:'ဒီအဖြေက ဘာကြောင့်မှန်ပြီး တခြားဟာတွေ ဘာကြောင့်မှားလဲ ရှင်းပြပေးပါ။', d:'ဒီစာပိုဒ်နဲ့ အဖြေရှာပုံကို ရှင်းပြပေးပါ။' };
   return (S.lang === 'my' ? my : vi)[kind];
 }
+/* Tóm tắt tiến trình học để gia sư đưa ra nhận xét dựa trên dữ liệu thật của người học */
+function studyContext(){
+  try {
+    var lab = function(id){ var i = ITEMS[id]; if (!i) return null; return i.kind === 'v' ? (i.w + '（' + i.r + '）＝' + (S.lang === 'my' ? i.my : i.vi)) : (i.p + '＝' + (S.lang === 'my' ? i.my : i.vi)); };
+    var lines = [];
+    var studied = Object.keys(S.srs).filter(function(id){ return ITEMS[id]; });
+    var learned = studied.filter(function(id){ return S.srs[id].int >= 21; });
+    lines.push('- Đã học: ' + studied.length + ' mục, đã thuộc (SRS ≥ 21 ngày): ' + learned.length + ', đánh dấu từ khó: ' + Object.keys(S.hard).length + ', đã lưu từ cần ôn: ' + Object.keys(S.wrong).length + '.');
+    var wrong = Object.keys(S.wrong).filter(function(id){ return ITEMS[id]; }).sort(function(a,b){ return S.wrong[b] - S.wrong[a]; }).slice(0, 25).map(lab).filter(Boolean);
+    if (wrong.length) lines.push('- Các mục hay sai: ' + wrong.join('; '));
+    var hard = Object.keys(S.hard).filter(function(id){ return ITEMS[id]; }).slice(0, 25).map(lab).filter(Boolean);
+    if (hard.length) lines.push('- Từ người học đánh dấu khó: ' + hard.join('; '));
+    var stat = {};
+    (S.log || []).forEach(function(e){ var it = ITEMS[e.id]; if (!it || !it.lesson) return; var k = it.lesson; stat[k] = stat[k] || { n:0, ok:0 }; stat[k].n++; if (e.ok) stat[k].ok++; });
+    var weak = Object.keys(stat).filter(function(k){ return stat[k].n >= 5; }).map(function(k){ return { k:k, p:stat[k].ok / stat[k].n, n:stat[k].n }; }).sort(function(a,b){ return a.p - b.p; }).slice(0, 5);
+    if (weak.length) lines.push('- Bài có tỉ lệ đúng thấp nhất: ' + weak.map(function(w){ return w.k + ' (' + Math.round(w.p * 100) + '% trên ' + w.n + ' lượt)'; }).join(', ') + '.');
+    var exams = (S.exams || []).slice(-8).reverse();
+    if (exams.length) lines.push('- Các bài thi gần đây: ' + exams.map(function(r){ return r.title + ': ' + r.pct + '%'; }).join('; ') + '.');
+    var rd = Object.keys(S.reading || {}).length; if (rd) lines.push('- Đã làm ' + rd + ' bài đọc hiểu.');
+    return lines.join('\n').slice(0, 3000);
+  } catch(e){ return ''; }
+}
 function callTutor(userText, ctx){
   var code = tutorCode();
   var langName = S.lang === 'my' ? 'tiếng Myanmar (Burmese)' : 'tiếng Việt';
   var sys = 'Bạn là gia sư tiếng Nhật tận tâm cho người học JLPT N2/N1. Luôn trả lời bằng ' + langName + '. ' +
     'Khi viết tiếng Nhật có kanji, ghi cách đọc hiragana trong ngoặc ngay sau, ví dụ: 経済（けいざい）. ' +
-    'Giải thích ngắn gọn, rõ ràng, có ví dụ, có mẹo nhớ nếu hữu ích. Khi giải thích đáp án, nói vì sao đáp án đúng và vì sao từng đáp án khác sai. Không dùng bảng markdown.';
+    'Giải thích ngắn gọn, rõ ràng, có ví dụ, có mẹo nhớ nếu hữu ích. Khi giải thích đáp án, nói vì sao đáp án đúng và vì sao từng đáp án khác sai. Không dùng bảng markdown. ' +
+    'Khi người học hỏi nhận xét, lời khuyên hoặc muốn biết mình nên học gì, hãy dựa trên TIẾN TRÌNH HỌC bên dưới (nếu có) và nêu cụ thể các từ, bài, đề thi liên quan.';
   var msgs = [{ role:'system', content:sys }];
   chat.slice(-10).forEach(function(m){ if (m.role === 'user' || m.role === 'assistant') msgs.push({ role:m.role, content:m.content }); });
+  var prog = studyContext();
+  if (prog) sys += '\n\nTIẾN TRÌNH HỌC CỦA NGƯỜI HỌC (dữ liệu thật từ app):\n' + prog;
+  msgs[0].content = sys;
   msgs.push({ role:'user', content:(ctx ? ('Ngữ cảnh mình đang học:\n' + ctx + '\n\nCâu hỏi: ') : '') + userText });
   return fetch('https://api.deepseek.com/chat/completions', {
     method:'POST',
