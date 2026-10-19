@@ -855,4 +855,435 @@ Q|Despite all the interruptions, he ___ with his work.|pressed on~held on~stuck 
 Q|The new office block ___ well with its surroundings.|blends in~stands out~shapes up~sets off|A|blend in (with) = hòa hợp với.|"well with its surroundings".||Tòa văn phòng mới hòa hợp với cảnh quan xung quanh.
 Q|It's a serious operation for a woman as old as my grandmother. She's very frail. I hope she ___.|pulls through~gets over~comes round~stands up|A|pull through = qua khỏi (bệnh nặng, ca mổ).|Vượt qua ca phẫu thuật.||Đây là ca mổ lớn với người già như bà tôi. Bà rất yếu. Tôi mong bà qua khỏi.
 Q|It was very difficult to ___ what he was saying above the noise of the traffic.|make out~pick up~make up~turn out|A|make out = nghe rõ, hiểu ra.|Tiếng xe ồn ào.||Rất khó nghe rõ anh ấy nói gì giữa tiếng xe cộ ồn ào.
+X|cd08|Thức giả định · Exercise 1|Chọn phương án đúng để hoàn thành câu.|Choose the correct answer.
+Q|It is necessary that children ___ of their old parents.|takes care~to take care~take care~took care|C|It is necessary that + S + (should) + V nguyên mẫu (không chia theo ngôi).|Sau "It is necessary that" động từ giữ nguyên mẫu.|2|Con cái cần chăm sóc cha mẹ già.
+Q|I wish you ___ complaining about the weather.|would stop~stop~stopped~had stopped|C|Sách chọn "stopped" (ước trái hiện tại: wish + QKĐ). Thực tế "would stop" cũng hay dùng khi phàn nàn về hành động của người khác.|Ước cho hiện tại → lùi một thì.|3,5|Ước gì bạn thôi phàn nàn về thời tiết.
+Q|It is essential that every student ___ to learn English at university.|had~have~has~to have|B|It is essential that + S + V nguyên mẫu (have, không phải has).|Thể giả định không thêm -s.|2|Điều thiết yếu là mọi sinh viên phải học tiếng Anh ở đại học.
+Q|We wish we ___ a large house but we can't afford it now.|have~had~can have~will have|B|Ước trái hiện tại ("now") → wish + QKĐ.|"now" → ước cho hiện tại.|3|Chúng tôi ước có ngôi nhà lớn nhưng giờ không đủ tiền.
+Q|My friend won't lend me his car. I wish ___.|he lent me his car~he didn't lend me his car~he would lend me his car~he will lend me his car|C|Ước về tương lai / mong người khác làm gì → wish + would + V.|"won't" → ước cho tương lai.|5|Bạn tôi không cho mượn xe. Ước gì anh ấy cho tôi mượn.
+Q|I'm sorry I haven't got any money on me. I wish ___.|I have got no money on me~I have some money on me~I had some money on me~I had got no money on me|C|Ước trái hiện tại → QKĐ, và ý ngược lại (có tiền).|Ước điều ngược với thực tế.|3|Xin lỗi, tôi không mang tiền. Ước gì tôi có ít tiền.
+Q|My friends didn't take part in the game. I wish ___.|my friends took part in the game~my friends had taken part in the game~my friends would take part in the game~my friends did take part in the game|B|Ước trái quá khứ ("didn't") → wish + QKHT.|Sự việc đã qua.|4|Bạn tôi đã không tham gia trò chơi. Ước gì họ đã tham gia.
+Q|It wasn't fine yesterday. I wish ___.|it was fine yesterday~it would be fine yesterday~it will be fine yesterday~it had been fine yesterday|D|"yesterday" → ước trái quá khứ → had been.|Sự việc đã qua.|4|Hôm qua trời không đẹp. Ước gì hôm qua trời đẹp.
+Q|I wish I ___ Psychology when I was a college student.|had studied~would study~studied~study|A|"when I was a college student" (quá khứ) → wish + QKHT.|Sự việc đã qua.|4|Ước gì tôi đã học Tâm lý học khi còn là sinh viên.
+Q|I wish someone ___ to help me with that work tomorrow.|offer~offered~would offer~had offered|C|"tomorrow" → ước cho tương lai → would + V.|Ước cho tương lai.|5|Ước gì ngày mai có ai đó giúp tôi việc đó.
+Q|If only I ___ play the guitar as well as you!|would~should~could~might|C|If only + could = giá mà có thể.|Ước về khả năng.|6|Giá mà tôi chơi guitar giỏi như bạn!
+Q|When I saw Tom, he looked ___ he had been ill.|so~such as~the same~as if|D|as if = như thể.|"trông như thể…".|9|Khi tôi gặp Tom, trông anh ấy như thể vừa ốm dậy.
+Q|Mrs White always talks to her baby as though he ___ an adult.|is~were~had been~will be|B|as though + QKĐ (were) cho điều trái hiện tại.|Em bé không phải người lớn.|9|Bà White luôn nói chuyện với con như thể nó là người lớn.
+Q|When he came out of the room, he looked ___ he had seen a ghost.|as~as though~when~if|B|as though = như thể.|"như thể đã thấy ma".|9|Khi bước ra khỏi phòng, anh ấy trông như thể vừa thấy ma.
+Q|Susan's doctor insists ___ for a few days.|that she is resting~her resting~that she rest~her to rest|C|insist that + S + V nguyên mẫu.|Sau "insist that" dùng V nguyên mẫu.|1|Bác sĩ của Susan yêu cầu cô ấy nghỉ ngơi vài ngày.
+Q|The doctor suggested that his patient ___.|stop smoking~stops smoking~stopped smoking~to stop smoking|A|suggest that + S + V nguyên mẫu.|Không chia động từ theo ngôi.|1|Bác sĩ đề nghị bệnh nhân bỏ thuốc lá.
+Q|It is necessary that he ___ the books.|find~doesn't find~don't find~did not find|A|It is necessary that + S + V nguyên mẫu.|Thể giả định.|2|Anh ấy cần phải tìm được những cuốn sách đó.
+Q|It has been proposed that we ___ the topic.|to change~changed~changing~change|D|propose that + S + V nguyên mẫu.|Thể giả định.|1|Người ta đề xuất chúng ta đổi chủ đề.
+Q|It's important that every student ___ all the lectures.|attends~attend~has attended~attended|B|It's important that + S + V nguyên mẫu.|Không thêm -s.|2|Điều quan trọng là mọi sinh viên dự đủ các buổi giảng.
+Q|It's time we all ___.|leave~to leave~left~have left|C|It's time + S + QKĐ.|Cấu trúc "It's time".|10|Đã đến lúc tất cả chúng ta đi rồi.
+Q|He acts as if he ___ English perfectly.|know~knew~have known~had known|B|S + V (hiện tại) + as if + QKĐ (trái hiện tại).|Vế trước ở hiện tại.|9|Anh ta cư xử như thể anh ta biết tiếng Anh hoàn hảo.
+Q|She acted as though she ___ him before.|knew~know~had known~has known|C|S + V (quá khứ) + as though + QKHT.|Vế trước ở quá khứ + "before".|9|Cô ấy cư xử như thể đã quen anh ta từ trước.
+Q|I would rather that I ___ him to my birthday party yesterday.|invited~have invited~had invited~invite|C|would rather that + S + QKHT (mong muốn trái quá khứ).|"yesterday".|8|Tôi ước gì đã mời anh ấy đến tiệc sinh nhật hôm qua.
+Q|She would rather Mary ___ here right now.|be~were~was~were/was|B|would rather + S + QKĐ (were cho mọi ngôi) — mong muốn ở hiện tại.|"right now".|7|Cô ấy muốn Mary ở đây ngay lúc này.
+Q|I suggest that he ___.|should study~study~studied~should study/study|D|suggest that + S + (should) + V nguyên mẫu → cả "should study" và "study" đều đúng.|"should" có thể có hoặc không.|1|Tôi đề nghị anh ấy nên học.
+X|cd08|Thức giả định · Exercise 2 · Viết lại câu|Viết lại câu với từ gợi ý sao cho nghĩa không đổi. Gõ cả câu (có thể bấm "Mình viết đúng ý" nếu khác chút ít).|Rewrite the sentences.
+W|Please don't tell anyone about it. → I'd rather you ___|I'd rather you didn't tell anyone about it|would rather + S + QKĐ để nói mong muốn người khác (không) làm gì ở hiện tại.|would rather sb did / didn't do sth.|7|Làm ơn đừng kể với ai.
+W|I would prefer you to deliver the sofa this afternoon. → I'd rather you ___|I'd rather you delivered the sofa this afternoon/I'd rather you deliver the sofa this afternoon|would rather + S + QKĐ (sách ghi "deliver" — dạng nguyên mẫu dùng khi yêu cầu nhẹ nhàng).|would rather sb did sth.|7|Tôi muốn bạn giao ghế sofa chiều nay.
+W|"Why don't you ask her yourself?" → My friend suggests that ___|My friend suggests that I should ask her myself/My friend suggests that I ask her myself|suggest that + S + (should) + V; đổi ngôi you → I, yourself → myself.|Đổi ngôi khi tường thuật.|1|"Sao cậu không tự hỏi cô ấy?"
+W|She urged her husband to apply for the post in the government. → She urged that her husband ___|She urged that her husband apply for the post in the government|urge that + S + V nguyên mẫu.|Không thêm -s.|1|Cô ấy giục chồng nộp đơn vào vị trí trong chính phủ.
+W|They insisted on my coming early. → They insisted that ___|They insisted that I come early|insist on V-ing = insist that + S + V nguyên mẫu.|Động từ nguyên mẫu.|1|Họ khăng khăng bắt tôi đến sớm.
+W|An accountant needs to master computer science. → It is necessary that ___|It is necessary that an accountant master computer science|It is necessary that + S + V nguyên mẫu.|Không thêm -s.|2|Kế toán cần thành thạo tin học.
+W|It's time for us to leave now. → It's time we ___|It's time we left now/It's time we left|It's time + S + QKĐ.|Lùi động từ về quá khứ.|10|Đã đến lúc chúng ta đi rồi.
+W|What a pity! Your sister can't come with us. → If only ___|If only your sister could come with us|If only + QKĐ (could) — tiếc ở hiện tại.|can → could.|6|Tiếc quá! Chị bạn không đi cùng được.
+W|Everyone finds it important for us to do something to save the environment. → It is important that we ___|It is important that we do something to save the environment|It is important that + S + V nguyên mẫu.|Thể giả định.|2|Ai cũng thấy chúng ta cần làm gì đó để bảo vệ môi trường.
+W|Michael lost his job last month, so he cannot buy a car. → If Michael ___|If Michael hadn't lost his job last month, he could buy a car|Câu điều kiện hỗn hợp: If + QKHT (quá khứ), S + could + V (hiện tại).|Vế if nói về quá khứ, vế chính về hiện tại.||Tháng trước Michael mất việc nên giờ không mua được xe.
+W|He regrets applying for the job in that company. → He wishes ___|He wishes he hadn't applied for the job in that company|Hối hận việc đã làm → wish + QKHT (phủ định).|regret V-ing = hối hận vì đã làm.|4|Anh ấy hối hận vì đã nộp đơn vào công ty đó.
+W|The headmaster insists on every schoolgirl's wearing ao dai every Monday. → The headmaster insists that ___|The headmaster insists that every schoolgirl wear ao dai every Monday|insist that + S + V nguyên mẫu (wear, không phải wears).|Không thêm -s.|1|Thầy hiệu trưởng yêu cầu nữ sinh mặc áo dài mỗi thứ Hai.
+W|They advise her to eat less meat and fat to keep herself healthy. → It is advisable that she ___|It is advisable that she eat less meat and fat to keep herself healthy|It is advisable that + S + V nguyên mẫu.|Không thêm -s.|2|Họ khuyên cô ấy ăn ít thịt và mỡ để giữ sức khỏe.
+W|Naturally, a child had better respect his parents. → It is natural that ___|It is natural that a child respect his parents/It is natural that a child should respect his parents|It is natural that + S + (should) + V.|Thể giả định.|2|Lẽ tự nhiên là con cái phải kính trọng cha mẹ.
+W|He needs to come to the interview early. → It is necessary that ___|It is necessary that he come to the interview early|It is necessary that + S + V nguyên mẫu.|Không thêm -s.|2|Anh ấy cần đến buổi phỏng vấn sớm.
+W|She must find it important to take two medicines every day. → It is important that ___|It is important that she take two medicines every day|It is important that + S + V nguyên mẫu.|Không thêm -s.|2|Cô ấy phải thấy việc uống hai loại thuốc mỗi ngày là quan trọng.
+W|It's too late. He must go home. → It's high time he ___|It's high time he went home|It's high time + S + QKĐ.|Lùi động từ.|10|Muộn quá rồi. Anh ấy phải về nhà.
+W|Every student must wear uniform. It is obligatory. → It is obligatory that ___|It is obligatory that every student wear uniform|It is obligatory that + S + V nguyên mẫu.|Không thêm -s.|2|Mọi học sinh phải mặc đồng phục. Đó là bắt buộc.
+W|They recommended her to go to the best doctor in town. → They recommended that she ___|They recommended that she go to the best doctor in town|recommend that + S + V nguyên mẫu.|Không chia động từ.|1|Họ khuyên cô ấy đến bác sĩ giỏi nhất thị trấn.
+W|The man demanded to be told everything about the accident. → The man demanded that ___|The man demanded that he be told everything about the accident|demand that + S + be + V3 (bị động ở thể giả định).|Bị động: be + V3.|1|Người đàn ông yêu cầu được biết mọi điều về vụ tai nạn.
+X|cd08|Thức giả định · Exercise 3 · Sửa lỗi|Sửa lỗi sai trong câu (nếu có). Gõ từ đã sửa; nếu câu đúng thì gõ "correct".|Correct the mistakes (if necessary).
+W|The teacher demanded that the student left the room.|leave|demand that + S + V nguyên mẫu.|Sau "demanded that".|1|Giáo viên yêu cầu học sinh rời khỏi phòng.
+W|It was urgent that he called her immediately.|call|It was urgent that + S + V nguyên mẫu (kể cả khi câu ở quá khứ).|Thể giả định không lùi thì.|2|Điều cấp bách là anh ấy phải gọi cho cô ấy ngay.
+W|It was very important that we delay discussion.|correct|It was important that + S + V nguyên mẫu → câu đúng.|Kiểm tra động từ sau "that".|2|Điều rất quan trọng là chúng ta hoãn thảo luận.
+W|She intends to move that the committee suspends discussion on this issue.|suspend|move (đề nghị chính thức) that + S + V nguyên mẫu.|Không thêm -s.|1|Cô ấy định đề nghị ủy ban hoãn thảo luận về vấn đề này.
+W|The King decreed that the new laws took effect the following month.|take|decree that + S + V nguyên mẫu.|Thể giả định.|1|Nhà vua ban sắc lệnh rằng luật mới có hiệu lực từ tháng sau.
+W|I propose that you should stop this rally.|correct|propose that + S + (should) + V → câu đúng.|"should" có thể có.|1|Tôi đề nghị anh dừng cuộc mít tinh này.
+W|It is of great importance that he speaks to the Dean before leaving for his location.|speak|It is of great importance that + S + V nguyên mẫu.|Không thêm -s.|2|Điều rất quan trọng là anh ấy phải nói với trưởng khoa trước khi đi.
+W|It's time we come back home.|came|It's time + S + QKĐ.|Lùi động từ.|10|Đã đến lúc chúng ta về nhà.
+W|The child ate as though he was hungry for days.|had been|S + V (quá khứ) + as though + QKHT.|Vế trước ở quá khứ.|9|Đứa trẻ ăn như thể đã đói nhiều ngày.
+W|It's time for you went to bed.|to go|It's time for sb + to V.|Có "for you" thì dùng to V.|10|Đã đến lúc con đi ngủ.
+W|I would rather that the weather is fine tomorrow morning.|be|Theo sách: would rather (that) + S + V nguyên mẫu khi nói mong muốn cho tương lai (cách dùng trang trọng).|Sách dùng dạng nguyên mẫu.|7|Tôi mong sáng mai trời đẹp.
+W|I'd rather she not go with you now.|didn't go|would rather + S + QKĐ (phủ định: didn't + V).|Mong muốn ở hiện tại.|7|Tôi không muốn cô ấy đi với bạn bây giờ.
+W|She walks as if she had a wooden leg.|correct|S + V (hiện tại) + as if + QKĐ → câu đúng.|Kiểm tra sự phối hợp thì.|9|Cô ấy đi như thể có một chân gỗ.
+W|I wish I finished my work last night.|had finished|"last night" → wish + QKHT.|Ước cho quá khứ.|4|Ước gì tối qua tôi làm xong việc.
+W|Minh's mother would rather that she met her friend last week.|had met|would rather that + S + QKHT (trái quá khứ, "last week").|Mong muốn về quá khứ.|8|Mẹ Minh ước gì tuần trước cô ấy đã gặp bạn.
+X|cd09|Danh động từ hay phân từ hiện tại? · Exercise 1|Từ gạch chân là danh động từ (G – Gerund) hay phân từ hiện tại (P – Present participle)?|Danh động từ đóng vai danh từ (chủ ngữ, tân ngữ, sau giới từ, danh từ ghép); phân từ hiện tại đóng vai tính từ, dùng trong thì tiếp diễn hoặc rút gọn mệnh đề.
+Q|I think you should start [[practising]] now!|G – Danh động từ~P – Phân từ hiện tại|A|Danh động từ làm tân ngữ sau động từ "start".|Từ này làm tân ngữ của động từ nào?|1|Mình nghĩ bạn nên bắt đầu luyện tập ngay!
+Q|[[Listening]] to music after work helps me relax my mind.|G – Danh động từ~P – Phân từ hiện tại|A|Danh động từ làm chủ ngữ.|Từ này đứng ở vị trí nào trong câu?||Nghe nhạc sau giờ làm giúp tôi thư giãn đầu óc.
+Q|It's a waste of time [[playing]] computer games.|G – Danh động từ~P – Phân từ hiện tại|B|Theo sách: phân từ trong cấu trúc "waste time doing sth".|Cấu trúc waste time + V-ing.|13|Chơi điện tử thật lãng phí thời gian.
+Q|There are some people [[waiting]] to see you, sir.|G – Danh động từ~P – Phân từ hiện tại|B|There + be + N + V-ing (phân từ bổ nghĩa cho danh từ).|Bổ nghĩa cho "people".||Có vài người đang đợi gặp ông ạ.
+Q|She thought of what he had said, [[smiling]] happily.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ rút gọn mệnh đề (hai hành động xảy ra đồng thời).|Hai hành động cùng lúc của một chủ ngữ.||Cô ấy nghĩ về những gì anh ấy nói, mỉm cười hạnh phúc.
+Q|My mother is in the [[sitting]] room.|G – Danh động từ~P – Phân từ hiện tại|A|Danh động từ trong danh từ ghép (sitting room = phòng để ngồi).|Phòng dùng để ngồi, không phải căn phòng "đang ngồi".||Mẹ tôi đang ở phòng khách.
+Q|The girl next door is [[playing]] the piano at the moment.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ dùng trong thì tiếp diễn.|is + V-ing.|14|Cô gái nhà bên đang chơi piano.
+Q|The thing I like best, [[chatting]] with friends, always makes me relaxed.|G – Danh động từ~P – Phân từ hiện tại|A|Danh động từ làm đồng vị ngữ (giải thích cho "the thing").|Từ này giải thích cho danh từ nào?||Điều tôi thích nhất, trò chuyện với bạn bè, luôn làm tôi thư thái.
+Q|The man [[driving]] the red car is my husband.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ rút gọn mệnh đề quan hệ (who is driving).|Thay cho "who is driving".||Người đàn ông lái chiếc xe đỏ là chồng tôi.
+Q|My sister said she was bored with [[doing]] the same things every day.|G – Danh động từ~P – Phân từ hiện tại|A|Danh động từ sau giới từ "with".|Sau giới từ.|5|Chị tôi nói chị chán làm những việc giống nhau mỗi ngày.
+Q|The book is so [[interesting]] that I can't put it down.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ dùng như tính từ.|Từ này mô tả cuốn sách.||Cuốn sách hay đến mức tôi không thể rời tay.
+Q|[[Feeling]] so hungry, I went down to the kitchen to find anything to eat.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ rút gọn mệnh đề chỉ lý do.|= Because I felt so hungry.||Thấy đói quá, tôi xuống bếp tìm gì đó ăn.
+Q|When he was [[walking]] on the pavement, he ran into me.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ trong thì tiếp diễn.|was + V-ing.||Khi đang đi trên vỉa hè, anh ấy tình cờ gặp tôi.
+Q|The missing child was last seen [[playing]] near the river.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ sau động từ tri giác (see).|see sb doing.|14|Đứa trẻ mất tích được nhìn thấy lần cuối khi đang chơi gần sông.
+Q|I found a coin [[lying]] on the sidewalk.|G – Danh động từ~P – Phân từ hiện tại|B|Phân từ sau "find + O".|find sth doing.||Tôi thấy một đồng xu nằm trên vỉa hè.
+X|cd09|Danh động từ & phân từ · Exercise 2|Chia động từ trong ngoặc ở dạng danh động từ / phân từ hiện tại / danh động từ hoàn thành / phân từ hoàn thành.|Having + V3 dùng khi hành động xảy ra trước.
+W|My boss spends two hours a day ___ (travel) to work.|travelling/traveling|spend time + V-ing.|Cấu trúc spend.|13|Sếp tôi dành hai tiếng mỗi ngày để đi làm.
+W|___ (Swim) is my favorite sport.|Swimming|Danh động từ làm chủ ngữ.|Đứng đầu câu làm chủ ngữ.||Bơi là môn thể thao yêu thích của tôi.
+W|I enjoy ___ (play) tennis with my friends.|playing|enjoy + V-ing.|enjoy đi với dạng nào?|1|Tôi thích chơi quần vợt với bạn bè.
+W|In spite of ___ (miss) the train, we arrived on time.|missing/having missed|Sau giới từ (in spite of) dùng V-ing.|Sau giới từ.|5|Dù lỡ tàu, chúng tôi vẫn đến đúng giờ.
+W|___ (complete) the book, he had a holiday.|Having completed|Phân từ hoàn thành: viết xong sách rồi mới đi nghỉ.|Hành động xảy ra trước.||Viết xong cuốn sách, anh ấy đi nghỉ.
+W|The man denied ___ (be) at the scene of the accident last night.|having been/being|deny + V-ing / having V3 (việc trong quá khứ).|deny + V-ing.|1|Người đàn ông phủ nhận đã có mặt ở hiện trường vụ tai nạn tối qua.
+W|___ (park) the car about a kilometer from the stadium, I walked the rest of the way.|Having parked|Đỗ xe xong rồi mới đi bộ → phân từ hoàn thành.|Hành động xảy ra trước.||Đỗ xe cách sân vận động khoảng một cây số, tôi đi bộ quãng còn lại.
+W|___ (take) the umbrella with him, he went out in the heavy rain.|Taking|Hai hành động liên tiếp, rút gọn bằng phân từ hiện tại.|Rút gọn mệnh đề cùng chủ ngữ.||Cầm theo ô, anh ấy ra ngoài trời mưa to.
+W|I have to work hard these days. I am always busy ___ (do) my homework.|doing|be busy + V-ing.|Cấu trúc be busy.||Dạo này tôi phải học nhiều. Tôi luôn bận làm bài tập.
+W|I suggested ___ (spend) the day in the garden.|spending|suggest + V-ing.|suggest đi với dạng nào?|1|Tôi đề nghị dành cả ngày ở vườn.
+W|Why do you keep ___ (look) back? Are you afraid of ___ (be) followed?|looking; being|keep + V-ing; sau giới từ "of" dùng V-ing.|Hai chỗ trống, hai quy tắc.|1,5|Sao bạn cứ ngoái lại? Bạn sợ bị theo dõi à?
+W|After ___ (find) a hotel, we looked for some place to have dinner.|having found/finding|After + V-ing / having V3.|Sau giới từ "after".|5|Sau khi tìm được khách sạn, chúng tôi tìm chỗ ăn tối.
+W|___ (Feel) tired, I went to bed early.|Feeling|Phân từ rút gọn mệnh đề lý do.|= Because I felt tired.||Thấy mệt nên tôi đi ngủ sớm.
+W|___ (finish) the housework, Tam Vy went for a walk.|Having finished|Làm xong việc nhà rồi mới đi dạo.|Hành động xảy ra trước.||Làm xong việc nhà, Tâm Vy đi dạo.
+W|We must avoid ___ (hurt) other people's feelings.|hurting|avoid + V-ing.|avoid đi với dạng nào?|1|Chúng ta phải tránh làm tổn thương người khác.
+W|___ (Learn) a foreign language takes a long time.|Learning|Danh động từ làm chủ ngữ.|Đứng đầu câu làm chủ ngữ.||Học ngoại ngữ mất nhiều thời gian.
+W|___ (Fail) twice, he didn't want to try again.|Having failed|Thất bại 2 lần trước rồi mới không muốn thử.|Hành động xảy ra trước.||Thất bại hai lần, anh ấy không muốn thử lại.
+W|Jack admitted ___ (steal) the money.|having stolen/stealing|admit + V-ing / having V3.|admit + V-ing.|1|Jack thừa nhận đã lấy trộm tiền.
+W|___ (open) the drawer, she took out a book.|Opening|Hai hành động liên tiếp → phân từ hiện tại.|Rút gọn mệnh đề.||Mở ngăn kéo, cô ấy lấy ra một cuốn sách.
+W|She warned the little boy against ___ (play) with matches.|playing|Sau giới từ "against" dùng V-ing.|Sau giới từ.|5|Cô ấy cảnh báo cậu bé không được nghịch diêm.
+X|cd09|Động từ nguyên mẫu có "to" · Exercise 1|Dùng các từ cho sẵn để hoàn thành câu với dạng đúng của động từ: find, know, use, take, pass, write, touch, finish, keep, complete.|Use the words in the box.
+W|Mr. White didn't have any money, so he decided ___ a job.|to find|decide + to V.|decide đi với to V.|2|Ông White không có tiền nên quyết định tìm việc.
+W|The teacher reminded the students ___ their assignments in time.|to finish|remind sb + to V.|remind + O + to V.|3|Giáo viên nhắc học sinh hoàn thành bài đúng hạn.
+W|My group leader expects me ___ this paper as soon as possible.|to complete|expect sb + to V.|expect + O + to V.|3|Trưởng nhóm mong tôi hoàn thành bài này càng sớm càng tốt.
+W|Our teacher encourages us ___ a dictionary whenever we are unsure of the meaning of a word.|to use|encourage sb + to V.|encourage + O + to V.|3|Thầy khuyến khích chúng tôi dùng từ điển mỗi khi không chắc nghĩa của từ.
+W|Before I went away to college, my mother had reminded me ___ her a letter once a week.|to write|remind sb + to V.|remind + O + to V.|3|Trước khi tôi đi học đại học, mẹ nhắc tôi viết thư cho mẹ mỗi tuần một lần.
+W|Mrs. Snow has warned her young children not ___ the hot stove.|to touch|warn sb not to V.|warn + O + not to V.|3|Bà Snow đã dặn các con nhỏ không được chạm vào bếp nóng.
+W|The student on the corner pretended ___ the answers to the teacher's questions.|to know|pretend + to V.|pretend đi với to V.|2|Cậu học sinh ngồi góc giả vờ biết câu trả lời.
+W|Residents are not allowed ___ pets in that apartment building.|to keep|be allowed + to V.|be allowed to.|3|Cư dân không được nuôi thú cưng trong tòa chung cư đó.
+W|All applicants are required ___ the entrance examination.|to pass|be required + to V.|be required to.|3|Tất cả thí sinh phải vượt qua kỳ thi đầu vào.
+W|Ann advised her sister ___ the plane instead of driving to San Francisco.|to take|advise sb + to V.|advise + O + to V.|3|Ann khuyên em gái đi máy bay thay vì lái xe đến San Francisco.
+X|cd09|Tính từ + to V · Exercise 2|Điền vào mỗi chỗ trống một động từ phù hợp về nghĩa, ở dạng đúng.|Fill in a suitable verb in the correct form.
+W|I was glad ___ a present from my old closest friend.|to receive/to get|be glad + to V.|Tính từ cảm xúc + to V.|2|Tôi vui khi nhận được quà từ người bạn thân cũ.
+W|I was relieved ___ out that I had passed the exam.|to find|be relieved + to V; find out = phát hiện ra.|Đi với "out".|2|Tôi nhẹ nhõm khi biết mình đã thi đỗ.
+W|The jet pilot was very lucky ___ alive after the plane crash.|to be/to stay/to remain|be lucky + to V.|Sống sót.|2|Phi công rất may mắn còn sống sau vụ rơi máy bay.
+W|The children were excited ___ to the circus.|to go|be excited + to V.|Đi xem xiếc.|2|Bọn trẻ háo hức được đi xem xiếc.
+W|Sunny didn't feel like going anywhere. She was content ___ at home and ___ a book.|to stay; read|be content + to V; vế sau dùng V nguyên mẫu song song.|Hai động từ nối bằng "and".|2|Sunny không muốn đi đâu cả. Cô ấy hài lòng ở nhà đọc sách.
+W|The teacher is always willing ___ the students with difficult exercises.|to help|be willing + to V.|Sẵn lòng giúp.|2|Thầy luôn sẵn lòng giúp học sinh làm bài khó.
+W|The students are motivated ___ part in the English speaking contest.|to take|be motivated + to V; take part in = tham gia.|Đi với "part in".|2|Học sinh được khích lệ tham gia cuộc thi nói tiếng Anh.
+W|Jessica was hesitant ___ home alone on the dark street.|to walk|be hesitant + to V.|Ngại đi bộ.|2|Jessica ngần ngại đi bộ về nhà một mình trên con phố tối.
+W|I was surprised ___ Mr. Jay at the meeting.|to see/to meet|be surprised + to V.|Ngạc nhiên khi gặp.|2|Tôi ngạc nhiên khi gặp ông Jay ở cuộc họp.
+W|We were very sorry ___ the bad news about the collapse of the bridge.|to hear|be sorry + to V.|Nghe tin xấu.|2|Chúng tôi rất tiếc khi nghe tin cây cầu bị sập.
+X|cd09|Gerund, to V hay V nguyên mẫu · Exercise 1|Chia dạng đúng của động từ trong ngoặc.|Give the correct form of the verbs.
+W|I'd rather ___ (stay) home tonight.|stay|would rather + V nguyên mẫu.|Sau "would rather".||Tối nay tôi muốn ở nhà hơn.
+W|He keeps ___ (hope) and ___ (pray) that things will get better.|hoping; praying|keep + V-ing.|keep đi với dạng nào?|1|Anh ấy cứ hy vọng và cầu nguyện mọi việc sẽ tốt hơn.
+W|I don't know why he avoids ___ (meet) me.|meeting|avoid + V-ing.|avoid + V-ing.|1|Tôi không hiểu sao anh ấy tránh gặp tôi.
+W|The boy admitted ___ (break) my ancient flower vase.|having broken/breaking|admit + V-ing / having V3.|admit + V-ing.|1|Cậu bé thừa nhận đã làm vỡ bình hoa cổ của tôi.
+W|I promise ___ (not tell) you a lie.|not to tell|promise + (not) to V.|"not" đứng trước "to".|2|Tôi hứa sẽ không nói dối bạn.
+W|The students stopped ___ (talk) when the teacher came in.|talking|stop + V-ing = ngừng hẳn việc đang làm.|Ngừng nói chuyện.|7|Học sinh ngừng nói chuyện khi thầy bước vào.
+W|I'll try ___ (not make) the same mistake again.|not to make|try + to V = cố gắng.|Cố gắng không…|8|Tôi sẽ cố không mắc lại lỗi đó.
+W|Would you mind ___ (give) me a hand?|giving|mind + V-ing.|mind + V-ing.|1|Bạn giúp tôi một tay được không?
+W|Have you ever watched people ___ (try) ___ (catch) fish?|trying; to catch|watch sb + V-ing; try + to V.|Hai chỗ, hai quy tắc.|14,8|Bạn đã bao giờ xem người ta cố bắt cá chưa?
+W|Do you have any money ___ (pay) for the book?|to pay|N + to V (để làm gì).|Tiền để trả.|2|Bạn có tiền để trả cho cuốn sách không?
+W|After ___ (hear) the conditions, I decided ___ (not enter) for the competition.|having heard; not to enter/hearing; not to enter|After + V-ing; decide + (not) to V.|Hai chỗ, hai quy tắc.|5,2|Sau khi nghe điều kiện, tôi quyết định không tham gia cuộc thi.
+W|Imagine ___ (have) ___ (get) up at 4 a.m every day.|having; to get|imagine + V-ing; have to + V.|"have to get up" = phải dậy.|1|Hãy tưởng tượng phải dậy lúc 4 giờ sáng mỗi ngày.
+W|There were some people ___ (row) on the river.|rowing|There + be + N + V-ing.|Phân từ bổ nghĩa cho "people".||Có vài người đang chèo thuyền trên sông.
+W|Your hair needs ___ (cut). You'd better ___ (have) it done tomorrow – unless you'd like me ___ (have) a go at it for you.|cutting; have; to have|need + V-ing (nghĩa bị động); had better + V; would like sb + to V.|Ba chỗ, ba quy tắc.|10|Tóc bạn cần cắt rồi. Mai bạn nên đi cắt – trừ khi bạn muốn tôi thử cắt cho.
+W|The children prefer ___ (watch) TV to ___ (read).|watching; reading|prefer doing A to doing B.|Cấu trúc prefer… to…|1|Bọn trẻ thích xem TV hơn đọc sách.
+W|She has something ___ (tell) you.|to tell|something + to V.|Có điều cần nói.|2|Cô ấy có điều muốn nói với bạn.
+W|It took me three days ___ (find) out the old photograph.|to find|It takes sb + time + to V.|Cấu trúc It takes.|12|Tôi mất ba ngày để tìm ra tấm ảnh cũ.
+W|Do you remember ___ (read) about it? – No, at that time I was too young ___ (read) newspapers.|reading; to read|remember + V-ing (nhớ đã làm); too + adj + to V.|Hai chỗ, hai quy tắc.|6|Bạn có nhớ đã đọc về chuyện đó không? – Không, lúc đó tôi còn quá nhỏ để đọc báo.
+W|My brother is a stamp collector. He started ___ (collect) stamps when he was 15 years old.|collecting/to collect|start + V-ing / to V (nghĩa như nhau).|start đi được với cả hai.|1,2|Anh tôi là người sưu tập tem. Anh ấy bắt đầu sưu tập từ năm 15 tuổi.
+W|It's difficult ___ (get) used to getting up early.|to get|It's + adj + to V.|Cấu trúc It's difficult.|2|Thật khó để quen với việc dậy sớm.
+X|cd09|Gerund hay to V · Exercise 2|Chọn đáp án đúng.|Choose the correct answer.
+Q|I couldn't help ___ at his jokes.|laugh~laughing~to laugh~laughed|B|can't help + V-ing = không nhịn được.|Cụm cố định.|1|Tôi không nhịn được cười trước những câu đùa của anh ấy.
+Q|Tom offered ___ Jane a ticket to the theater, but she refused to take it.|to give~give~giving~to be given|A|offer + to V.|offer đi với dạng nào?|2|Tom ngỏ ý tặng Jane vé xem kịch nhưng cô ấy từ chối.
+Q|Those workers stopped ___ their coffee because they felt tired of their new work.|drink~drank~drinking~to drink|D|Theo sách: stop + to V = dừng việc khác để làm việc này (dừng lại để uống cà phê).|stop + to V và stop + V-ing khác nhau.|7|Những công nhân dừng lại uống cà phê vì thấy mệt với công việc mới.
+Q|He asked them ___.|help him~should help him~to help him~help to him|C|ask sb + to V.|ask + O + to V.|3|Anh ấy nhờ họ giúp.
+Q|Mr Minh advised my family ___ leaving Vietnam.|to think~not to think~against~against to|C|advise sb against + V-ing = khuyên không nên.|Sau chỗ trống là V-ing.|5|Ông Minh khuyên gia đình tôi không nên rời Việt Nam.
+Q|I hope ___ that woman again.|to see~of seeing~seeing~have seen|A|hope + to V.|hope đi với to V.|2|Tôi hy vọng gặp lại người phụ nữ đó.
+Q|She wasted much time ___ her old pair of shoes.|mend~to mend~mending~to be mended|C|waste time + V-ing.|Giống spend time.|13|Cô ấy lãng phí nhiều thời gian sửa đôi giày cũ.
+Q|He regrets ___ lazy last year. He lost his job.|to be~be~been~being|D|regret + V-ing = hối hận vì đã làm.|Việc đã xảy ra năm ngoái.|9|Anh ấy hối hận vì năm ngoái đã lười biếng. Anh ấy mất việc.
+Q|She remembered ___ that woman last month.|of seeing~to see~seeing~have seen|C|remember + V-ing = nhớ đã làm.|Việc đã xảy ra tháng trước.|6|Cô ấy nhớ là đã gặp người phụ nữ đó tháng trước.
+Q|David tried his best ___, but his girlfriend refused ___.|explaining; to listen~explaining; listening~to explain; to listen~to explain; listening|C|try one's best + to V; refuse + to V.|Hai cấu trúc với to V.|8,2|David cố hết sức giải thích nhưng bạn gái từ chối nghe.
+Q|We heard a baby ___ in a neighbouring village.|cry~to cry~cried~to crying|A|Theo sách: hear sb + V nguyên mẫu / V-ing.|Động từ tri giác + O + V.|14|Chúng tôi nghe thấy tiếng em bé khóc ở làng bên.
+Q|Willy denied ___ a whole bag of chocolate chip cookies before lunch.|eat~to eat~having eaten~eaten|C|deny + having V3 (phủ nhận đã làm).|deny + V-ing.|1|Willy phủ nhận đã ăn hết cả túi bánh quy sô-cô-la trước bữa trưa.
+Q|I was delighted ___ my old friends again.|to see~seeing~seen~to be seen|A|be delighted + to V.|Tính từ cảm xúc + to V.|2|Tôi rất vui khi gặp lại bạn cũ.
+Q|We regret ___ you that we cannot approve your suggestion.|inform~to inform~informing~informed|B|regret + to V = lấy làm tiếc phải (thông báo).|Thông báo tin xấu.|9|Chúng tôi lấy làm tiếc phải báo rằng không thể chấp thuận đề xuất của bạn.
+Q|Have you ever considered ___ a pharmacist?|become~becoming~to become~became|B|consider + V-ing.|consider + V-ing.|1|Bạn đã bao giờ tính trở thành dược sĩ chưa?
+Q|You had better ___ at home until you feel better.|staying~stayed~to stay~stay|D|had better + V nguyên mẫu.|Sau had better.||Tốt hơn bạn nên ở nhà cho đến khi thấy khỏe hơn.
+Q|I remember ___ my mother said the grass in the garden needed ___.|to hear; cutting~hear; cut~heard; to cut~hearing; cutting|D|remember + V-ing (nhớ đã nghe); need + V-ing (nghĩa bị động: cần được cắt).|Hai chỗ, hai quy tắc.|6,10|Tôi nhớ đã nghe mẹ nói cỏ trong vườn cần được cắt.
+Q|My teacher doesn't allow us ___ while he is explaining the lesson.|talk~to talk~talking~talked|B|allow sb + to V.|allow + O + to V.|3|Thầy không cho chúng tôi nói chuyện khi thầy đang giảng bài.
+Q|We have plenty of time. We needn't ___.|hurry~to hurry~hurrying~hurried|A|needn't + V nguyên mẫu.|needn't là động từ khuyết thiếu.||Chúng ta còn nhiều thời gian. Không cần vội.
+Q|I promised ___ there on time, so I mustn't ___ late.|be; be~to be; to be~to be; be~be; to be|C|promise + to V; mustn't + V nguyên mẫu.|Hai cấu trúc khác nhau.|2|Tôi đã hứa đến đúng giờ nên tôi không được đến muộn.
+X|cd09|Tìm và sửa lỗi · Exercise 3|Mỗi câu có một lỗi về dạng động từ. Gõ lại phần đã sửa.|Find and correct the mistake.
+W|She likes her job but does not like wear uniforms.|wearing/to wear|like + V-ing / to V.|Động từ sau "like".|1|Cô ấy thích công việc nhưng không thích mặc đồng phục.
+W|They speak English well because they practise speak it every day.|speaking|practise + V-ing.|practise đi với dạng nào?|1|Họ nói tiếng Anh giỏi vì luyện nói mỗi ngày.
+W|Lan was in a difficult situation, so I agreed lending her some money.|to lend|agree + to V.|agree đi với to V.|2|Lan gặp khó khăn nên tôi đồng ý cho cô ấy mượn ít tiền.
+W|Don't forget attending our meeting next month on time.|to attend|forget + to V = quên phải làm (việc tương lai).|Việc ở tương lai.|6|Đừng quên dự cuộc họp tháng sau đúng giờ nhé.
+W|I spent most of my time on the train read my favorite book.|reading|spend time + V-ing.|Cấu trúc spend.|13|Tôi dành phần lớn thời gian trên tàu đọc cuốn sách yêu thích.
+W|I heard him talked about you this morning.|talk/talking|hear sb + V / V-ing.|Động từ tri giác + O.|14|Sáng nay tôi nghe anh ấy nói về bạn.
+W|I enjoy watching the sun to rise slowly in the morning.|rise/rising|watch sth + V / V-ing.|Động từ tri giác + O.|14|Tôi thích ngắm mặt trời từ từ mọc vào buổi sáng.
+W|Why should you to carry this box? It's too heavy for you.|carry|should + V nguyên mẫu.|Sau động từ khuyết thiếu.||Sao bạn phải mang cái hộp này? Nó quá nặng với bạn.
+W|She said the letter was personal and wouldn't let me to read it.|read|let sb + V nguyên mẫu.|let + O + V.|4|Cô ấy nói lá thư là riêng tư và không cho tôi đọc.
+W|It's impossible for me being there before 8 p.m.|to be|It's impossible (for sb) + to V.|Cấu trúc It's + adj.|2|Tôi không thể có mặt ở đó trước 8 giờ tối.
+W|I saw a man to jump through the window 5 minutes ago, but I couldn't remember his face.|jump/jumping|see sb + V / V-ing.|Động từ tri giác + O.|14|Tôi thấy một người nhảy qua cửa sổ 5 phút trước nhưng không nhớ mặt.
+W|She suggested taking the plane this evening or go by train tomorrow.|going|suggest + V-ing; hai vế nối bằng "or" phải cùng dạng.|Song song với "taking".|1|Cô ấy đề nghị đi máy bay tối nay hoặc đi tàu ngày mai.
+W|Could you please stop to make so much noise?|making|stop + V-ing = ngừng làm.|Ngừng gây ồn.|7|Bạn làm ơn đừng làm ồn nữa được không?
+W|It was very kind of you to showing me the way.|show|It's kind of sb + to V.|Sau "to" là V nguyên mẫu.|2|Bạn thật tốt khi chỉ đường cho tôi.
+W|I'm glad hearing that you have made much progress in your study.|to hear|be glad + to V.|Tính từ cảm xúc + to V.|2|Tôi vui khi nghe bạn đã tiến bộ nhiều trong học tập.
+X|cd10|Câu hỏi đuôi · Exercise 1|Hoàn thành câu hỏi đuôi (chỉ gõ phần đuôi, ví dụ: shall we).|Complete the tag questions.
+W|Let's go shopping at Saigon Coop Mart, ___?|shall we|Let's… → shall we.|Câu rủ rê.|3|Mình đi mua sắm ở Co.opmart nhé?
+W|Children should drink a lot of milk and fruit juice, ___?|shouldn't they|Khẳng định + should → shouldn't; children → they.|Dùng lại động từ khuyết thiếu.|1|Trẻ em nên uống nhiều sữa và nước hoa quả, phải không?
+W|Bring your camera with you to the party, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Mang máy ảnh đến bữa tiệc nhé?
+W|Remember to buy your mother some sugar on your way home, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Nhớ mua đường cho mẹ trên đường về nhé?
+W|You think the Internet is a means of education, ___?|don't you|S + think + mệnh đề, với S không phải "I" → hỏi đuôi theo mệnh đề chính.|Chủ ngữ là "You", không phải "I".|11|Bạn nghĩ Internet là một phương tiện giáo dục, phải không?
+W|You ought to go now, ___?|shouldn't you|ought to → shouldn't.|Trường hợp đặc biệt của ought to.|9|Bạn nên đi bây giờ, phải không?
+W|I think she won't come to your party, ___?|will she|I think + mệnh đề → hỏi đuôi theo mệnh đề sau (won't → will).|Bắt đầu bằng "I think".|11|Mình nghĩ cô ấy sẽ không đến dự tiệc của bạn, phải không?
+W|What a nice dress, ___?|isn't it|Câu cảm thán: danh từ → đại từ + be.|Đổi "a nice dress" thành đại từ.||Chiếc váy đẹp quá, phải không?
+W|I think it is going to rain, ___?|isn't it|I think + mệnh đề → hỏi theo mệnh đề sau.|Bắt đầu bằng "I think".|11|Mình nghĩ trời sắp mưa, phải không?
+W|He said that his father was a doctor, ___?|didn't he|S (không phải I) + said + mệnh đề → hỏi theo mệnh đề chính.|Chủ ngữ là "He".|1|Anh ấy nói bố anh ấy là bác sĩ, phải không?
+W|Everything is all right, ___?|isn't it|everything → it.|Chủ ngữ chỉ vật bất định.|7|Mọi thứ ổn cả, phải không?
+W|She met nobody at the party, ___?|did she|"nobody" mang nghĩa phủ định → đuôi khẳng định.|Câu có từ phủ định.|5|Cô ấy không gặp ai ở bữa tiệc, phải không?
+W|Don't forget to turn off the lights before going out, ___?|will you|Câu mệnh lệnh (kể cả phủ định) → will you.|Câu mệnh lệnh.|4|Đừng quên tắt đèn trước khi ra ngoài nhé?
+W|Be careful with that man, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Cẩn thận với người đàn ông đó nhé?
+W|Someone had come to our room, ___?|hadn't they|someone → they; had → hadn't.|Chủ ngữ chỉ người bất định.|6|Đã có ai đó vào phòng chúng ta, phải không?
+W|She likes nobody to help her, ___?|does she/doesn't she|Sách cho "does she" vì câu chứa "nobody" (nghĩa phủ định).|Câu có từ mang nghĩa phủ định.|5|Cô ấy không thích ai giúp mình, phải không?
+W|Everybody realized the danger, ___?|didn't they|everybody → they; QKĐ → didn't.|Chủ ngữ chỉ người bất định.|6|Mọi người đều nhận ra mối nguy hiểm, phải không?
+W|Nobody complained, ___?|did they|nobody → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai phàn nàn, phải không?
+W|Mary hardly ever cooks, ___?|does she|"hardly" mang nghĩa phủ định → đuôi khẳng định.|Trạng từ bán phủ định.|5|Mary hầu như không bao giờ nấu ăn, phải không?
+W|Nothing went wrong, ___?|did it|nothing → it, đuôi khẳng định.|Chủ ngữ phủ định chỉ vật.|5,7|Không có gì trục trặc, phải không?
+W|He never takes advice, ___?|does he|"never" → đuôi khẳng định.|Câu có "never".|5|Anh ấy chẳng bao giờ nghe lời khuyên, phải không?
+W|I am too impatient, ___?|aren't I|I am → aren't I.|Trường hợp đặc biệt.|2|Mình quá thiếu kiên nhẫn, phải không?
+W|Don't drop that vase, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Đừng làm rơi cái bình đó nhé?
+W|Let's go out tonight, ___?|shall we|Let's → shall we.|Câu rủ rê.|3|Tối nay mình đi chơi nhé?
+W|Open the door, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Mở cửa giúp mình nhé?
+X|cd10|Câu hỏi đuôi · Exercise 2|Hoàn thành câu hỏi đuôi (chỉ gõ phần đuôi).|Complete the tag questions.
+W|I'm late, ___?|aren't I|I am → aren't I.|Trường hợp đặc biệt.|2|Mình đến muộn, phải không?
+W|Let's have a party, ___?|shall we|Let's → shall we.|Câu rủ rê.|3|Mình tổ chức tiệc nhé?
+W|Don't smoke, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Đừng hút thuốc nhé?
+W|He'll never know, ___?|will he|"never" → đuôi khẳng định; 'll = will.|Câu có "never".|5|Anh ấy sẽ không bao giờ biết, phải không?
+W|I think he's from India, ___?|isn't he|I think + mệnh đề → hỏi theo mệnh đề sau.|Bắt đầu bằng "I think".|11|Mình nghĩ anh ấy đến từ Ấn Độ, phải không?
+W|They must have stayed up late last night, ___?|haven't they/didn't they|must have V3 (suy đoán quá khứ) → theo sách dùng have/has: haven't they. (Có thể gặp "didn't they" khi có thời gian quá khứ cụ thể.)|must + have + V3.|10|Tối qua chắc họ thức khuya lắm, phải không?
+W|Let's go out, ___?|shall we|Let's → shall we.|Câu rủ rê.|3|Mình ra ngoài nhé?
+W|That is your umbrella, ___?|isn't it|that → it.|Đại từ chỉ định.|7|Đó là ô của bạn, phải không?
+W|Those aren't Fred's books, ___?|are they|those → they; phủ định → khẳng định.|Đại từ chỉ định số nhiều.|1|Đó không phải sách của Fred, phải không?
+W|Something is wrong with Jane today, ___?|isn't it|something → it.|Chủ ngữ chỉ vật bất định.|7|Hôm nay Jane có chuyện gì đó, phải không?
+W|Everyone can learn how to swim, ___?|can't they|everyone → they.|Chủ ngữ chỉ người bất định.|6|Ai cũng có thể học bơi, phải không?
+W|Nobody cheated in the exam, ___?|did they|nobody → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai gian lận trong kỳ thi, phải không?
+W|Nothing went wrong while I was gone, ___?|did it|nothing → it, đuôi khẳng định.|Chủ ngữ phủ định chỉ vật.|5,7|Không có gì trục trặc khi mình vắng nhà, phải không?
+W|I am invited to your party, ___?|aren't I|I am → aren't I.|Trường hợp đặc biệt.|2|Mình được mời dự tiệc của bạn, phải không?
+W|He'd better come to see me, ___?|hadn't he|had better → hadn't.|'d better = had better.|9|Tốt hơn anh ấy nên đến gặp mình, phải không?
+W|He seldom visits you, ___?|does he|"seldom" mang nghĩa phủ định → đuôi khẳng định.|Trạng từ bán phủ định.|5|Anh ấy hiếm khi đến thăm bạn, phải không?
+W|You've never been in Italy, ___?|have you|"never" → đuôi khẳng định.|Câu có "never".|5|Bạn chưa bao giờ đến Ý, phải không?
+W|No one died in the accident, ___?|did they|no one → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai chết trong vụ tai nạn, phải không?
+W|Going swimming in the summer is never boring, ___?|is it|V-ing làm chủ ngữ → it; "never" → đuôi khẳng định.|Hai quy tắc cùng lúc.|5,7|Đi bơi vào mùa hè chẳng bao giờ chán, phải không?
+W|What nice gifts, ___?|aren't they|Câu cảm thán: gifts → they + are.|Đổi danh từ thành đại từ.||Những món quà đẹp quá, phải không?
+W|Don't talk in class, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Đừng nói chuyện trong lớp nhé?
+W|Sit down, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Ngồi xuống nhé?
+W|Nobody called the phone, ___?|did they|nobody → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai gọi điện, phải không?
+W|Everything is okay, ___?|isn't it|everything → it.|Chủ ngữ chỉ vật.|7|Mọi thứ ổn, phải không?
+W|You have to leave early, ___?|don't you|have to là động từ thường → mượn trợ động từ do.|"have to" không phải trợ động từ.|1|Bạn phải về sớm, phải không?
+X|cd10|Câu hỏi đuôi · Exercise 3|Hoàn thành câu hỏi đuôi (chỉ gõ phần đuôi).|Complete the tag questions.
+W|Hoa never comes to school late, ___?|does she|"never" → đuôi khẳng định.|Câu có "never".|5|Hoa không bao giờ đi học muộn, phải không?
+W|He hardly ever makes a mistake, ___?|does he|"hardly" → đuôi khẳng định.|Trạng từ bán phủ định.|5|Anh ấy hầu như không mắc lỗi, phải không?
+W|Nobody liked the play, ___?|did they|nobody → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai thích vở kịch, phải không?
+W|She'd saved money when she bought it, ___?|hadn't she|'d saved = had saved → hadn't.|'d ở đây là had hay would?|1|Cô ấy đã để dành tiền khi mua nó, phải không?
+W|They think he's funny, ___?|don't they|S (không phải I) + think → hỏi theo mệnh đề chính.|Chủ ngữ là "They".|11|Họ nghĩ anh ấy hài hước, phải không?
+W|He ought to have made a note of it, ___?|shouldn't he|ought to → shouldn't.|Trường hợp ought to.|9|Lẽ ra anh ấy nên ghi lại, phải không?
+W|She must be here, ___?|needn't she/mustn't she|Theo sách: must (sự cần thiết) → needn't. Nếu must là suy đoán thì đuôi theo động từ sau must (isn't she).|Must mang nghĩa nào?|10|Cô ấy phải có mặt ở đây, phải không?
+W|I remember you said she would come the next day, ___?|didn't you|Câu có nhiều mệnh đề → hỏi theo mệnh đề người nói muốn xác nhận (you said).|Người nói muốn xác nhận điều gì?|1|Mình nhớ bạn nói hôm sau cô ấy sẽ đến, phải không?
+W|I don't think he will come, ___?|will he|I don't think + mệnh đề → hỏi theo mệnh đề sau, "not" tính sang mệnh đề sau → đuôi khẳng định.|Bắt đầu bằng "I don't think".|11|Mình không nghĩ anh ấy sẽ đến, phải không?
+W|One can leave it, ___?|can't one/can't you|Chủ ngữ "one" → one hoặc you.|Chủ ngữ "one".|1|Người ta có thể bỏ nó lại, phải không?
+W|What a beautiful house, ___?|isn't it|Câu cảm thán: a house → it.|Đổi danh từ thành đại từ.||Ngôi nhà đẹp quá, phải không?
+W|What handsome boys, ___?|aren't they|Câu cảm thán: boys → they.|Đổi danh từ thành đại từ.||Những cậu bé đẹp trai quá, phải không?
+W|How lovely the baby is, ___?|isn't he/isn't she/isn't it|Câu cảm thán: the baby → he/she.|Đổi danh từ thành đại từ.||Em bé đáng yêu quá, phải không?
+W|How interesting the games are, ___?|aren't they|Câu cảm thán: the games → they.|Đổi danh từ thành đại từ.||Các trò chơi thú vị quá, phải không?
+W|People think she tells lies, ___?|don't they|S (không phải I) + think → hỏi theo mệnh đề chính.|Chủ ngữ là "People".|11|Mọi người nghĩ cô ấy nói dối, phải không?
+W|It seems that you are right, ___?|aren't you|It seems that + mệnh đề → hỏi theo mệnh đề sau.|Mệnh đề sau "It seems that".||Có vẻ bạn đúng, phải không?
+W|What you have said is wrong, ___?|isn't it|Chủ ngữ là mệnh đề danh từ → it.|Chủ ngữ là cả một mệnh đề.|7|Những gì bạn nói là sai, phải không?
+W|Why he killed himself seems a secret, ___?|doesn't it|Chủ ngữ là mệnh đề danh từ → it; seems → doesn't.|Chủ ngữ là cả một mệnh đề.|7|Lý do anh ta tự tử có vẻ là bí mật, phải không?
+W|I wish to study English, ___?|may I|I wish… → may I.|Trường hợp đặc biệt.||Tôi muốn học tiếng Anh, được không?
+W|One can be one's own master, ___?|can't one/can't you|Chủ ngữ "one" → one hoặc you.|Chủ ngữ "one".|1|Người ta có thể làm chủ chính mình, phải không?
+W|What a long river, ___?|isn't it|Câu cảm thán: a river → it.|Đổi danh từ thành đại từ.||Con sông dài quá, phải không?
+W|How intelligent you are, ___?|aren't you|Câu cảm thán với "you" → aren't you.|Chủ ngữ là "you".||Bạn thông minh quá, phải không?
+W|Nobody has arrived yet, ___?|have they|nobody → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Chưa ai đến cả, phải không?
+W|Everybody looked so miserable, ___?|didn't they|everybody → they; QKĐ → didn't.|Chủ ngữ chỉ người bất định.|6|Mọi người trông rất khổ sở, phải không?
+W|Nobody's got to leave early, ___?|have they|nobody has got to → đuôi "have they".|'s = has.|5,6|Không ai phải về sớm, phải không?
+X|cd10|Câu hỏi đuôi · Exercise 4|Hoàn thành câu hỏi đuôi (chỉ gõ phần đuôi).|Complete the tag questions.
+W|Everybody will be there, ___?|won't they|everybody → they; will → won't.|Chủ ngữ chỉ người bất định.|6|Mọi người sẽ có mặt ở đó, phải không?
+W|You'd rather not tell me, ___?|would you|'d rather not = would rather not (phủ định) → đuôi khẳng định "would you". (Sách ghi "wouldn't you".)|would rather → dùng would.|9|Bạn không muốn nói với mình, phải không?
+W|He'd better try harder, ___?|hadn't he|had better → hadn't.|'d better = had better.|9|Tốt hơn anh ấy nên cố gắng hơn, phải không?
+W|There's nothing on TV tonight, ___?|is there|There + nothing (phủ định) → is there.|Câu với "there".|8|Tối nay TV không có gì xem, phải không?
+W|You must give up smoking, ___?|needn't you/mustn't you|Theo sách: must (sự cần thiết) → needn't.|Must chỉ sự cần thiết.|10|Bạn phải bỏ thuốc lá, phải không?
+W|I didn't do anything wrong, ___?|did I|Phủ định → đuôi khẳng định.|Quy tắc chung.|1|Mình không làm gì sai, phải không?
+W|No one can help you, ___?|can they|no one → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai giúp được bạn, phải không?
+W|She must be tired now, ___?|isn't she|must (suy đoán hiện tại) → đuôi theo động từ sau must (be → isn't).|Must chỉ suy đoán.|10|Giờ chắc cô ấy mệt lắm, phải không?
+W|Get out of my sight, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Biến khỏi mắt tôi đi, được chứ?
+W|It seldom barks, ___?|does it|"seldom" → đuôi khẳng định.|Trạng từ bán phủ định.|5|Nó hiếm khi sủa, phải không?
+W|There are many girls here, ___?|aren't there|There are → aren't there.|Câu với "there".|8|Ở đây có nhiều cô gái, phải không?
+W|I think they failed to reach the top, ___?|didn't they|I think + mệnh đề → hỏi theo mệnh đề sau.|Bắt đầu bằng "I think".|11|Mình nghĩ họ đã không lên được đỉnh, phải không?
+W|The men never killed children, ___?|did they|"never" → đuôi khẳng định.|Câu có "never".|5|Những người đàn ông đó chưa bao giờ giết trẻ em, phải không?
+W|Wash the dishes, ___?|will you|Câu mệnh lệnh → will you.|Câu mệnh lệnh.|4|Rửa bát giúp mình nhé?
+W|The actress must have taken that role, ___?|hasn't she|must have V3 (suy đoán quá khứ) → has/have theo chủ ngữ.|must + have + V3.|10|Nữ diễn viên chắc hẳn đã nhận vai đó, phải không?
+W|Let's drink wine, ___?|shall we|Let's → shall we.|Câu rủ rê.|3|Mình uống rượu vang nhé?
+W|Everyone was disappointed, ___?|weren't they|everyone → they; was → weren't (chủ ngữ they).|Chủ ngữ chỉ người bất định.|6|Mọi người đều thất vọng, phải không?
+W|Your aunt must be happy with the gift, ___?|isn't she|must (suy đoán) → theo động từ sau must.|Must chỉ suy đoán.|10|Dì bạn chắc vui với món quà lắm, phải không?
+W|That wasn't my fault, ___?|was it|that → it; phủ định → khẳng định.|Đại từ chỉ định.|7|Đó không phải lỗi của mình, phải không?
+W|My uncle hardly gets up late, ___?|does he|"hardly" → đuôi khẳng định.|Trạng từ bán phủ định.|5|Chú mình hầu như không dậy muộn, phải không?
+W|The islands must be very beautiful, ___?|aren't they|must (suy đoán) → theo động từ sau must; islands → they.|Must chỉ suy đoán.|10|Những hòn đảo chắc đẹp lắm, phải không?
+W|I am not cowardly, ___?|am I|I am not → am I.|Phủ định → khẳng định.|2|Mình không hèn nhát, phải không?
+W|No one likes the girl, ___?|do they|no one → they, đuôi khẳng định.|Chủ ngữ phủ định.|5,6|Không ai thích cô gái đó, phải không?
+W|Nothing wrong has happened, ___?|has it|nothing → it, đuôi khẳng định.|Chủ ngữ phủ định chỉ vật.|5,7|Không có gì tồi tệ xảy ra, phải không?
+W|I'm not supreme of all reality, ___?|am I|I am not → am I.|Phủ định → khẳng định.|2|Mình đâu phải chúa tể của mọi thứ, phải không?
+X|cd11|So sánh · Exercise 1|Cho dạng đúng của tính từ/trạng từ trong ngoặc.|Give the correct form of the words in brackets.
+W|This chair is ___ than that one. (comfortable)|more comfortable|"than" → so sánh hơn; tính từ dài → more + adj.|Tính từ dài hay ngắn?|4|Chiếc ghế này thoải mái hơn chiếc kia.
+W|Your flat is ___ than mine. (large)|larger|Tính từ ngắn tận cùng -e → thêm -r.|Tính từ ngắn.|3|Căn hộ của bạn rộng hơn của tôi.
+W|The weather today is ___ than it was yesterday. (hot)|hotter|hot: phụ âm–nguyên âm–phụ âm → gấp đôi t: hotter.|Gấp đôi phụ âm cuối.|3|Thời tiết hôm nay nóng hơn hôm qua.
+W|The Nile is the ___ river in the world. (long)|longest|"the… in the world" → so sánh nhất.|Có "the" và phạm vi.|6|Sông Nile là con sông dài nhất thế giới.
+W|Chinese bicycles are ___ than Japanese ones. (bad)|worse|bad – worse – worst (bất quy tắc).|Tính từ bất quy tắc.|5|Xe đạp Trung Quốc tệ hơn xe Nhật.
+W|Mathematics is ___ than English. (difficult)|more difficult|Tính từ dài → more difficult.|Tính từ dài.|4|Toán khó hơn tiếng Anh.
+W|Ho Chi Minh City is the ___ city in Vietnam. (big)|biggest|So sánh nhất, gấp đôi g.|Có "the" và phạm vi.|6|TP. Hồ Chí Minh là thành phố lớn nhất Việt Nam.
+W|He drives ___ than his friend. (careful)|more carefully|Bổ nghĩa cho động từ "drives" → trạng từ carefully; so sánh hơn → more carefully.|Động từ cần trạng từ.|4|Anh ấy lái xe cẩn thận hơn bạn.
+W|She sings ___ in this school. (beautiful)|the most beautifully|So sánh nhất với trạng từ: the most beautifully.|Bổ nghĩa cho "sings".|6|Cô ấy hát hay nhất trường này.
+W|I read ___ than my sister. (slow)|more slowly/slower|Bổ nghĩa cho động từ "read" → slowly → more slowly.|Động từ cần trạng từ.|4|Tôi đọc chậm hơn chị tôi.
+W|Grace is ___ girl in our class. (old)|the oldest|So sánh nhất.|Phạm vi "in our class".|6|Grace là cô gái lớn tuổi nhất lớp.
+W|This exercise is ___ than that one. (easy)|easier|Tính từ 2 âm tiết tận cùng -y → đổi y thành i + er.|Tận cùng "y".|3|Bài tập này dễ hơn bài kia.
+W|He is twice ___ as you. (fat)|as fat|So sánh gấp bội: twice as + adj + as.|Cấu trúc gấp… lần.|10|Anh ấy béo gấp đôi bạn.
+W|Nam is ___ student of all. (noisy)|the noisiest|So sánh nhất, tận cùng -y → iest.|"of all".|6|Nam là học sinh ồn ào nhất.
+W|My cold is ___ than it was. (good)|better|good – better – best.|Tính từ bất quy tắc.|5|Cảm lạnh của tôi đã đỡ hơn.
+W|This exercise is ___ of all. (easy)|the easiest|So sánh nhất.|"of all".|6|Bài tập này dễ nhất.
+W|This flower is ___ than that one. (beautiful)|more beautiful|Tính từ dài.|"than".|4|Bông hoa này đẹp hơn bông kia.
+W|He has twice as ___ books as his sister. (many)|many|twice as many + N đếm được số nhiều + as.|"books" đếm được.|10|Anh ấy có số sách gấp đôi chị gái.
+W|Which is the ___ animal in the world? (dangerous)|most dangerous|So sánh nhất với tính từ dài.|Có "the".|6|Con vật nào nguy hiểm nhất thế giới?
+W|English is not so ___ as Chinese. (difficult)|difficult|not so/as + adj + as → giữ nguyên tính từ.|So sánh không bằng.|2|Tiếng Anh không khó bằng tiếng Trung.
+X|cd11|Ngày càng… · Exercise 2|Hoàn thành câu với cấu trúc "so sánh hơn + and + so sánh hơn".|Comparative + and + comparative.
+W|This subject gets ___ all the time. (hard)|harder and harder|Tính từ ngắn: -er and -er.|Ngày càng khó.|9|Môn này ngày càng khó.
+W|I'm just getting ___. (confused)|more and more confused|Tính từ dài: more and more + adj.|Ngày càng bối rối.|9|Tôi ngày càng bối rối.
+W|It's becoming ___ for me to keep up. (difficult)|more and more difficult|Tính từ dài.|Ngày càng khó.|9|Tôi ngày càng khó theo kịp.
+W|The textbook just gets ___. (complicated)|more and more complicated|Tính từ dài.|Ngày càng phức tạp.|9|Sách giáo khoa ngày càng phức tạp.
+W|I spend ___ time on my work. (much)|more and more|much → more.|Ngày càng nhiều.|9|Tôi dành ngày càng nhiều thời gian cho công việc.
+W|My list of things to do gets ___. (long)|longer and longer|Tính từ ngắn.|Ngày càng dài.|9|Danh sách việc cần làm của tôi ngày càng dài.
+W|My problems are just getting ___. (bad)|worse and worse|bad → worse.|Bất quy tắc.|9|Vấn đề của tôi ngày càng tệ.
+W|I feel happy as my holiday is coming ___. (close)|closer and closer|Tính từ ngắn tận cùng -e.|Ngày càng gần.|9|Tôi thấy vui vì kỳ nghỉ đang đến gần.
+W|Eating and traveling in this city is getting ___. (expensive)|more and more expensive|Tính từ dài.|Ngày càng đắt.|9|Ăn uống và đi lại ở thành phố này ngày càng đắt.
+W|Your English is OK now; your pronunciation has got ___. (good)|better and better|good → better.|Bất quy tắc.|9|Tiếng Anh của bạn giờ ổn rồi; phát âm ngày càng tốt hơn.
+X|cd11|So sánh · Exercise 3|Chọn câu trả lời đúng.|Choose the correct answer.
+Q|In Vietnam, it is normally ___ in the South than in the North.|hot~hotter~hottest~hoter|B|"than" → so sánh hơn; hot → hotter (gấp đôi t).|Chú ý chính tả.|3|Ở Việt Nam, miền Nam thường nóng hơn miền Bắc.
+Q|The food is ___ than the last time I ate it.|badder~worse~worst~more bad|B|bad → worse.|Bất quy tắc.|5|Đồ ăn tệ hơn lần trước tôi ăn.
+Q|Ho Chi Minh City is ___ than Hanoi.|big~bigger~biggest~biger|B|big → bigger (gấp đôi g).|Chú ý chính tả.|3|TP. Hồ Chí Minh lớn hơn Hà Nội.
+Q|Her voice is ___ than her sister's.|beautiful~more beautiful~beautifully~more beautifully|B|Sau "is" dùng tính từ; tính từ dài → more beautiful.|be + tính từ.|4|Giọng cô ấy hay hơn giọng chị cô ấy.
+Q|Her literature result is much ___ than it was last year.|good~well~more well~better|D|good → better.|Bất quy tắc.|5,7|Điểm văn của cô ấy năm nay tốt hơn nhiều so với năm ngoái.
+Q|Cinderella danced ___ than any other girls at the ball.|more graceful~gracefuler~gracefully~more gracefully|D|Bổ nghĩa cho "danced" → trạng từ; so sánh hơn → more gracefully.|Động từ cần trạng từ.|4|Lọ Lem nhảy duyên dáng hơn mọi cô gái khác ở buổi dạ hội.
+Q|This book is the ___ of all.|bored~boring~more boring~most boring|D|"the… of all" → so sánh nhất; boring (vật gây chán).|So sánh nhất.|6|Cuốn sách này chán nhất.
+Q|Mary speaks English very ___.|fluent~fluently~more fluently~most fluently|B|Bổ nghĩa cho "speaks" → trạng từ; "very" không đi với so sánh.|Không có "than" hay "the".||Mary nói tiếng Anh rất trôi chảy.
+Q|Tom runs faster than John and David runs the ___ in the group.|fast~most fast~fastest~most fastly|C|fast (trạng từ ngắn) → the fastest.|So sánh nhất.|6|Tom chạy nhanh hơn John và David chạy nhanh nhất nhóm.
+Q|There is nothing ___ than going swimming in hot weather.|gooder~good~better~best|C|"than" → better.|Bất quy tắc.|5|Không gì tuyệt hơn đi bơi khi trời nóng.
+Q|Nobody in our class is ___ responsible as Peter.|more~the most~much~as|D|as + adj + as (so sánh bằng).|Sau chỗ trống có "as".|1|Không ai trong lớp có trách nhiệm bằng Peter.
+Q|She is ___ student in my class.|most hard-working~more hard-working~the most hard-working~as hard-working|C|So sánh nhất với tính từ dài: the most + adj.|Phạm vi "in my class".|6|Cô ấy là học sinh chăm chỉ nhất lớp tôi.
+Q|He drives ___ his brother.|more careful than~more carefully~more carefully than~as careful as|C|Động từ "drives" → trạng từ; cần "than".|Cần trạng từ và "than".|4|Anh ấy lái xe cẩn thận hơn anh trai.
+Q|Tuan writes more ___ with fewer mistakes than the previous term.|careless~careful~carefully~carelessly|C|Ít lỗi hơn → cẩn thận hơn; bổ nghĩa động từ → carefully.|Nghĩa + trạng từ.||Tuấn viết cẩn thận hơn, ít lỗi hơn học kỳ trước.
+Q|My father is happy because I get ___ results at school.|bad~good~intelligent~well|B|Tính từ bổ nghĩa cho danh từ "results", nghĩa tích cực → good.|Cần tính từ.||Bố tôi vui vì tôi đạt kết quả tốt ở trường.
+Q|Peter does better at school because he works ___.|harder~more carelessly~more lazily~worse|A|Học tốt hơn vì chăm chỉ hơn → harder.|Nghĩa tích cực.|3|Peter học tốt hơn vì cậu ấy chăm chỉ hơn.
+Q|He can do sums more ___ and read faster.|badly~quickly~difficultly~fastly|B|Song song với "read faster" → more quickly.|Không có "fastly".||Cậu ấy tính toán nhanh hơn và đọc nhanh hơn.
+Q|Jane is not ___ her brother.|more intelligent as~intelligent as~so intelligent as~so intelligent that|C|not so/as + adj + as.|So sánh không bằng.|2|Jane không thông minh bằng anh trai.
+Q|She is a very ___ pupil. She spends most of her time studying.|hard-working~difficult~hard~easy|A|Dành hầu hết thời gian học → chăm chỉ.|Nghĩa của câu sau.||Cô ấy là học sinh rất chăm chỉ.
+Q|My English this term is ___ than that of last year.|good~gooder~better~best|C|good → better.|Bất quy tắc.|5|Tiếng Anh của tôi kỳ này tốt hơn năm ngoái.
+Q|___ you study for these exams, ___ you will do.|The harder / the better~The more / the much~The hardest / the best~The more hard / the more good|A|Càng… càng…: The + so sánh hơn…, the + so sánh hơn…|Cấu trúc càng… càng.|8|Bạn học càng chăm cho kỳ thi thì càng làm bài tốt.
+Q|My neighbor is driving me mad! It seems that ___ it is at night, ___ he plays his music!|the later / the louder~the less / the more loud~the less / less~the more late / the more loudlier|A|Càng muộn càng to: the later, the louder.|Cấu trúc càng… càng.|8|Hàng xóm làm tôi phát điên! Hình như đêm càng khuya anh ta mở nhạc càng to!
+Q|Thanks to the progress of science and technology, our lives have become ___.|better and better~more and more good~the more and more good~gooder and gooder|A|good → better and better.|Ngày càng…|9|Nhờ tiến bộ khoa học công nghệ, cuộc sống ngày càng tốt đẹp hơn.
+Q|The Sears Tower is ___ building in Chicago.|the tallest~taller~the more tall~taller and taller|A|So sánh nhất trong phạm vi "in Chicago".|Phạm vi.|6|Tháp Sears là tòa nhà cao nhất Chicago.
+Q|Peter is ___ John.|younger and more intelligent than~more young and intelligent than~more intelligent and younger than~the more intelligent and younger than|A|young → younger; intelligent → more intelligent.|Mỗi tính từ có dạng riêng.|3,4|Peter trẻ hơn và thông minh hơn John.
+Q|San Diego is ___ town in Southern California.|the nicest~more nice and nice~the nicer~nicer and nicer|A|So sánh nhất trong phạm vi.|Phạm vi.|6|San Diego là thị trấn đẹp nhất Nam California.
+Q|It gets ___ when the winter is coming.|colder and colder~cold and cold~the coldest and coldest~more and more cold|A|Ngày càng lạnh: colder and colder.|Tính từ ngắn.|9|Khi mùa đông đến, trời ngày càng lạnh.
+Q|The faster we finish, ___.|the sooner we can leave~we can leave sooner and sooner~the sooner can we leave~we can leave the sooner|A|The + so sánh hơn + S + V, the + so sánh hơn + S + V (không đảo ngữ).|Cấu trúc càng… càng.|8|Chúng ta làm xong càng nhanh thì càng về sớm.
+Q|Of all athletes, Alex is ___.|the least qualified~the less qualified~the less and less qualified~the more and more qualified|A|"Of all" → so sánh nhất: the least.|So sánh nhất kém.|6|Trong tất cả vận động viên, Alex là người kém tiêu chuẩn nhất.
+Q|The faster Thanh walks, ___.|the more tired he gets~more tired~he gets tired~he gets more tired|A|Cấu trúc càng… càng.|Vế hai cũng bắt đầu bằng "the".|8|Thành đi càng nhanh càng mệt.
+X|cd11|Viết lại câu · Exercise 4|Viết lại câu sao cho nghĩa không đổi (gõ cả câu).|Rewrite the sentences.
+W|No one in my class is taller than Peter. → Peter ___|Peter is the tallest in my class/Peter is the tallest student in my class|No one… taller than → so sánh nhất.|Chuyển sang so sánh nhất.|6|Không ai trong lớp cao hơn Peter.
+W|According to me, English is easier than Maths. → According to me, Maths ___|According to me, Maths is not as easy as English/According to me, Maths is not so easy as English/According to me, Maths is more difficult than English|So sánh hơn → không bằng.|not as… as.|2|Theo tôi, tiếng Anh dễ hơn Toán.
+W|No one in my group is more intelligent than Mary. → Mary ___|Mary is the most intelligent in my group/Mary is the most intelligent person in my group|→ so sánh nhất.|Tính từ dài.|6|Không ai trong nhóm thông minh hơn Mary.
+W|No river in the world is longer than the Nile. → The Nile ___|The Nile is the longest river in the world|→ so sánh nhất.|Tính từ ngắn.|6|Không con sông nào trên thế giới dài hơn sông Nile.
+W|Mount Everest is the highest mountain in the world. → No mountain ___|No mountain in the world is higher than Mount Everest|So sánh nhất → No + so sánh hơn.|Chuyển ngược lại.|3|Everest là ngọn núi cao nhất thế giới.
+W|This is the first time I have ever met such a pretty girl. → She is ___|She is the prettiest girl I have ever met|the first time… such → so sánh nhất + HTHT.|Cấu trúc so sánh nhất + ever.|6|Đây là lần đầu tôi gặp một cô gái xinh như vậy.
+W|He works much. He feels tired. → The more ___|The more he works, the more tired he feels|Càng… càng…|Cấu trúc càng… càng.|8|Anh ấy làm việc nhiều. Anh ấy thấy mệt.
+W|This computer works better than that one. → That computer ___|That computer doesn't work as well as this one/That computer does not work as well as this one|better → not as well as.|So sánh không bằng.|2|Máy tính này chạy tốt hơn máy kia.
+W|The apartment is big. The rent is high. → The bigger ___|The bigger the apartment is, the higher the rent is|Càng… càng…|Cấu trúc càng… càng.|8|Căn hộ to. Tiền thuê cao.
+W|We set off soon. We will arrive soon. → The sooner ___|The sooner we set off, the sooner we will arrive|Càng… càng…|Cấu trúc càng… càng.|8|Chúng ta xuất phát sớm. Chúng ta sẽ đến sớm.
+W|The joke is good. The laughter is loud. → The better ___|The better the joke is, the louder the laughter is|Càng… càng…|Cấu trúc càng… càng.|8|Câu đùa hay. Tiếng cười to.
+W|She gets fat. She feels tired. → The fatter ___|The fatter she gets, the more tired she feels|Càng… càng…|Cấu trúc càng… càng.|8|Cô ấy béo lên. Cô ấy thấy mệt.
+W|As he gets older, he wants to travel less. → The older ___|The older he gets, the less he wants to travel|Càng… càng…|Cấu trúc càng… càng.|8|Càng già anh ấy càng ít muốn đi du lịch.
+W|The children are excited with the difficult games. → The more ___|The more difficult the games are, the more excited the children are|Càng… càng…|Cấu trúc càng… càng.|8|Trò chơi càng khó trẻ con càng hào hứng.
+W|I meet him much. I hate him much. → The more ___|The more I meet him, the more I hate him|Càng… càng…|Cấu trúc càng… càng.|8|Tôi gặp anh ta nhiều. Tôi ghét anh ta nhiều.
+W|My boss works better when he is pressed for time. → The less ___|The less time my boss has, the better he works|Càng ít thời gian càng làm tốt.|Cấu trúc càng… càng.|8|Sếp tôi làm việc tốt hơn khi bị áp lực thời gian.
+W|If you read many books, you will have much knowledge. → The more ___|The more books you read, the more knowledge you will have|Danh từ đặt ngay sau "the more".|Cấu trúc càng… càng với danh từ.|8|Nếu đọc nhiều sách, bạn sẽ có nhiều kiến thức.
+W|He speaks too much and people feel bored. → The more ___|The more he speaks, the more bored people feel|Càng… càng…|Cấu trúc càng… càng.|8|Anh ta nói quá nhiều và mọi người thấy chán.
+W|The growth in the economy makes people's living conditions better. → The more ___|The more the economy grows, the better people's living conditions are|Càng… càng…|Cấu trúc càng… càng.|8|Kinh tế tăng trưởng làm điều kiện sống tốt hơn.
+W|People learn a lot of things as they travel far. → The farther ___|The farther people travel, the more they learn|Càng… càng…|Cấu trúc càng… càng.|8|Người ta học được nhiều điều khi đi xa.
+W|Her old house is bigger than her new one. → Her new house ___|Her new house is not as big as her old one/Her new house isn't as big as her old one/Her new house is smaller than her old one|So sánh hơn → không bằng.|not as… as.|2|Nhà cũ của cô ấy to hơn nhà mới.
+W|I can't cook as well as my mother. → My mother can cook ___|My mother can cook better than me/My mother can cook better than I can|not as well as → better than.|So sánh hơn với trạng từ well.|5|Tôi nấu ăn không giỏi bằng mẹ.
+W|The black dress is more expensive than the white one. → The white dress ___|The white dress is not as expensive as the black one/The white dress is cheaper than the black one|So sánh hơn → không bằng.|not as… as.|2|Váy đen đắt hơn váy trắng.
+W|There isn't anybody as kind-hearted as your mother. → Your mother is ___|Your mother is more kind-hearted than anybody/Your mother is the most kind-hearted person|Không ai bằng → hơn bất kỳ ai.|So sánh hơn.|4|Không ai tốt bụng bằng mẹ bạn.
+W|The black car is cheaper than the red car. → The red car ___|The red car is not as cheap as the black car/The red car is more expensive than the black car|So sánh hơn → không bằng.|not as… as.|2|Xe đen rẻ hơn xe đỏ.
+W|This film is more interesting than that one. → That film is ___|That film is not as interesting as this one|So sánh hơn → không bằng.|not as… as.|2|Phim này hay hơn phim kia.
+W|This is the most interesting film of all. → No other films are ___|No other films are more interesting than this one|So sánh nhất → No + so sánh hơn.|Chuyển ngược lại.|4|Đây là phim hay nhất.
+W|No cars in the world are more expensive than Japanese ones. → Japanese cars ___|Japanese cars are the most expensive in the world|→ so sánh nhất.|Tính từ dài.|6|Không xe nào trên thế giới đắt hơn xe Nhật.
+W|Other oceans in the world aren't as large as the Pacific one. → The Pacific Ocean is ___|The Pacific Ocean is larger than other oceans in the world/The Pacific Ocean is the largest ocean in the world|Không bằng → hơn.|So sánh hơn.|3|Các đại dương khác không lớn bằng Thái Bình Dương.
+W|No hotel in the city is as comfortable as this. → This hotel is the ___|This hotel is the most comfortable in the city/This hotel is the most comfortable hotel in the city|→ so sánh nhất.|Tính từ dài.|6|Không khách sạn nào trong thành phố thoải mái bằng khách sạn này.
+X|cd11|Tìm và sửa lỗi · Exercise 5|Mỗi câu có một lỗi về so sánh. Gõ lại phần đã sửa.|Find and correct the mistake.
+W|This girl is the most beautiful of the two daughters that he has.|the more beautiful|"of the two" → the + so sánh hơn.|So sánh giữa hai người.|4|Cô gái này xinh hơn trong hai cô con gái của ông ấy.
+W|Frank plays tennis worse of all the players.|the worst|"of all" → so sánh nhất.|So sánh nhất.|6|Frank chơi quần vợt tệ nhất trong các tay vợt.
+W|The most he tries, the more he succeeds.|the more|Càng… càng… dùng so sánh hơn: The more…|Cấu trúc càng… càng.|8|Anh ấy càng cố gắng càng thành công.
+W|She can pronounce English words more correct than she could last term.|correctly|Bổ nghĩa cho động từ "pronounce" → trạng từ.|Động từ cần trạng từ.||Cô ấy phát âm chính xác hơn học kỳ trước.
+W|In this class, the students are talking more loudlier than the teacher.|loudly|loudly là trạng từ dài → more loudly (không thêm -er).|Không dùng hai dạng so sánh cùng lúc.|4|Trong lớp này, học sinh nói to hơn cả giáo viên.
+W|This summer is hotter and winder than last summer.|windier|windy (tính từ, tận cùng -y) → windier.|"wind" là danh từ.|3|Mùa hè này nóng hơn và nhiều gió hơn mùa hè trước.
+W|You should practise English oftener to be a better speaker of English.|more often|often → more often.|often coi như trạng từ dài.|4|Bạn nên luyện tiếng Anh thường xuyên hơn để nói giỏi hơn.
+W|Ha Anh can now speak English more well than the last time I met him.|better|well → better.|Bất quy tắc.|5|Giờ Hà Anh nói tiếng Anh tốt hơn lần cuối tôi gặp.
+W|She is much more intelligent than Nam does.|is|Động từ vế sau phải tương ứng với vế trước (is).|Trợ động từ phải khớp.||Cô ấy thông minh hơn Nam nhiều.
+W|The more rich he is, the more miserable he gets.|richer/the richer|rich là tính từ ngắn → richer.|Tính từ ngắn.|8|Anh ta càng giàu càng khổ sở.
+X|cd12|Trật tự tính từ · Exercise 1|Sắp xếp các tính từ trong ngoặc theo đúng trật tự (gõ cụm tính từ theo thứ tự đúng).|Thứ tự OSASCOMP: Opinion – Size – Age – Shape – Color – Origin – Material – Purpose.
+W|My sister lives in a (new / nice / wooden / black) house.|nice new black wooden|Opinion (nice) – Age (new) – Color (black) – Material (wooden).|Ý kiến → tuổi → màu → chất liệu.|1|Chị tôi sống trong một ngôi nhà gỗ màu đen mới đẹp.
+W|We are happy today because today is a (memorable / training / long) day.|memorable long training|Opinion (memorable) – Size (long) – Purpose (training).|Mục đích luôn đứng cuối.|1,9|Hôm nay chúng tôi vui vì đây là một ngày đào tạo dài đáng nhớ.
+W|My colleague has a (white / Korean / small / old) car.|small old white Korean|Size – Age – Color – Origin.|Kích cỡ → tuổi → màu → nguồn gốc.|1|Đồng nghiệp tôi có chiếc ô tô Hàn Quốc nhỏ, cũ, màu trắng.
+W|My friend and I often go home on a (shopping / new / narrow / crowded) street.|crowded narrow new shopping|Opinion (crowded) – Size (narrow) – Age (new) – Purpose (shopping).|Mục đích đứng cuối.|1,9|Bạn tôi và tôi thường về nhà qua một con phố mua sắm mới, hẹp, đông đúc.
+W|Mrs. Navy likes wearing a (red / long / lovely / cotton) dress on special occasions.|lovely long red cotton|Opinion – Size/Length – Color – Material.|Chất liệu gần danh từ.|1|Bà Navy thích mặc chiếc váy cotton đỏ dài đáng yêu vào dịp đặc biệt.
+W|The flower girl wore a (silk / pretty / white) dress at the wedding ceremony last night.|pretty white silk|Opinion – Color – Material.|Ý kiến → màu → chất liệu.|1|Cô bé phù dâu mặc chiếc váy lụa trắng xinh xắn ở đám cưới tối qua.
+W|She has (blue / big / glassy) eyes, so she is really different from others.|glassy big blue|Theo sách: Opinion (glassy) – Size – Color.|Ý kiến → kích cỡ → màu.|1|Cô ấy có đôi mắt xanh to trong veo nên rất khác người.
+W|The little boy is wearing a (nice / old / blue / big) pullover.|nice big old blue|Opinion – Size – Age – Color.|Ý kiến → kích cỡ → tuổi → màu.|1|Cậu bé đang mặc chiếc áo len xanh to cũ đẹp.
+W|My grandparents lived in a (magnificent / two-storey / spacious / old) house during their lifetime.|magnificent spacious old two-storey|Opinion – Size – Age – (two-storey: kiểu nhà, đứng gần danh từ).|Theo sách.|1|Ông bà tôi đã sống cả đời trong một ngôi nhà hai tầng cũ rộng rãi tráng lệ.
+W|My mother often wears a pair of (small / comfortable / black / leather / Chinese) gloves when she washes the dishes.|comfortable small black Chinese leather|Opinion – Size – Color – Origin – Material.|Nguồn gốc trước chất liệu.|1|Mẹ tôi thường đeo đôi găng tay da Trung Quốc màu đen nhỏ thoải mái khi rửa bát.
+W|Mike loves watching (old / American / successful) films in his free time.|successful old American|Opinion – Age – Origin.|Ý kiến → tuổi → nguồn gốc.|1|Mike thích xem những bộ phim Mỹ cũ thành công khi rảnh.
+W|She has a (pretty / white / oval) face, so she is quite beautiful.|pretty oval white|Opinion – Shape – Color.|Ý kiến → hình dạng → màu.|1|Cô ấy có khuôn mặt trái xoan trắng xinh xắn nên khá đẹp.
+W|In the kitchen is a (round / large / wooden / beautiful) table.|beautiful large round wooden|Opinion – Size – Shape – Material.|Kích cỡ trước hình dạng.|1|Trong bếp có chiếc bàn gỗ tròn lớn đẹp.
+W|My friend bought a (brown / nice / leather / Chanel) belt from a shop on Tran Phu street.|nice brown Chanel leather|Opinion – Color – Origin (thương hiệu) – Material.|Chất liệu gần danh từ.|1|Bạn tôi mua chiếc thắt lưng da Chanel nâu đẹp ở một cửa hàng phố Trần Phú.
+W|Mrs. Annie looks so graceful because she has (black / long / beautiful) hair.|beautiful long black|Opinion – Length – Color.|Ý kiến → độ dài → màu.|1|Bà Annie trông thật duyên dáng vì có mái tóc đen dài đẹp.
+W|Her father spent money on (interesting / Vietnamese / oil / old) paintings.|interesting old Vietnamese oil|Opinion – Age – Origin – Material.|Chất liệu (oil) gần danh từ.|1|Bố cô ấy chi tiền mua những bức tranh sơn dầu Việt Nam cổ thú vị.
+W|We bought some (German / lovely / old) glasses.|lovely old German|Opinion – Age – Origin.|Ý kiến → tuổi → nguồn gốc.|1|Chúng tôi mua vài chiếc cốc Đức cũ đáng yêu.
+W|My teacher is a (Japanese / tall / kind / middle-aged) man, so a lot of students love him.|kind tall middle-aged Japanese|Opinion – Size – Age – Origin.|Ý kiến → kích cỡ → tuổi → nguồn gốc.|1|Thầy tôi là một người đàn ông Nhật trung niên cao, tốt bụng nên nhiều học sinh quý thầy.
+W|We usually throw trash into (plastic / black / small / convenient) bags.|convenient small black plastic|Opinion – Size – Color – Material.|Chất liệu cuối cùng.|1|Chúng tôi thường bỏ rác vào những túi nhựa đen nhỏ tiện lợi.
+W|My father wore a (cotton / white / new / collarless) shirt to my cousin's wedding.|collarless new white cotton/new white collarless cotton|Theo sách: collarless – new – white – cotton.|Màu → chất liệu ở cuối.|1|Bố tôi mặc chiếc áo sơ mi cotton trắng mới không cổ đến đám cưới anh họ tôi.
+X|cd12|Trật tự tính từ · Exercise 2|Chọn phương án đúng.|Choose the correct answer.
+Q|They take their ___ children to the park every day.|lovely small young African~African small young lovely~small young lovely African~young lovely African small|A|Opinion (lovely) – Size (small) – Age (young) – Origin (African).|Ý kiến đứng đầu.|1|Họ đưa những đứa trẻ châu Phi nhỏ đáng yêu ra công viên mỗi ngày.
+Q|At first sight I met her, I was impressed with her ___ eyes.|beautiful big round black~big beautiful round black~beautiful black big round~beautiful round big black|A|Opinion – Size – Shape – Color.|Kích cỡ trước hình dạng.|1|Lần đầu gặp, tôi ấn tượng với đôi mắt đen tròn to đẹp của cô ấy.
+Q|This is a picture of a ___ bus.|bright red London~red bright London~London bright red~London red bright|A|Opinion (bright) – Color (red) – Origin (London).|Nguồn gốc sau màu.|1|Đây là bức ảnh chiếc xe buýt London màu đỏ tươi.
+Q|Lara goes to a ___ temple every week.|great big ancient Buddhist~Buddhist great big ancient~ancient great big Buddhist~big great ancient Buddhist|A|Opinion – Size – Age – Origin (Buddhist).|Ý kiến → kích cỡ → tuổi.|1|Lara đến một ngôi chùa Phật giáo cổ to lớn mỗi tuần.
+Q|There are some ___ pictures in this newspaper.|interesting new white computer-generated~white interesting computer-generated new~computer-generated white interesting new~new interesting computer-generated white|A|Opinion – Age – Color – (computer-generated: nguồn gốc/cách tạo).|Ý kiến đứng đầu.|1|Có vài bức tranh mới thú vị màu trắng do máy tính tạo trên tờ báo này.
+Q|She is doing extremely well in her ___ graduate course.|intensive one-year English~one-year English intensive~intensive English one-year~English intensive one-year|A|Opinion (intensive) – Age/Duration (one-year) – Origin (English).|Ý kiến → thời gian → nguồn gốc.|1|Cô ấy học rất tốt khóa sau đại học tiếng Anh chuyên sâu một năm.
+Q|During the winter I like having a ___ fire.|pretty small red wooden~wooden pretty small red~small pretty red wooden~red wooden pretty small|A|Opinion – Size – Color – Material.|Chất liệu cuối.|1|Mùa đông tôi thích có một ngọn lửa củi nhỏ đỏ rực xinh xắn.
+Q|I would like to have ___ sports shoes to run in the park.|comfortable medium grey leather~grey medium leather comfortable~comfortable leather grey medium~medium leather comfortable grey|A|Opinion – Size – Color – Material.|Ý kiến → kích cỡ → màu → chất liệu.|1|Tôi muốn có đôi giày thể thao da xám cỡ vừa thoải mái để chạy trong công viên.
+Q|They say he's a ___ student for his age.|brilliant tall mature~tall mature brilliant~mature brilliant tall~tall brilliant mature|A|Opinion (brilliant) – Size (tall) – Age (mature).|Ý kiến đứng đầu.|1|Người ta nói cậu ấy là một học sinh xuất sắc, cao lớn, chín chắn so với tuổi.
+Q|The speaker is a ___ professor.|kind short old Spanish~old short Spanish kind~Spanish kind old short~kind Spanish short old|A|Opinion – Size – Age – Origin.|Ý kiến → kích cỡ → tuổi → nguồn gốc.|1|Diễn giả là một giáo sư Tây Ban Nha già, thấp, tốt bụng.
+Q|My sister lives in a ___ apartment.|nice new wooden~nice wooden new~new nice wooden~wooden nice new|A|Opinion – Age – Material.|Chất liệu cuối.|1|Chị tôi sống trong một căn hộ gỗ mới đẹp.
+Q|My cousin bought a ___ vase.|lovely small ancient blue~blue ancient lovely small~lovely blue small ancient~small blue ancient lovely|A|Opinion – Size – Age – Color.|Ý kiến → kích cỡ → tuổi → màu.|1|Em họ tôi mua một chiếc bình xanh cổ nhỏ đáng yêu.
+Q|They cook a ___ meal for their children.|delicious big traditional Vietnamese~Vietnamese delicious big traditional~traditional delicious big Vietnamese~big delicious traditional Vietnamese|A|Opinion – Size – Age (traditional) – Origin.|Ý kiến → kích cỡ → tuổi → nguồn gốc.|1|Họ nấu một bữa ăn Việt truyền thống thịnh soạn, ngon miệng cho con.
+Q|They are trying to build an ___ house.|elegant four-bedroom modern Italian~four-bedroom elegant modern Italian~modern elegant four-bedroom Italian~Italian elegant four-bedroom modern|A|Opinion – Size (four-bedroom) – Age (modern) – Origin.|Ý kiến đứng đầu.|1|Họ đang cố xây một ngôi nhà kiểu Ý hiện đại bốn phòng ngủ thanh lịch.
+Q|His brother presented her a ___ watch.|nice oval digital Japanese~oval nice Japanese digital~digital oval Japanese nice~digital Japanese oval nice|A|Theo sách: Opinion – Shape – (digital) – Origin.|Ý kiến đứng đầu.|1|Anh trai anh ấy tặng cô một chiếc đồng hồ điện tử Nhật hình bầu dục đẹp.
+Q|The old man owns a ___ coffee table.|beautiful round old French~French beautiful round old~beautiful French old round~old round beautiful French|A|Opinion – Shape – Age – Origin (theo sách).|Ý kiến đứng đầu, nguồn gốc cuối.|1|Ông lão có một chiếc bàn cà phê Pháp cổ tròn đẹp.
+Q|My father has a ___ hat.|small old black Turkish~old small black Turkish~small old Turkish black~small Turkish old black|A|Size – Age – Color – Origin.|Kích cỡ → tuổi → màu → nguồn gốc.|1|Bố tôi có một chiếc mũ Thổ Nhĩ Kỳ đen cũ nhỏ.
+Q|Jack's father bought him an ___ bike as a birthday gift.|expensive blue Japanese~blue Japanese expensive~expensive Japanese blue~Japanese expensive blue|A|Opinion – Color – Origin.|Ý kiến → màu → nguồn gốc.|1|Bố Jack mua cho cậu một chiếc xe đạp Nhật màu xanh đắt tiền làm quà sinh nhật.
+Q|She is good at creating ___ paintings.|interesting square new Vietnamese~interesting Vietnamese new square~square Vietnamese new interesting~Vietnamese interesting square new|A|Theo sách: Opinion – Shape – Age – Origin.|Ý kiến đứng đầu, nguồn gốc cuối.|1|Cô ấy giỏi vẽ những bức tranh Việt Nam mới hình vuông thú vị.
+Q|My mother would like to buy a ___ bag.|big blue Russian plastic~big plastic blue Russian~big Russian blue plastic~Russian plastic big blue|A|Size – Color – Origin – Material.|Chất liệu cuối.|1|Mẹ tôi muốn mua một chiếc túi nhựa Nga màu xanh to.
 `;
