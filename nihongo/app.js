@@ -46,7 +46,7 @@ var T = {
   explainCorrect:'Đáp án đúng là {x}',chosenMeans:'"{x}" có nghĩa là: {m}',
   needLogin:'Đăng nhập để đồng bộ',
   ttsNone:'Máy không hỗ trợ đọc tiếng Nhật',
-  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceSys:'Dùng giọng tiếng Nhật mặc định của máy (ja-JP).',shareProg:'Cho gia sư xem tiến trình học',shareProgHelp:'Gửi kèm từ hay sai, từ khó, bài yếu, điểm và câu sai trong bài thi để gia sư nhận xét đúng với bạn.',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
+  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceSys:'Dùng giọng tiếng Nhật mặc định của máy (ja-JP).',shareProg:'Cho gia sư xem tiến trình học',askProg:'Gia sư phân tích tiến trình của mình',askProgQ:'Dựa trên tiến trình học của mình trong app, hãy nhận xét điểm mạnh, điểm yếu và lập kế hoạch ôn tập cụ thể cho mấy ngày tới.',appVer:'Phiên bản app',shareProgHelp:'Gửi kèm từ hay sai, từ khó, bài yếu, điểm và câu sai trong bài thi để gia sư nhận xét đúng với bạn.',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
   prevW:'← Lùi',nextW:'Tiếp →',hardW:'↓ Từ khó',unhard:'Bỏ đánh dấu khó',isHard:'Từ khó',
   swipeHelp:'Vuốt trái → phải: từ tiếp · Vuốt phải → trái: lùi lại · Vuốt xuống: từ khó · Chạm: lật thẻ',
   shuffleW:'🔀 Xáo trộn',reverseW:'⇅ Đảo ngược',shuffled:'Đã xáo trộn thứ tự',reversed:'Đã đảo ngược thứ tự',firstCard:'Đây là thẻ đầu tiên',
@@ -91,7 +91,7 @@ var T = {
   explainCorrect:'အဖြေမှန်က {x} ဖြစ်သည်',chosenMeans:'"{x}" ၏ အဓိပ္ပာယ်: {m}',
   needLogin:'ချိန်ကိုက်ရန် ဝင်ရောက်ပါ',
   ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ',
-  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceSys:'စက်၏ ပုံသေ ဂျပန်အသံ (ja-JP) ကို သုံးပါမည်။',shareProg:'ဆရာကို လေ့လာမှု တိုးတက်မှု ပြပါ',shareProgHelp:'မှားလေ့ရှိသော စကားလုံး၊ ခက်သော စကားလုံး၊ အားနည်းသော သင်ခန်းစာ၊ စာမေးပွဲ ရမှတ်နှင့် မှားသောမေးခွန်းများကို ပို့ပေးမည်။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
+  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceSys:'စက်၏ ပုံသေ ဂျပန်အသံ (ja-JP) ကို သုံးပါမည်။',shareProg:'ဆရာကို လေ့လာမှု တိုးတက်မှု ပြပါ',askProg:'ဆရာ ကျွန်ုပ်၏ တိုးတက်မှုကို ခွဲခြမ်းပါ',askProgQ:'App ထဲက ကျွန်ုပ်၏ လေ့လာမှု တိုးတက်မှုအပေါ် အခြေခံ၍ အားသာချက်၊ အားနည်းချက်နှင့် နောက်ရက်များအတွက် ပြန်လေ့ကျင့်ရန် အစီအစဉ် ပေးပါ။',appVer:'App ဗားရှင်း',shareProgHelp:'မှားလေ့ရှိသော စကားလုံး၊ ခက်သော စကားလုံး၊ အားနည်းသော သင်ခန်းစာ၊ စာမေးပွဲ ရမှတ်နှင့် မှားသောမေးခွန်းများကို ပို့ပေးမည်။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
   prevW:'← နောက်ပြန်',nextW:'ရှေ့ဆက် →',hardW:'↓ ခက်သောစကားလုံး',unhard:'ခက်သည် မှတ်ချက်ဖြုတ်',isHard:'ခက်',
   swipeHelp:'ဘယ်မှ ညာသို့ ပွတ်: နောက်တစ်လုံး · ညာမှ ဘယ်သို့ ပွတ်: နောက်ပြန် · အောက်သို့ ပွတ်: ခက်သောစကားလုံး · နှိပ်: ကတ်လှန်',
   shuffleW:'🔀 ရောမွှေ',reverseW:'⇅ ပြောင်းပြန်',shuffled:'အစီအစဉ် ရောမွှေပြီး',reversed:'အစီအစဉ် ပြောင်းပြန်လုပ်ပြီး',firstCard:'ဒါက ပထမဆုံးကတ်ပါ',
@@ -380,6 +380,7 @@ function bindGate(){
 }
 
 /* ======================= tutor (DeepSeek) ======================= */
+var APP_VER = '2026-10-19c';
 var KEY_SHARE = 'nihongo_tutor_share';
 function shareProgress(){ try { return localStorage.getItem(KEY_SHARE) !== '0'; } catch(e){ return true; } }
 function tutorCode(){ try { return localStorage.getItem(KEY_CODE) || ''; } catch(e){ return ''; } }
@@ -435,11 +436,17 @@ function callTutor(userText, ctx){
     'Giải thích ngắn gọn, rõ ràng, có ví dụ, có mẹo nhớ nếu hữu ích. Khi giải thích đáp án, nói vì sao đáp án đúng và vì sao từng đáp án khác sai. Không dùng bảng markdown. ' +
     'Khi người học hỏi nhận xét, lời khuyên hoặc muốn biết mình nên học gì, hãy dựa trên TIẾN TRÌNH HỌC bên dưới (nếu có) và nêu cụ thể các từ, bài, đề thi liên quan.';
   var msgs = [{ role:'system', content:sys }];
-  chat.slice(-10).forEach(function(m){ if (m.role === 'user' || m.role === 'assistant') msgs.push({ role:m.role, content:m.content }); });
   var prog = shareProgress() ? studyContext() : '';
-  if (prog) sys += '\n\nTIẾN TRÌNH HỌC CỦA NGƯỜI HỌC (dữ liệu thật từ app):\n' + prog;
+  if (prog) sys += '\n\nQUAN TRỌNG: App đã tự động gửi kèm TIẾN TRÌNH HỌC thật của người học (đọc từ app). Bạn XEM ĐƯỢC dữ liệu này. ' +
+    'Tuyệt đối không nói rằng bạn không xem được hay không truy cập được tiến trình. Nếu các con số đều bằng 0 thì nói người học mới bắt đầu và gợi ý cách học. ' +
+    'Nếu trong lịch sử chat trước đây bạn từng nói không xem được thì đó là phiên bản cũ của app, hãy bỏ qua.\n\nTIẾN TRÌNH HỌC CỦA NGƯỜI HỌC (dữ liệu thật từ app):\n' + prog;
+  else sys += '\n\n(Người học đã tắt chia sẻ tiến trình học. Nếu họ hỏi về tiến trình, nói họ bật lại ở ⚙ Cài đặt → "Cho gia sư xem tiến trình học".)';
   msgs[0].content = sys;
-  msgs.push({ role:'user', content:(ctx ? ('Ngữ cảnh mình đang học:\n' + ctx + '\n\nCâu hỏi: ') : '') + userText });
+  // bỏ các câu trả lời cũ kiểu "không xem được tiến trình" để không lặp lại
+  var stale = /không (xem|truy cập|thấy) được (tiến trình|dữ liệu)|không có quyền truy cập|không phải công cụ hiển thị/i;
+  var hist = chat.slice(-11); if (hist.length && hist[hist.length - 1].role === 'user' && hist[hist.length - 1].content === userText) hist.pop();
+  hist.slice(-10).forEach(function(m){ if ((m.role === 'user' || m.role === 'assistant') && !(m.role === 'assistant' && stale.test(m.content))) msgs.push({ role:m.role, content:m.content }); });
+  msgs.push({ role:'user', content:(ctx ? ('Ngữ cảnh mình đang học:\n' + ctx + '\n\nCâu hỏi: ') : '') + userText + (prog ? '\n\n[Tiến trình học hiện tại của mình (app gửi kèm):\n' + prog + ']' : '') });
   return fetch('https://api.deepseek.com/chat/completions', {
     method:'POST',
     headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + code },
@@ -965,7 +972,7 @@ function removeChatbar(){ var b = $('chatbar'); if (b) b.remove(); }
 function renderTutor(){
   removeChatbar();
   var code = tutorCode();
-  var html = (ui.exam && !ui.exam.submitted ? '<button class="btn warn block" id="exBackBtn" style="margin-bottom:8px">' + t('exBackToExam') + '</button>' : '') + '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 ' + t('tutorTitle') + '</h2>' + (chat.length ? '<button class="pill" id="cClear">' + t('clearChat') + '</button>' : '') + '</div>';
+  var html = (ui.exam && !ui.exam.submitted ? '<button class="btn warn block" id="exBackBtn" style="margin-bottom:8px">' + t('exBackToExam') + '</button>' : '') + '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 ' + t('tutorTitle') + '</h2>' + (chat.length ? '<button class="pill" id="cClear">' + t('clearChat') + '</button>' : '') + '</div>' + (code ? '<div class="chips" style="margin:4px 0 8px"><button class="pill on" id="cProg">📊 ' + t('askProg') + '</button></div>' : '');
   if (!code){
     html += '<div class="card">' + esc(t('tutorNoKey')) + '<div style="height:10px"></div><button class="btn primary" id="cGo">⚙ ' + t('tutorCode') + '</button></div>';
     view.innerHTML = html;
@@ -985,6 +992,7 @@ function renderTutor(){
   var bar = h('<div class="chatbar" id="chatbar"><div class="inner"><textarea id="chatInput" class="grow" rows="1" placeholder="' + esc(t('tutorPh')) + '"></textarea><button class="btn primary" id="cSend">' + t('send') + '</button></div></div>');
   document.body.appendChild(bar);
   $('cSend').onclick = sendChat;
+  if ($('cProg')) $('cProg').onclick = function(){ $('chatInput').value = t('askProgQ'); sendChat(); };
   window.scrollTo(0, document.body.scrollHeight);
 }
 function sendChat(){
@@ -1029,7 +1037,8 @@ function openSettings(){
     (cloud.lastErr ? '<div class="small" style="color:var(--bad)">' + esc(t('syncErr', { e:cloud.lastErr })) + '</div>' : '') +
     '<div style="margin-top:6px">' + (cloud.user ? '<button class="btn" id="xLogout">' + t('logout') + '</button>' : '<button class="btn primary" id="xLogin">' + t('loginNow') + '</button>') + '</div>' +
     '<h3>💾 ' + t('backup') + '</h3><div class="row"><button class="btn" id="xExport">' + t('exportJ') + '</button><label class="btn" style="cursor:pointer">' + t('importJ') + '<input type="file" id="xImport" accept=".json,application/json" class="hidden"></label></div>' +
-    '<button class="btn bad" style="margin-top:10px" id="xReset">' + t('resetP') + '</button>');
+    '<button class="btn bad" style="margin-top:10px" id="xReset">' + t('resetP') + '</button>' +
+    '<div class="small muted" style="margin-top:12px;text-align:center">' + t('appVer') + ': ' + APP_VER + '</div>');
   $('xClose').onclick = closeSheet;
   document.querySelectorAll('#sheet [data-l]').forEach(function(b){ b.onclick = function(){ S.lang = b.getAttribute('data-l'); save(); applyPrefs(); render(); openSettings(); }; });
   if ($('xVoice')) $('xVoice').onchange = function(){ try { localStorage.setItem(KEY_VOICE, this.value); } catch(e){} loadVoices(); speak('こんにちは。日本語{にほんご}の勉強{べんきょう}を始{はじ}めましょう。'); };
