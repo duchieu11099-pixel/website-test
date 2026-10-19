@@ -46,7 +46,7 @@ var T = {
   explainCorrect:'Đáp án đúng là {x}',chosenMeans:'"{x}" có nghĩa là: {m}',
   needLogin:'Đăng nhập để đồng bộ',
   ttsNone:'Máy không hỗ trợ đọc tiếng Nhật',
-  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceSys:'Dùng giọng tiếng Nhật mặc định của máy (ja-JP).',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
+  ttsNoJa:'Máy chưa có giọng đọc tiếng Nhật. Vào ⚙ Cài đặt → Giọng đọc để xem cách cài.',voice:'Giọng đọc tiếng Nhật',voiceTest:'🔊 Nghe thử',voiceNone:'Chưa tìm thấy giọng tiếng Nhật trên máy này.',voiceSys:'Dùng giọng tiếng Nhật mặc định của máy (ja-JP).',shareProg:'Cho gia sư xem tiến trình học',shareProgHelp:'Gửi kèm từ hay sai, từ khó, bài yếu, điểm và câu sai trong bài thi để gia sư nhận xét đúng với bạn.',voiceHelp:'iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Nhật → tải Kyoko/O-ren. Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ Google → Cài đặt dữ liệu giọng nói → Tiếng Nhật. Máy tính: dùng Chrome hoặc Edge. Cài xong tải lại app.',
   prevW:'← Lùi',nextW:'Tiếp →',hardW:'↓ Từ khó',unhard:'Bỏ đánh dấu khó',isHard:'Từ khó',
   swipeHelp:'Vuốt trái → phải: từ tiếp · Vuốt phải → trái: lùi lại · Vuốt xuống: từ khó · Chạm: lật thẻ',
   shuffleW:'🔀 Xáo trộn',reverseW:'⇅ Đảo ngược',shuffled:'Đã xáo trộn thứ tự',reversed:'Đã đảo ngược thứ tự',firstCard:'Đây là thẻ đầu tiên',
@@ -91,7 +91,7 @@ var T = {
   explainCorrect:'အဖြေမှန်က {x} ဖြစ်သည်',chosenMeans:'"{x}" ၏ အဓိပ္ပာယ်: {m}',
   needLogin:'ချိန်ကိုက်ရန် ဝင်ရောက်ပါ',
   ttsNone:'ဒီစက်က ဂျပန်အသံ မဖတ်နိုင်ပါ',
-  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceSys:'စက်၏ ပုံသေ ဂျပန်အသံ (ja-JP) ကို သုံးပါမည်။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
+  ttsNoJa:'ဒီစက်မှာ ဂျပန်အသံ မရှိသေးပါ။ ⚙ ဆက်တင် → အသံ တွင် ထည့်နည်း ကြည့်ပါ။',voice:'ဂျပန် အသံ',voiceTest:'🔊 နားထောင်ကြည့်',voiceNone:'ဒီစက်မှာ ဂျပန်အသံ ရှာမတွေ့ပါ။',voiceSys:'စက်၏ ပုံသေ ဂျပန်အသံ (ja-JP) ကို သုံးပါမည်။',shareProg:'ဆရာကို လေ့လာမှု တိုးတက်မှု ပြပါ',shareProgHelp:'မှားလေ့ရှိသော စကားလုံး၊ ခက်သော စကားလုံး၊ အားနည်းသော သင်ခန်းစာ၊ စာမေးပွဲ ရမှတ်နှင့် မှားသောမေးခွန်းများကို ပို့ပေးမည်။',voiceHelp:'iPhone: Settings → Accessibility → Spoken Content → Voices → Japanese → Kyoko/O-ren ဒေါင်း။ Android: Settings → System → Languages → Text-to-speech → Google → Install voice data → Japanese။ ကွန်ပျူတာ: Chrome/Edge သုံးပါ။ ထည့်ပြီး အက်ပ်ကို ပြန်ဖွင့်ပါ။',
   prevW:'← နောက်ပြန်',nextW:'ရှေ့ဆက် →',hardW:'↓ ခက်သောစကားလုံး',unhard:'ခက်သည် မှတ်ချက်ဖြုတ်',isHard:'ခက်',
   swipeHelp:'ဘယ်မှ ညာသို့ ပွတ်: နောက်တစ်လုံး · ညာမှ ဘယ်သို့ ပွတ်: နောက်ပြန် · အောက်သို့ ပွတ်: ခက်သောစကားလုံး · နှိပ်: ကတ်လှန်',
   shuffleW:'🔀 ရောမွှေ',reverseW:'⇅ ပြောင်းပြန်',shuffled:'အစီအစဉ် ရောမွှေပြီး',reversed:'အစီအစဉ် ပြောင်းပြန်လုပ်ပြီး',firstCard:'ဒါက ပထမဆုံးကတ်ပါ',
@@ -380,6 +380,8 @@ function bindGate(){
 }
 
 /* ======================= tutor (DeepSeek) ======================= */
+var KEY_SHARE = 'nihongo_tutor_share';
+function shareProgress(){ try { return localStorage.getItem(KEY_SHARE) !== '0'; } catch(e){ return true; } }
 function tutorCode(){ try { return localStorage.getItem(KEY_CODE) || ''; } catch(e){ return ''; } }
 var chat = (function(){ try { return JSON.parse(localStorage.getItem(KEY_CHAT) || '[]'); } catch(e){ return []; } })();
 var pendingCtx = '';
@@ -415,8 +417,14 @@ function studyContext(){
     if (weak.length) lines.push('- Bài có tỉ lệ đúng thấp nhất: ' + weak.map(function(w){ return w.k + ' (' + Math.round(w.p * 100) + '% trên ' + w.n + ' lượt)'; }).join(', ') + '.');
     var exams = (S.exams || []).slice(-8).reverse();
     if (exams.length) lines.push('- Các bài thi gần đây: ' + exams.map(function(r){ return r.title + ': ' + r.pct + '%'; }).join('; ') + '.');
+    var secName = { moji:'文字語彙', bunpo:'文法', dokkai:'読解' };
+    (S.exams || []).slice(-3).reverse().forEach(function(r){
+      if (!r.miss || !r.miss.length) return;
+      lines.push('- Câu sai trong "' + r.title + '" (' + r.pct + '%):');
+      r.miss.slice(0, 12).forEach(function(m){ lines.push('  · [' + (secName[m.sec] || m.sec) + '] ' + m.q + ' → chọn: ' + (m.pick || '(bỏ trống)') + ' | đúng: ' + m.a); });
+    });
     var rd = Object.keys(S.reading || {}).length; if (rd) lines.push('- Đã làm ' + rd + ' bài đọc hiểu.');
-    return lines.join('\n').slice(0, 3000);
+    return lines.join('\n').slice(0, 5000);
   } catch(e){ return ''; }
 }
 function callTutor(userText, ctx){
@@ -428,7 +436,7 @@ function callTutor(userText, ctx){
     'Khi người học hỏi nhận xét, lời khuyên hoặc muốn biết mình nên học gì, hãy dựa trên TIẾN TRÌNH HỌC bên dưới (nếu có) và nêu cụ thể các từ, bài, đề thi liên quan.';
   var msgs = [{ role:'system', content:sys }];
   chat.slice(-10).forEach(function(m){ if (m.role === 'user' || m.role === 'assistant') msgs.push({ role:m.role, content:m.content }); });
-  var prog = studyContext();
+  var prog = shareProgress() ? studyContext() : '';
   if (prog) sys += '\n\nTIẾN TRÌNH HỌC CỦA NGƯỜI HỌC (dữ liệu thật từ app):\n' + prog;
   msgs[0].content = sys;
   msgs.push({ role:'user', content:(ctx ? ('Ngữ cảnh mình đang học:\n' + ctx + '\n\nCâu hỏi: ') : '') + userText });
@@ -955,6 +963,7 @@ function renderSummary(){
 /* ---------- tutor tab ---------- */
 function removeChatbar(){ var b = $('chatbar'); if (b) b.remove(); }
 function renderTutor(){
+  removeChatbar();
   var code = tutorCode();
   var html = (ui.exam && !ui.exam.submitted ? '<button class="btn warn block" id="exBackBtn" style="margin-bottom:8px">' + t('exBackToExam') + '</button>' : '') + '<div class="row"><h2 class="grow" style="margin:6px 0">🎓 ' + t('tutorTitle') + '</h2>' + (chat.length ? '<button class="pill" id="cClear">' + t('clearChat') + '</button>' : '') + '</div>';
   if (!code){
@@ -1015,6 +1024,7 @@ function openSettings(){
     '<div class="small" style="margin:6px 0;color:' + (code ? 'var(--good)' : 'var(--warn)') + '">' + (code ? '● ' + t('codeOn') + ' (••••' + esc(code.slice(-4)) + ')' : '○ ' + t('codeOff')) + '</div>' +
     '<div class="row"><input type="password" id="xCode" class="grow" placeholder="' + esc(t('tutorCode')) + '" autocomplete="off"><button class="btn primary" id="xCodeSave">' + t('save') + '</button></div>' +
     (code ? '<button class="btn bad" style="margin-top:8px" id="xCodeDel">' + t('del') + '</button>' : '') +
+    '<label class="chk" style="margin-top:10px"><input type="checkbox" id="xShare"' + (shareProgress() ? ' checked' : '') + '> ' + t('shareProg') + '</label><div class="small muted">' + esc(t('shareProgHelp')) + '</div>' +
     '<h3>☁ ' + t('account') + '</h3><div class="small">' + (cloud.user ? esc(t('loggedAs', { e:cloud.user.email })) : esc(t('notLogged'))) + '</div>' +
     (cloud.lastErr ? '<div class="small" style="color:var(--bad)">' + esc(t('syncErr', { e:cloud.lastErr })) + '</div>' : '') +
     '<div style="margin-top:6px">' + (cloud.user ? '<button class="btn" id="xLogout">' + t('logout') + '</button>' : '<button class="btn primary" id="xLogin">' + t('loginNow') + '</button>') + '</div>' +
@@ -1023,6 +1033,7 @@ function openSettings(){
   $('xClose').onclick = closeSheet;
   document.querySelectorAll('#sheet [data-l]').forEach(function(b){ b.onclick = function(){ S.lang = b.getAttribute('data-l'); save(); applyPrefs(); render(); openSettings(); }; });
   if ($('xVoice')) $('xVoice').onchange = function(){ try { localStorage.setItem(KEY_VOICE, this.value); } catch(e){} loadVoices(); speak('こんにちは。日本語{にほんご}の勉強{べんきょう}を始{はじ}めましょう。'); };
+  if ($('xShare')) $('xShare').onchange = function(){ try { localStorage.setItem(KEY_SHARE, this.checked ? '1' : '0'); } catch(e){} };
   if ($('xVoiceTest')) $('xVoiceTest').onclick = function(){ speak('こんにちは。日本語{にほんご}の勉強{べんきょう}を始{はじ}めましょう。'); };
   $('xFuri').onchange = function(){ S.furi = this.checked; save(); applyPrefs(); };
   $('xGoal').onchange = function(){ S.goal = Math.max(5, parseInt(this.value, 10) || 20); save(); render(); };
@@ -1420,7 +1431,11 @@ function submitExam(auto){
   if (ex.kind === 'jlpt') res.pass = res.langScore >= 19 && res.readScore >= 19 && (res.langScore + res.readScore) >= 60;
   ex.result = res; ex.ai = '';
   S.exams = S.exams || [];
-  S.exams.push({ id:ex.id, title:ex.title, kind:ex.kind, pct:res.pct, ok:ok, total:res.total, dur:dur, at:Date.now(), lang:res.langScore, read:res.readScore });
+  var txt = function(h){ return String(h || '').replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<br>/g, ' ').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim(); };
+  var miss = [];
+  ex.qs.forEach(function(q, k){ if (ex.ans[k] === q.a) return;
+    miss.push({ sec:q.sec, q:txt(q.qhtml).slice(0, 160), pick:ex.ans[k] >= 0 ? txt(q.opts[ex.ans[k]]).slice(0, 60) : '', a:txt(q.opts[q.a]).slice(0, 60) }); });
+  S.exams.push({ id:ex.id, title:ex.title, kind:ex.kind, pct:res.pct, ok:ok, total:res.total, dur:dur, at:Date.now(), lang:res.langScore, read:res.readScore, miss:miss.slice(0, 20) });
   if (S.exams.length > 60) S.exams = S.exams.slice(-60);
   save(); exSave();
   try { localStorage.setItem(KEY_EXAM + '_last', JSON.stringify(ex)); } catch(e){}
