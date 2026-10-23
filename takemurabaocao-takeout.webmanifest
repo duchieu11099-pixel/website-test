@@ -1,0 +1,14 @@
+{
+  "name": "竹むら 売上報告",
+  "short_name": "竹むら売上",
+  "lang": "ja",
+  "start_url": "./takemurabaocao-takeout.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#202125",
+  "theme_color": "#202125",
+  "icons": [
+    { "src": "./icons/takemura-takeout-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/takemura-takeout-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
